@@ -1,0 +1,4 @@
+export MY_DOTFILE_FOLDER=/home/mayank/.my_configs
+
+source $MY_DOTFILE_FOLDER/zsh/zshrc-oh-my-zsh
+source $MY_DOTFILE_FOLDER/shell_common_config
