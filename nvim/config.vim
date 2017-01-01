@@ -55,7 +55,6 @@ endif
 " ---------------
 " Behaviors
 " ---------------
-" set path+=**
 syntax enable
 set backup             " Turn on backups
 set autoread           " Automatically reload changes if detected
