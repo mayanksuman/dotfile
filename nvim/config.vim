@@ -10,7 +10,6 @@ if $TERM =~ '-256color'
 	set t_Co=256
 	set t_ut=
 endif
-
 set background=dark
 
 " -----------------------------
