@@ -10,12 +10,16 @@ sudo -E apt update
 sudo -E apt install zsh tmux neovim markdown xsel silversearcher-ag exuberant-ctags git gcc g++ sed python-pip python3-pip npm nodejs pandoc
 
 echo "Installing fonts"
-cp -R /fonts/ ~/.local/share/fonts/
+ln -s $PWD/terminal_fonts ~/.local/share/fonts/terminal_fonts
 
 echo "Installing configuration"
 cd scripts
-./oh_my_zsh_install.sh
-./base16-shell.sh
+./zsh.sh
 ./tmux.sh
 ./nvim.sh
 ./git.sh
+
+# Finally switching to new shell
+env zsh
+base16_brewer
+# exit

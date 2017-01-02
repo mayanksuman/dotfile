@@ -1,4 +1,4 @@
-export MY_DOTFILE_FOLDER=/home/mayank/.dotfile
+export MY_DOTFILE_FOLDER=""
 
 source $MY_DOTFILE_FOLDER/zsh/zshrc-oh-my-zsh
 source $MY_DOTFILE_FOLDER/shell_common_config
