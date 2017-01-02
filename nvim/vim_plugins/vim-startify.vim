@@ -15,7 +15,7 @@ let g:startify_skiplist = [
             \ 'bundle/.*/doc',
             \ ]
 let g:startify_files_number = 15
-let g:startify_custom_indices = ['a', 's', 'd', 'f', 'g']
+let g:startify_custom_indices = ['a', 's', 'd', 'g', 'l']
 let g:startify_change_to_dir = 0
 
 hi StartifyBracket ctermfg=240
