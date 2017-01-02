@@ -4,7 +4,7 @@ try
 catch
 endtry
 
-let g:config_file_location='/home/mayank/.my_configs/nvim/'
+let g:config_file_location='/home/mayank/.dotfile/nvim/'
 let g:runtime_data_location='/home/mayank/.local/share/nvim/'
 
 exe 'set runtimepath+='. g:config_file_location
