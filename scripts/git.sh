@@ -44,7 +44,7 @@ printf "${BLUE}Looking for an existing git config...${NORMAL}\n"
 
   umask g-w,o-w
 
-  sed -i "/templatedir = */c\\templatedir = $PWD" gitconfig.symlink
+  sed -i "/templatedir = */c\\# templatedir = $PWD" gitconfig.symlink
 
   ln -s $(pwd)/gitconfig.symlink ~/.gitconfig
   ln -s $(pwd)/gitignore_global.symlink ~/.gitignore_global
