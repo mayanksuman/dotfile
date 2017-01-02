@@ -81,8 +81,6 @@ main() {
   echo ''
   echo ''
   printf "${NORMAL}"
-  env zsh
-  base16_brewer
 }
 
 main

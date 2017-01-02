@@ -47,6 +47,7 @@ main() {
   ln -s ~/.config/nvim/init.vim ~/.vimrc
   cd $curr_dir
   nvim +PlugInstall +qa
+  # vim +PlugInstall +qa
   echo "vim config is now installed"
 }
 

@@ -72,13 +72,6 @@ main() {
     exit 1
   }
 
-
-  printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
-  if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
-    printf "${YELLOW}Found ~/.zshrc.${NORMAL} ${GREEN}Backing up to ~/.zshrc.old${NORMAL}\n";
-    mv ~/.zshrc ~/.zshrc.old;
-  fi
-
   printf "${BLUE}Using the Oh My Zsh template file and adding it to ~/.zshrc${NORMAL}\n"
   cd ../zsh
   cp $ZSH/templates/zshrc.zsh-template zshrc-oh-my-zsh
@@ -87,10 +80,6 @@ main() {
   " zshrc-oh-my-zsh
   sed -i 's/~\/.oh-my-zsh/$ZSH/g' zshrc-oh-my-zsh
   sed -i 's/robbyrussell/intheloop/g' zshrc-oh-my-zsh
-  cd ..
-  sed -i "/export MY_DOTFILE_FOLDER=*/c\\export MY_DOTFILE_FOLDER=$PWD" zsh/zshrc.symlink
-  echo "source $(pwd)/shell_common_config">>~/.bashrc
-  ln -s $(pwd)/zsh/zshrc.symlink ~/.zshrc
   cd $curr_dir
 
   # If this user's login shell is not already "zsh", attempt to switch.
@@ -123,7 +112,6 @@ main() {
   echo 'p.p.s. Get stickers and t-shirts at http://shop.planetargon.com.'
   echo ''
   printf "${NORMAL}"
-  env zsh
 }
 
 main

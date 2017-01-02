@@ -32,6 +32,21 @@ main() {
   fi
   unset CHECK_TMUX_INSTALLED
 
+  # Prevent the cloned repository from having insecure permissions. Failing to do
+  # so causes compinit() calls to fail with "command not found: compdef" errors
+  # for users with insecure umasks (e.g., "002", allowing group writability). Note
+  # that this will be ignored under Cygwin by default, as Windows ACLs take
+  # precedence over umasks except for filesystems mounted with option "noacl".
+  umask g-w,o-w
+  printf "${BLUE}Looking for an existing tmux config...${NORMAL}\n"
+  if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
+    printf "${YELLOW}Found ~/.tmux.conf.${NORMAL} ${GREEN}Backing up to ~/.tmux.conf.old${NORMAL}\n";
+    mv ~/.tmux.conf ~/.tmux.conf.old;
+  fi
+  cd '../tmux'
+  ln -s $(pwd)/tmux.conf.symlink ~/.tmux.conf
+  cd $curr_dir
+
   if [ ! -n "$TPM_DIR" ]; then
     cd $HOME
     TPM_DIR="$(pwd)/.local/share/tmux/plugins/tpm"
@@ -44,13 +59,6 @@ main() {
     printf "You'll need to remove $TPM_DIR if you want to re-install.\n"
     exit
   fi
-
-  # Prevent the cloned repository from having insecure permissions. Failing to do
-  # so causes compinit() calls to fail with "command not found: compdef" errors
-  # for users with insecure umasks (e.g., "002", allowing group writability). Note
-  # that this will be ignored under Cygwin by default, as Windows ACLs take
-  # precedence over umasks except for filesystems mounted with option "noacl".
-  umask g-w,o-w
 
   printf "${BLUE}Cloning tmux plugin manager (tpm)...${NORMAL}\n"
   mkdir -p $TPM_DIR
@@ -71,17 +79,7 @@ main() {
     exit 1
   }
 
-  printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
-  if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
-    printf "${YELLOW}Found ~/.tmux.conf.${NORMAL} ${GREEN}Backing up to ~/.tmux.conf.old${NORMAL}\n";
-    mv ~/.tmux.conf ~/.tmux.conf.old;
-  fi
-  cd '../tmux'
-  ln -s $(pwd)/tmux.conf.symlink ~/.tmux.conf
-  cd $curr_dir
-  printf "${GREEN}"
-  echo 'tmux setup is now complete.'
-  printf "${NORMAL}"
+  printf "${GREEN}tmux setup is now complete.${NORMAL}\n"
 
 }
 
