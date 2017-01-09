@@ -1,0 +1,36 @@
+snippet todo "TODO snippet"
+% TODO: `echo $USER` ${1:description} `!v strftime("%c")`
+endsnippet
+
+snippet func "MATLAB function snippet" b
+function [$3] = $1 ($2)
+	$4
+end
+
+endsnippet
+
+snippet if "MATLAB if statement" b
+if ($1)
+	$2
+end
+endsnippet
+
+snippet sval "MATLAB common value substitution" b
+$1($1==$2)=$3;
+
+endsnippet
+
+snippet vn "MATLAB nan variable intialization" b
+$1 = nan($2);
+
+endsnippet
+
+snippet vz "MATLAB zero variable intialization" b
+$1 = zeros($2);
+
+endsnippet
+
+snippet vo "MATLAB ones variable intialization" b
+$1 = ones($2);
+
+endsnippet

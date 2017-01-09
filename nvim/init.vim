@@ -9,11 +9,8 @@ let g:runtime_data_location='/home/mayank/.local/share/nvim/'
 
 exe 'set runtimepath+='. g:config_file_location
 
-" Load plugin-specific configuration.
-exe 'source '. g:config_file_location. 'plugins.vim'
-
-" Load platform-specific configuration.
-exe 'source '. g:config_file_location. 'platforms.vim'
+" All hotkeys, not dependant on plugins, are mapped here.
+exe 'source '. g:config_file_location. 'mappings.vim'
 
 " All of the Vim configuration.
 exe 'source '. g:config_file_location. 'config.vim'
@@ -24,8 +21,11 @@ exe 'source '. g:config_file_location. 'commands.vim'
 " Small custom functions.
 exe 'source '. g:config_file_location. 'functions.vim'
 
-" All hotkeys, not dependant on plugins, are mapped here.
-exe 'source '. g:config_file_location. 'mappings.vim'
+" Load plugin-specific configuration.
+exe 'source '. g:config_file_location. 'plugins.vim'
+
+" Load platform-specific configuration.
+exe 'source '. g:config_file_location. 'platforms.vim'
 
 " Auto commands.
 exe 'source '. g:config_file_location. 'autocmds.vim'
@@ -36,4 +36,3 @@ try
 	source vimrc.local
 catch
 endtry
-
