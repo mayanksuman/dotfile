@@ -5,7 +5,7 @@
 [github]
     user = mayanksuman
 [init]
-    # templatedir = /home/mayank/.dotfile/git
+# templatedir = /home/mayank/.dotfile/git
 [alias]
     # list all aliases
     la = "!git config -l | grep alias | cut -c 7-"
@@ -89,9 +89,6 @@
     # remove grep - Remove found files that are NOT under version control
     rg = "!sh -c 'git ls-files --others --exclude-standard | grep $1 | xargs rm' -"
 
-    # Kaleidoscope commands
-    dkal = difftool -y -t Kaleidoscope
-    mkal = mergetool -y -t Kaleidoscope
     remotes = remote -v
 
     # check out a local copy of a PR. https://gist.github.com/gnarf/5406589
@@ -149,6 +146,3 @@
 	# helper = osxkeychain
 [rebase]
 	instructionFormat = "[%an - %ar] %s"
-[pager]
-    diff = "diff-so-fancy | less --tabs=4 -RFX"
-    show = "diff-so-fancy | less --tabs=4 -RFX"
