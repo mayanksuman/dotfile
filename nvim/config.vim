@@ -89,8 +89,10 @@ set nostartofline      " Don't go to the start of the line after some commands
 set scrolloff=3        " Keep three lines below the last line when scrolling
 set gdefault           " this makes search/replace global by default
 set switchbuf=useopen  " Switch to an existing buffer if one exists
-cd %:h		       " Change the current directory to same as opened file
-
+" Change the current directory to same as opened file
+if !(!argc() && (line2byte('$') == -1))
+	cd %:h
+end
 " ---------------
 " Text Format
 " ---------------
