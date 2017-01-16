@@ -4,7 +4,7 @@ if exists('g:vim_plug_installing_plugins')
   finish
 endif
 
-let g:UltiSnipsSnippetDirectories=['MyUltiSnippets']
+exe 'let g:UltiSnipsSnippetDirectories=['''.g:config_file_location.'MyUltiSnippets'',''MyUltiSnippets'']'
 let g:UltiSnipsExpandTrigger='<C-e>'
 let g:UltiSnipsJumpForwardTrigger='<C-j>'
 let g:UltiSnipsJumpBackwardTrigger='<C-h>'
