@@ -18,8 +18,12 @@ echo "Installing configuration ..."
 cd scripts
 ./zsh.sh
 ./tmux.sh
-./nvim.sh
 ./git.sh
+
+mkdir -p ~/.local/share/nvim
+mkdir -p ~/.local/share/nvim/{backup,swap,view,undo}
+./nvim.sh
+
 
 echo "Installation Complete."
 echo "Post Installation manual configuring (Highly Reccomended)"

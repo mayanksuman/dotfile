@@ -16,13 +16,13 @@ set background=dark
 " File Locations
 " -----------------------------
 set backup
-exe 'set backupdir=.,'. g:runtime_data_location. 'backup'
-exe 'set directory='. g:runtime_data_location. 'swap'
-exe 'set viewdir='. g:runtime_data_location. 'view'
+exe 'set backupdir='. g:runtime_data_location. 'backup//,.'
+exe 'set directory='. g:runtime_data_location. 'swap//'
+exe 'set viewdir='. g:runtime_data_location. 'view//'
 " Persistent Undo
 if has('persistent_undo')
 	set undofile
-	exe 'set undodir='. g:runtime_data_location. 'undo'
+	exe 'set undodir='. g:runtime_data_location. 'undo//'
 	set undolevels=1000         " Maximum number of changes that can be undone
 	set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
 endif
