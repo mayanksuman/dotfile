@@ -36,3 +36,5 @@ try
 	source vimrc.local
 catch
 endtry
+
+" ch %:h

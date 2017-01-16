@@ -81,14 +81,15 @@ set autowrite          " Writes on make/shell commands
 set timeoutlen=1000     " Time to wait for a command (after leader for example).
 set ttimeout
 set ttimeoutlen=100    " Time to wait for a key sequence.
-set nofoldenable       " Disable folding entirely.
-set foldlevelstart=99  " I really don't like folds.
+" set nofoldenable       " Disable folding entirely.
+" set foldlevelstart=99  " I really don't like folds.
 set formatoptions=crql
-set iskeyword+=\$,-   " Add extra characters that are valid parts of variables
+set iskeyword+=\$,-    " Add extra characters that are valid parts of variables
 set nostartofline      " Don't go to the start of the line after some commands
 set scrolloff=3        " Keep three lines below the last line when scrolling
 set gdefault           " this makes search/replace global by default
 set switchbuf=useopen  " Switch to an existing buffer if one exists
+cd %:h		       " Change the current directory to same as opened file
 
 " ---------------
 " Text Format
@@ -150,3 +151,4 @@ set mousehide  " Hide mouse after chars typed
 
 " Better complete options to speed it up
 set complete=.,w,b,u,U
+
