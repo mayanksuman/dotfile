@@ -12,10 +12,7 @@ set -g default-command "/bin/zsh"
 
 set -g history-limit 20000
 
-
-# set the base index for windows to 1
-set -g base-index 1
-setw -g pane-base-index 1
+# Keeps the message from displaying in statusbar
 set -g quiet on
 
 # Activity Monitoring
@@ -29,7 +26,6 @@ setw -g aggressive-resize on
 
 # make delay shorter
 set -sg escape-time 0
-
 
 set-option -g set-titles on
 set-option -g set-titles-string "#T - #W"
