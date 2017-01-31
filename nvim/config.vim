@@ -50,7 +50,7 @@ highlight clear LineNr		" Current line number row will have
 if exists('+colorcolumn')
 	set colorcolumn=80	" Color the 80th column differently as a wrapping guide.
 endif
-
+set cryptmethod=blowfish2	" Stronger crypt strength : Need vim 7.4.399+
 
 " ---------------
 " Behaviors
