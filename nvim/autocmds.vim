@@ -20,10 +20,6 @@ if has('autocmd')
 					\   exe "normal! g`\"" |
 					\ endif
 
-		" Fix trailing whitespace in my most used programming langauges
-		autocmd BufWritePre *.py,*.coffee,*.rb,*.erb,*.md,*.scss,*.vim,Cakefile,
-					\*.hbs
-					\ silent! :StripTrailingWhiteSpace
 
 		" Help mode bindings
 		" <enter> to follow tag, <bs> to go back, and q to quit.
@@ -51,7 +47,12 @@ if has('autocmd')
 		" To disable the stripping of whitespace, add the following to your
 		" .vimrc.before.local file:
 		"   let g:ms_vim_keep_trailing_whitespace = 1
-		autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql,html,css autocmd BufWritePre <buffer> if !exists('g:ms_vim_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+		autocmd FileType c,cpp,java,go,php,javascript,puppet,python,
+					\rust,twig,xml,yml,perl,sql,html,css,
+					\vim,markdown,coffee,ruby,matlab
+					\ autocmd BufWritePre <buffer>
+					\ if !exists('g:ms_vim_keep_trailing_whitespace')
+					\| call StripTrailingWhitespace() | endif
 
 
 		autocmd BufNewFile,BufRead *.coffee set filetype=coffee
@@ -77,4 +78,5 @@ if has('autocmd')
 			autocmd BufWinEnter * call ResCur()
 		augroup END
 	endif
+
 endif
