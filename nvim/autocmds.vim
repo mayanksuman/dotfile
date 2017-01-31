@@ -42,7 +42,6 @@ if has('autocmd')
 		au VimResized * :wincmd =
 
 
-
 		" Remove trailing whitespaces and ^M chars
 		" To disable the stripping of whitespace, add the following to your
 		" .vimrc.before.local file:
@@ -109,4 +108,77 @@ if has('autocmd')
 		" after the file has been written.
 		autocmd BufWritePost,FileWritePost *.gpg u
 	augroup END
+
+
+	"LaTeX commands, from JG
+	augroup texcmds
+		autocmd!
+		"http://learnvimscriptthehardway.stevelosh.com/chapters/44.html
+		au BufNewFile,BufRead *.tex set filetype=tex
+		"try <Esc>:set filetype?
+		"autocmd FileType tex map <buffer> <F7> :silent !skim: %:r.pdf  &> /dev/null &<CR>:redraw!<CR>
+		"autocmd FileType tex map <buffer> <F5>  :!open /Applications/Skim.app: %:r.pdf  &> /dev/null &<CR>:redraw!<CR>
+		autocmd FileType tex map <buffer> <F5> :w<CR>:!xelatex % <CR><CR>
+		autocmd FileType tex map <buffer> <F6> :w<CR>:!pdflatex % <CR><CR>
+		autocmd FileType tex map <buffer> <F8> :w<CR>:!bibtex %:r.aux <CR><CR>
+		autocmd FileType tex setlocal spell spelllang=en_us
+
+		"http://stackoverflow.com/questions/5054128/repeating-characters-in-vim-insert-mode
+		"autocmd FileType tex map <buffer> \sep<CR> i%-<Esc>y1l80pa%<Esc>0o<Esc>
+		"     autocmd FileType tex map <buffer> \sep<CR> i%%<C-o>:norm 80ia<CR><Esc>0o<Esc>
+		autocmd FileType tex map <buffer> \sep<CR> i%%<C-o>80i-<Esc>0o<Esc>
+		autocmd FileType tex inoremap <C-l> <Esc>la
+		autocmd FileType tex inoremap <C-h> <Esc>ha
+		"autocmd FileType tex inoremap <C-l> <Esc>lli
+
+		"need to create a file main.tex.latexmaster, containing one character
+		autocmd FileType tex map <buffer> <F7>  :call CompileMasterFile() <CR><CR>
+
+
+		"Ideas for creating these functions from:
+		"http://vim-latex.sourceforge.net/documentation/latex-suite/latex-master-file.html#Tex_MainFileExpression
+		"and
+		"http://vi.stackexchange.com/questions/2408/vimscript-save-file
+		"and
+		"http://stackoverflow.com/questions/890802/how-do-i-disable-the-press-enter-or-type-command-to-continue-prompt-in-vim
+		function! CompileMasterFile()
+			let mainfilename = GetMasterFileName()
+			let mainauxfilename = GetMasterFileNameAux()
+			if mainfilename != ''
+				"save and compile with pdflatex
+				:w
+				execute ':silent !pdflatex ' mainfilename
+				execute ':silent !bibtex ' mainauxfilename
+				execute ':silent !bibtex ' mainauxfilename
+				execute ':silent !pdflatex ' mainfilename
+				execute '!pdflatex ' mainfilename
+			else
+				"if no master file found, show message
+				echom "No master file found (e.g. myfile.tex.latexmaster)"
+			endif
+		endfunction
+
+		"we indicate the name of mymain.tex by creating a file mymain.tex.latexmaster,
+		"which can be empty (or just contain a blank line
+		function! GetMasterFileName()
+			if glob('*.latexmaster') != ''
+				"this just removes the '.latexmaster' bit
+				return split(glob('*.latexmaster'), ".latexmaster")[0]
+			else
+				return ''
+			endif
+		endfunction
+
+		"in order for bibtex to work, we need the 'mymain.aux' filename
+		"this seems to be one way to obtain it
+		function! GetMasterFileNameAux()
+			if glob('*.latexmaster') != ''
+				"this removes the 'tex.latexmaster' bit and replaces it with 'aux'
+				return join([split(glob('*.latexmaster'), ".tex.latexmaster")[0], "aux"], ".")
+			else
+				return ''
+			endif
+		endfunction
+	augroup END
+
 endif
