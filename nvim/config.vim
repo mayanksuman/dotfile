@@ -30,24 +30,25 @@ endif
 " ---------------
 " UI
 " ---------------
-set ruler          " Ruler on
-set showcmd                 " Show partial commands in status line and
-" Selected characters/lines in visual mode
-set number         " Line numbers on
-set wrap           " Line wrapping on
-set breakindent	   " Line Wrap with indent
+set ruler		" Ruler on
+set showcmd		" Show partial commands in status line and
+			" Selected characters/lines in visual mode
+set number		" Line numbers on
+set wrap		" Line wrapping on
+set breakindent		" Line Wrap with indent
 set breakindentopt=shift:5  " Put five character space before the indented wrap
-set laststatus=2   " Always show the statusline
-set cmdheight=2    " Make the command area two lines high
-set cursorline     " Highlight current line
-set encoding=utf-8
-set noshowmode     " Don't show the mode since Powerline shows it
-set title          " Set the title of the window in the terminal to the file
+set laststatus=2	" Always show the statusline
+set cmdheight=2		" Make the command area two lines high
+set cursorline		" Highlight current line
+set encoding=utf-8	" Ask vim to use utf-8 internally instead of latin-1
+set fileencoding=utf-8	" file should be encode in utf-8
+set noshowmode		" Don't show the mode since Powerline shows it
+set title		" Set the title of terminal window to the file
 highlight clear SignColumn      " SignColumn should match background
-highlight clear LineNr          " Current line number row will have
-" same background color in relative mode
+highlight clear LineNr		" Current line number row will have
+				" same background color in relative mode
 if exists('+colorcolumn')
-	set colorcolumn=80 " Color the 80th column differently as a wrapping guide.
+	set colorcolumn=80	" Color the 80th column differently as a wrapping guide.
 endif
 
 
