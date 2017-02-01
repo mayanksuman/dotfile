@@ -1,10 +1,11 @@
 snippet cl "Clear everything"
 clear all;close all;clc;
-
+$0
 endsnippet
 
 snippet todo "TODO snippet"
 % TODO: `echo $USER` ${1:description} `!v strftime("%c")`
+$0
 endsnippet
 
 snippet func "MATLAB function snippet" b
@@ -12,30 +13,32 @@ function [$3] = $1 ($2)
 	$4
 end
 
+$0
 endsnippet
 
 snippet if "MATLAB if statement" b
 if ($1)
 	$2
 end
+$0
 endsnippet
 
 snippet sval "MATLAB common value substitution" b
 $1($1==$2)=$3;
-
+$0
 endsnippet
 
 snippet vn "MATLAB nan variable intialization" b
 $1 = nan($2);
-
+$0
 endsnippet
 
 snippet vz "MATLAB zero variable intialization" b
 $1 = zeros($2);
-
+$0
 endsnippet
 
 snippet vo "MATLAB ones variable intialization" b
 $1 = ones($2);
-
+$0
 endsnippet
