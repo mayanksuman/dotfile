@@ -211,15 +211,15 @@ let G_HAS_NVIM=eval("has('nvim')")=='1'
 if G_HAS_NVIM
 " Terminal emulator mapping for nvim
 " Escape key behavior
-:tnoremap jk <C-\><C-n>
-:tnoremap JK <C-\><C-n>
-:tnoremap Jk <C-\><C-n>
-:tnoremap jK <C-\><C-n>
-:tnoremap <Esc> <C-\><C-n>
+tnoremap jk <C-\><C-n>
+tnoremap JK <C-\><C-n>
+tnoremap Jk <C-\><C-n>
+tnoremap jK <C-\><C-n>
+tnoremap <Esc> <C-\><C-n>
 
 " Movement across panes
-:tnoremap <C-h> <C-\><C-n><C-w>h
-:tnoremap <C-j> <C-\><C-n><C-w>j
-:tnoremap <C-k> <C-\><C-n><C-w>k
-:tnoremap <C-l> <C-\><C-n><C-w>l
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
 endif
