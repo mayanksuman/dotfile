@@ -12,7 +12,7 @@ Only tested on Debian based systems.
 
 * Typing `jk` insert mode is equivalent to `Escape`.
 
-And many more. See [`nvim/mappings.vim`](mappings.vim) for more.
+And many more. See [`mappings.vim`](nvim/mappings.vim) for more.
 
 ## Installing Custom VIM Plugins
 
