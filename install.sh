@@ -12,6 +12,10 @@ sudo -E apt update
 sudo -E apt install zsh tmux neovim markdown xsel silversearcher-ag exuberant-ctags git gcc g++ sed python-pip python3-pip npm nodejs pandoc
 
 echo "Installing fonts ..."
+if [ -d ~/.local/share/fonts/terminal_fonts ]; then
+	printf "${YELLOW}Found ~/.local/share/fonts/terminal_fonts.${NORMAL} ${GREEN}Backing up to ~/.local/share/fonts/terminal_fonts.old${NORMAL}\n";
+	mv ~/.local/share/fonts/terminal_fonts ~/.local/share/fonts/terminal_fonts.old;
+fi
 ln -s $PWD/terminal_fonts ~/.local/share/fonts/terminal_fonts
 
 echo "Installing configuration ..."
@@ -27,5 +31,5 @@ mkdir -p ~/.local/share/nvim/{backup,swap,view,undo}
 
 echo "Installation Complete."
 echo "Post Installation manual configuring (Highly Reccomended)"
-echo "For installing tmux plugins, please enter tmux and press <ctrl-b-I>."
 echo " For getting base16 color scheme in shell and vim. Please open a ZSH shell and input base16_brewer or any other theme name."
+echo "For installing tmux plugins, please enter tmux and press <ctrl-b-I>."

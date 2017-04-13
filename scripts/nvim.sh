@@ -35,9 +35,10 @@ main() {
     mv ~/.config/nvim ~/.config/nvim.old;
   fi
   cd ..
+ln -s $(pwd)/nvim ~/.config/nvim
   sed -i "/let g:config_file_location='*'/c\\let g:config_file_location='$PWD/nvim/'" nvim/init.vim
   sed -i "/let g:runtime_data_location='*'/c\\let g:runtime_data_location='$HOME/.local/share/nvim/'" nvim/init.vim
-  ln -s $(pwd)/nvim ~/.config/nvim
+  
 
   printf "${BLUE}Looking for an existing vim config...${NORMAL}\n"
   if [ -f ~/.vimrc ] || [ -h ~/.vimrc ]; then
@@ -48,7 +49,7 @@ main() {
   cd $curr_dir
   nvim +PlugInstall +qa
   # vim +PlugInstall +qa
-  echo "vim config is now installed"
+  echo "nvim config is now installed"
 }
 
 main
