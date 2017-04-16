@@ -36,7 +36,7 @@ main() {
   if [ ! -n "$ZSH" ]; then
     cd $HOME
     echo $PWD
-    ZSH="$(pwd)/.config/oh-my-zsh"
+    ZSH="$(pwd)/.local/share/zsh/oh-my-zsh"
     echo "oh-my-zsh is going to be installed in $ZSH ." 
     cd $curr_dir
   fi

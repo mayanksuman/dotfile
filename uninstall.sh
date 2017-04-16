@@ -31,43 +31,43 @@ main() {
 
 printf "${YELLOW}Removing Fonts.${NORMAL}\n"
   if [ -d ~/.local/share/fonts/terminal_fonts ]; then
-    rm ~/.local/share/fonts/terminal_fonts
+    rm -f ~/.local/share/fonts/terminal_fonts
   fi
 
 printf "${YELLOW}Removing ZSH configuration.${NORMAL}\n"
-  if [ -f ~/.zshrc ]; then
-    rm ~/.zshrc;
+  if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
+    rm -f ~/.zshrc;
   fi
 printf "${YELLOW}Removing Oh-My-ZSH.${NORMAL}\n"
-  if [ -d ~/.config/oh-my-zsh ]; then
-    rm -R -f ~/.config/oh-my-zsh;
+  if [ -d ~/.local/share/zsh/oh-my-zsh ]; then
+    rm -R -f ~/.local/share/zsh/oh-my-zsh;
   fi
 printf "${YELLOW}Removing Base16-shell themes.${NORMAL}\n"
-  if [ -d ~/.config/base16-shell ]; then
-    rm -R -f ~/.config/base16-shell;
+  if [ -d ~/.local/share/zsh/base16-shell ]; then
+    rm -R -f ~/.local/share/zsh/base16-shell;
   fi
-  if [ -f ~/.vimrc_background ]; then
+  if [ -f ~/.vimrc_background ] || [ -h ~/.vimrc_background ]; then
     rm ~/.vimrc_background;
   fi
-  if [ -f ~/.base16_theme ]; then
+  if [ -f ~/.base16_theme ] || [ -h ~/.base16_theme ]; then
     rm ~/.base16_theme;
   fi
 printf "${YELLOW}Removing tmux configuration.${NORMAL}\n"
-  if [ -f ~/.tmux.conf ]; then
+  if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
     rm ~/.tmux.conf;
   fi
 printf "${YELLOW}Removing vim and nvim configurations.${NORMAL}\n"
   if [ -d ~/.config/nvim ]; then
-    rm ~/.config/nvim
+    unlink ~/.config/nvim
   fi
-  if [ -f ~/.vimrc ]; then
+  if [ -f ~/.vimrc ] || [ -h ~/.vimrc ]; then
     rm ~/.vimrc;
   fi
 printf "${YELLOW}Removing git configuration.${NORMAL}\n"
-  if [ -f ~/.gitconfig ]; then
+  if [ -f ~/.gitconfig ] || [ -h ~/.gitconfig ]; then
     rm ~/.gitconfig;
   fi
-  if [ -f ~/.gitignore_global ]; then
+  if [ -f ~/.gitignore_global ] || [ -h ~/.gitignore_global ]; then
     rm ~/.gitignore_global;
   fi
 

@@ -34,7 +34,7 @@ main() {
   if [ ! -n "$BASE16_ZSH" ]; then
     curr_dir=$PWD
     cd $HOME
-    BASE16_ZSH="$(pwd)/.config/base16-shell"
+    BASE16_ZSH="$(pwd)/.local/share/zsh/base16-shell"
     echo "Base16-Shell is going to be installed in $BASE16_ZSH ." 
     cd $curr_dir
   fi
