@@ -1,6 +1,6 @@
 # MS dotfile - My configuration
 
-Version 1! Inspired by mutewinter, spf13, nicknishi dotfile.
+Version 2! Inspired by mutewinter, spf13, nicknishi dotfile.
 
 ## Installation
 Only tested on Debian based systems.
