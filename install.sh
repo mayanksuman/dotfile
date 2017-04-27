@@ -1,6 +1,27 @@
 #!/usr/bin/env bash
 
-echo "Installing dotfiles ..."
+echo "Checking OS platform"
+UNAME=$(uname | tr "[:upper:]" "[:lower:]")
+# If Linux, try to determine specific distribution
+if [ "$UNAME" == "linux" ]; then
+	# If available, use LSB to identify distribution
+	if [ -f /etc/lsb-release -o -d /etc/lsb-release.d ]; then
+		export DISTRO=$(lsb_release -i | cut -d: -f2 | sed s/'^\t'//)
+		# Otherwise, use release info file
+	else
+		export DISTRO=$(ls -d /etc/[A-Za-z]*[_-][rv]e[lr]* | grep -v "lsb" | cut -d'/' -f3 | cut -d'-' -f1 | cut -d'_' -f1)
+	fi
+else
+	echo "$UNAME platform is not supported. Exitting."
+	exit 1
+fi
+# For everything else (or if above failed), just use generic identifier
+[ "$DISTRO" == "" ] && export DISTRO=$UNAME
+unset UNAME
+
+echo $DISTRO
+
+echo " Install dotfiles ..."
 
 echo "Initializing submodule(s) ..."
 git submodule update --init --recursive
@@ -14,7 +35,7 @@ sudo -E apt update
 sudo -E apt install -y build-essential exuberant-ctags cmake python-pip \
 	python3-pip nodejs git zsh tmux markdown pandoc sed xsel\
 	silversearcher-ag pandoc \
-	neovim python-neovim python3-neovim 
+	neovim python-neovim python3-neovim
 
 echo "Installing fonts ..."
 if [ -d ~/.local/share/fonts/terminal_fonts ]; then
