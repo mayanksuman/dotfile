@@ -1,0 +1,7 @@
+*.sec*
+.DS_Store
+.gitsecret
+/bin/
+!README.md
+!*example
+

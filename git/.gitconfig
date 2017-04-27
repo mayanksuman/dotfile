@@ -1,9 +1,7 @@
 # gitconfig
-[user]
-    name = Mayank Suman
-    email = mayanksuman@live.com
-[github]
-    user = mayanksuman
+[include]
+    # User Information
+    path=$HOME/.gituser_info.custom
 [init]
 # templatedir = $HOME/.git_template
 [alias]
