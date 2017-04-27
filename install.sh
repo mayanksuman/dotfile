@@ -26,11 +26,16 @@ echo " Install dotfiles ..."
 echo "Initializing submodule(s) ..."
 git submodule update --init --recursive
 
-echo "Installing required packages ..."
-echo " Adding repository for latest nodejs and npm"
 echo "  You need to be a sudo user for installing softwares."
 echo "  Please give your password if demanded."
+sudo -v
+# Keep-alive: update existing sudo time stamp until the script has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+echo " Adding repository for latest nodejs and npm"
 curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+
+echo "Installing required packages ..."
 sudo -E apt update
 sudo -E apt install -y build-essential exuberant-ctags cmake python-pip \
 	python3-pip nodejs git zsh tmux markdown pandoc sed xsel\
