@@ -47,8 +47,8 @@ ln -s $(pwd)/nvim ~/.config/nvim
   fi
   ln -s ~/.config/nvim/init.vim ~/.vimrc
   cd $curr_dir
-  nvim +PlugInstall +qa
-  # vim +PlugInstall +qa
+#  nvim +PlugInstall +qa
+  vim +PlugInstall +qa
   echo "nvim config is now installed"
 }
 

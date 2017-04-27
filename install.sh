@@ -9,7 +9,9 @@ echo "Installing required packages ..."
 echo "  You need to be a sudo user for installing softwares."
 echo "  Please give your password if demanded."
 sudo -E apt update
-sudo -E apt install zsh tmux neovim markdown xsel silversearcher-ag exuberant-ctags git gcc g++ sed python-pip python3-pip npm nodejs pandoc
+sudo -E apt install -y build-essential exuberant-ctags cmake python-pip \
+	python3-pip nodejs git zsh tmux neovim markdown pandoc sed xsel\
+	silversearcher-ag pandoc
 
 echo "Installing fonts ..."
 if [ -d ~/.local/share/fonts/terminal_fonts ]; then
