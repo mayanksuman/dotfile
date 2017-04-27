@@ -1,0 +1,6 @@
+[submodule "zsh/.local/share/zsh/oh-my-zsh"]
+	path = zsh/.local/share/zsh/oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh.git
+[submodule "shell_common/.local/share/shell_common/base16-shell"]
+	path = shell_common/.local/share/shell_common/base16-shell
+	url = https://github.com/chriskempson/base16-shell.git

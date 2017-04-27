@@ -1,5 +1,5 @@
 # BASE16-Shell Entry
-BASE16_SHELL=$HOME/.local/share/zsh/base16-shell/
+BASE16_SHELL=$HOME/.local/share/shell_common/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
 # 256 color support for vim
