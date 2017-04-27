@@ -4,4 +4,4 @@
 /bin/
 !README.md
 !*example
-
+!.gitignore
