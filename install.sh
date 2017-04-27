@@ -6,12 +6,15 @@ echo "Initializing submodule(s) ..."
 git submodule update --init --recursive
 
 echo "Installing required packages ..."
+echo " Adding repository for latest nodejs and npm"
 echo "  You need to be a sudo user for installing softwares."
 echo "  Please give your password if demanded."
+curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 sudo -E apt update
 sudo -E apt install -y build-essential exuberant-ctags cmake python-pip \
-	python3-pip nodejs git zsh tmux neovim markdown pandoc sed xsel\
-	silversearcher-ag pandoc
+	python3-pip nodejs git zsh tmux markdown pandoc sed xsel\
+	silversearcher-ag pandoc \
+	neovim python-neovim python3-neovim 
 
 echo "Installing fonts ..."
 if [ -d ~/.local/share/fonts/terminal_fonts ]; then
