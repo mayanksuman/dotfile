@@ -33,4 +33,3 @@ let g:ycm_filetype_blacklist = {
   \ 'mail': 1
 \}
 
-let g:ycm_global_ycm_extra_conf = "~/.vim/.runtime_files/.YouCompleteMe_files/.ycm_extra_conf.py"

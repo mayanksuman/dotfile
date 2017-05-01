@@ -1,99 +1,16 @@
 #!/usr/bin/env bash
 
-main() {
-  # Use colors, but only if connected to a terminal, and that terminal
-  # supports them.
-  if which tput >/dev/null 2>&1; then
-      ncolors=$(tput colors)
-  fi
-  if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-    RED="$(tput setaf 1)"
-    GREEN="$(tput setaf 2)"
-    YELLOW="$(tput setaf 3)"
-    BLUE="$(tput setaf 4)"
-    BOLD="$(tput bold)"
-    NORMAL="$(tput sgr0)"
-  else
-    RED=""
-    GREEN=""
-    YELLOW=""
-    BLUE=""
-    BOLD=""
-    NORMAL=""
-  fi
-
-  # Only enable exit-on-error after the non-critical colorization stuff,
-  # which may fail on systems lacking tput or terminfo
-  set -e
+source ./_scripts/msg.sh
   
-  printf "${RED}Uninstalling dotfiles ${NORMAL}\n"
-  printf "${YELLOW}Please note that only configuration will be removed not the installed softwares.${NORMAL}\n"
+  info "Uninstalling dotfiles"
+  info "Please note that only configuration will be removed not the installed softwares."
 
-printf "${YELLOW}Removing Fonts.${NORMAL}\n"
-  if [ -d ~/.local/share/fonts/terminal_fonts ]; then
-    rm -f ~/.local/share/fonts/terminal_fonts
-  fi
+action "Removing Fonts."
+stow -t ~ -D terminal_fonts
+ok
 
-printf "${YELLOW}Removing ZSH configuration.${NORMAL}\n"
-  if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
-    rm -f ~/.zshrc;
-  fi
-printf "${YELLOW}Removing Oh-My-ZSH.${NORMAL}\n"
-  if [ -d ~/.local/share/zsh/oh-my-zsh ]; then
-    rm -R -f ~/.local/share/zsh/oh-my-zsh;
-  fi
-printf "${YELLOW}Removing Base16-shell themes.${NORMAL}\n"
-  if [ -d ~/.local/share/zsh/base16-shell ]; then
-    rm -R -f ~/.local/share/zsh/base16-shell;
-  fi
-  if [ -f ~/.vimrc_background ] || [ -h ~/.vimrc_background ]; then
-    rm ~/.vimrc_background;
-  fi
-  if [ -f ~/.base16_theme ] || [ -h ~/.base16_theme ]; then
-    rm ~/.base16_theme;
-  fi
-printf "${YELLOW}Removing tmux configuration.${NORMAL}\n"
-  if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
-    rm ~/.tmux.conf;
-  fi
-printf "${YELLOW}Removing vim and nvim configurations.${NORMAL}\n"
-  if [ -d ~/.config/nvim ]; then
-    unlink ~/.config/nvim
-  fi
-  if [ -f ~/.vimrc ] || [ -h ~/.vimrc ]; then
-    rm ~/.vimrc;
-  fi
-printf "${YELLOW}Removing git configuration.${NORMAL}\n"
-  if [ -f ~/.gitconfig ] || [ -h ~/.gitconfig ]; then
-    rm ~/.gitconfig;
-  fi
-  if [ -f ~/.gitignore_global ] || [ -h ~/.gitignore_global ]; then
-    rm ~/.gitignore_global;
-  fi
-
-printf "${BLUE}Looking for an old ZSH config...${NORMAL}\n"
-  if [ -f ~/.zshrc.old ] || [ -h ~/.zshrc.old ]; then
-    printf "${YELLOW}Found ~/.zshrc.old. Restoring up to ~/.zshrc${NORMAL}\n";
-    mv ~/.zshrc.old ~/.zshrc;
-  fi
-
-printf "${BLUE}Looking for an old tmux config...${NORMAL}\n"
-  if [ -f ~/.tmux.conf.old ] || [ -h ~/.tmux.conf.old ]; then
-    printf "${YELLOW}Found ~/.tmux.conf.old.${NORMAL} ${GREEN}Restoring up to ~/.tmux.conf${NORMAL}\n";
-    mv ~/.tmux.conf.old ~/.tmux.conf;
-  fi
-
- printf "${BLUE}Looking for an old nvim config...${NORMAL}\n"
-  if [ -d ~/.config/nvim.old ]; then
-    printf "${YELLOW}Found ~/.config/nvim.old.${NORMAL} ${GREEN}Restoring up to ~/.config/nvim${NORMAL}\n";
-    mv ~/.config/nvim.old ~/.config/nvim;
-  fi
-
- printf "${BLUE}Looking for an old vim config...${NORMAL}\n"
-  if [ -f ~/.vimrc.old ] || [ -h ~/.vimrc.old ]; then
-    printf "${YELLOW}Found ~/.vimrc.old.${NORMAL} ${GREEN}Restoring up to ~/.vimrc${NORMAL}\n";
-    mv ~/.vimrc.old ~/.vimrc;
-  fi
+action "Removing git configuration"
+stow -t ~ -D git
 printf "${BLUE}Looking for an old git config...${NORMAL}\n"
   if [ -f ~/.gitconfig.old ] || [ -h ~/.gitconfig.old ]; then
     printf "${YELLOW}Found ~/.gitconfig.old.${NORMAL} ${GREEN}Restoring up to ~/.gitconfig${NORMAL}\n";
@@ -104,28 +21,54 @@ printf "${BLUE}Looking for an old git config...${NORMAL}\n"
     printf "${YELLOW}Found ~/.gitignore_global.old.${NORMAL} ${GREEN}Restoring up to ~/.gitignore_global${NORMAL}\n";
     mv ~/.gitignore_global.old ~/.gitignore_global;
   fi
+ok
 
-  if [ -d ~/.local/share/nvim ]; then
-    printf "${RED}"
-    echo -n "Do you want to uninstalled the config data in ~/.local/share/nvim (y/n)? "
-    read answer
-    printf "${NORMAL}"
-    if echo "$answer" | grep -iq "^y" ;then
-      rm -R -f ~/.local/share/nvim
-    fi
+action "Removing BASH configuration"
+stow -t ~ -D shell_common
+if [ -f ~/.vimrc_background ] || [ -h ~/.vimrc_background ]; then
+    rm ~/.vimrc_background;
+  fi
+  if [ -f ~/.base16_theme ] || [ -h ~/.base16_theme ]; then
+    rm ~/.base16_theme;
+  fi
+ok
+
+action "Removing ZSH configuration"
+stow -t ~ -D zsh
+  if [ -f ~/.zshrc.old ] || [ -h ~/.zshrc.old ]; then
+    info "Found old config file ~/.zshrc.old. Restoring up to ~/.zshrc";
+    mv ~/.zshrc.old ~/.zshrc;
+  fi
+ok
+
+action "Removing tmux configuration"
+stow -t ~ -D tmux
+printf "${BLUE}Looking for an old tmux config...${NORMAL}\n"
+  if [ -f ~/.tmux.conf.old ] || [ -h ~/.tmux.conf.old ]; then
+    printf "${YELLOW}Found ~/.tmux.conf.old.${NORMAL} ${GREEN}Restoring up to ~/.tmux.conf${NORMAL}\n";
+    mv ~/.tmux.conf.old ~/.tmux.conf;
+  fi
+ok
+
+action "Removing nvim/vim configuration"
+stow -t ~ -D nvim
+ok
+printf "${BLUE}Looking for an old nvim config...${NORMAL}\n"
+  if [ -d ~/.config/nvim.old ]; then
+    printf "${YELLOW}Found ~/.config/nvim.old.${NORMAL} ${GREEN}Restoring up to ~/.config/nvim${NORMAL}\n";
+    mv ~/.config/nvim.old ~/.config/nvim;
   fi
 
-  if [ -d ~/.local/share/tmux ]; then
-    printf "${RED}"
-    echo -n "Do you want to uninstalled the config data in ~/.local/share/tmux (y/n)? "
-    read answer
-    printf "${NORMAL}"
-    if echo "$answer" | grep -iq "^y" ;then
-      rm -R -f ~/.local/share/tmux
-    fi
+ printf "${BLUE}Looking for an old vim config...${NORMAL}\n"
+  if [ -f ~/.vimrc.old ] || [ -h ~/.vimrc.old ]; then
+    printf "${YELLOW}Found ~/.vimrc.old.${NORMAL} ${GREEN}Restoring up to ~/.vimrc${NORMAL}\n";
+    mv ~/.vimrc.old ~/.vimrc;
   fi
 
-printf "${GREEN}All configuration successfully uninstalled. ${NORMAL}\n"
-}
+action "Removing stow -t ~ Configuration"
+stow -t ~ -D stow
+ok
 
-main
+
+info "All configuration successfully uninstalled."
+

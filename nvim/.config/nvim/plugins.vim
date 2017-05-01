@@ -6,7 +6,7 @@ set nocompatible " Don't use compatibility mode
 filetype off     " required for plug install
 let g:plugin_config_location=g:config_file_location.'vim_plugins/'
 
-" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
+" Specify a directory for plugins (for Neovim: $HOME/.local/share/nvim/plugged)
 call plug#begin(g:runtime_data_location . 'plugged')
 
 " Source all the plugins with a global variable set that ensures only the

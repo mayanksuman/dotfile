@@ -1,9 +1,9 @@
 # gitconfig
 [include]
     # User Information
-    path=$HOME/.gituser_info.custom
+    path=~/.gituser_info.sec
 [init]
-# templatedir = $HOME/.git_template
+# templatedir = ~/.git_template
 [alias]
     # list all aliases
     la = "!git config -l | grep alias | cut -c 7-"
