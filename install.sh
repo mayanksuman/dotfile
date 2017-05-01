@@ -132,7 +132,8 @@ stow -t ~ nvim
 ok
 
 step "Installing vim plugins"
-vim +PlugInstall +GrammarousCheck +qa
+vim +PlugInstall +qa
+vim +GrammarousCheck +qa
 ok
 
 step "Enabling python support in nvim"
