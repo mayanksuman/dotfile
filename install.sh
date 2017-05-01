@@ -148,7 +148,11 @@ ok
 
 action "Configuring git"
 stow -t ~ -D git
-if [ ! -f git/.gituser_info.sec ]; then
+if [ -f git/.gituser_info.sec ] || [ -h git/.gituser_info.sec ]; then
+info "git user info file is found. The contents are"
+cat git/.gituser_info.sec
+info "If you want to change, then please edit $(pwd)/git/.gituser_info.sec file."
+else
 cp git/.gituser_info.sec.example git/.gituser_info.sec
 input "Enter your name as git user"
 read username
