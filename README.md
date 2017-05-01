@@ -1,9 +1,9 @@
 # MS dotfile - My configuration
 
-Version 2! Inspired by mutewinter, spf13, nicknishi dotfile.
+Version 2.1! Dotfile managed by GNU stow using an Install script. It is being migrated to GNU stow. Install script is complete, uninstall script need some love and time.
 
 ## Installation
-Only tested on Debian based systems.
+Only tested on Debian/Ubuntu based systems.
 
 1. `git clone http://github.com/mayanksuman/dotfile.git ~/.dotfile` && cd ~/.dotfile
 1. `./install.sh`.
@@ -33,3 +33,8 @@ let g:move_key_modifier = 'C'
 
 This example installs [`vim-move`](https://github.com/matze/vim-move).
 
+## Other Features
+1. Automatically sets ZSH as default shell.
+1. Uses fzf for reverse lookup of history (ctrl-R).
+1. Better DISPLAY variable forwarding in tmux ssh session.
+1. Transparent editting of encrypted gpg files right from nvim/vim
