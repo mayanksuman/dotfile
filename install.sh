@@ -4,6 +4,7 @@ source ./_scripts/msg.sh
 
 action "Initializing submodule(s)"
 git submodule update --init --recursive
+ok
 
 info "  You need to be a sudo user for installing softwares."
 info "  Please give your password if demanded."
@@ -30,24 +31,24 @@ sudo -E apt-get install -ym build-essential exuberant-ctags cmake python-pip \
 ok
 
 action "Configuring stow"
+stow -t ~ -D stow
 stow -t ~ stow
 ok
 
 action "Installing fonts"
+stow -t ~ -D terminal_fonts
 stow -t ~ terminal_fonts
 ok
 
-action "Configuring git"
-stow -t ~ git
-ok
-
 action "Configuring Bash"
+stow -t ~ -D shell_common
 stow -t ~ shell_common
 echo "source ~/.shell_common_config">>~/.bashrc
 ok
 
 # ZSH setup
 action "Configuring ZSH"
+stow -t ~ -D zsh
 step "Setting up ZSH as default shell"
 # If this user's login shell is not already "zsh", attempt to switch.
 TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
@@ -64,22 +65,31 @@ if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
 	fi
 fi
 # Check for old ZSH config
-step "setting up ZSH configuration; Backing up existing config if present"
+step "Looking for an existing zsh config"
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
 	info "Found ~/.zshrc. Backing up to ~/.zshrc.old";
 	mv ~/.zshrc ~/.zshrc.old;
+else
+info "No existing zsh config found";
 fi
+ok
+step "setting up new ZSH configuration"
 stow -t ~ zsh
 ok
 info "ZSH configuration complete."
 # ZSH setup complete
 
 action "Configuring tmux"
-step "Setting up tmux configuration; Backing up existing config if present"
+stow -t ~ -D tmux
+step "Looking for an existing tmux config"
 if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
 	info "Found ~/.tmux.conf. Backing up to ~/.tmux.conf.old";
 	mv ~/.tmux.conf ~/.tmux.conf.old;
+else
+info "No existing tmux config found";
 fi
+ok
+step "Setting up new tmux configuration"
 stow -t ~ tmux
 ok
 
@@ -98,17 +108,22 @@ ok
 info "tmux is configured"
 
 action "Configuring nvim/vim"
-step "Looking for an existing nvim config; Backing Up if it exists."
+stow -t ~ -D nvim
+step "Looking for an existing nvim config"
 if [ -d ~/.config/nvim ]; then
 	info "Found ~/.config/nvim. Backing up to ~/.config/nvim.old";
 	mv ~/.config/nvim ~/.config/nvim.old;
+else
+info "No existing nvim config found";
 fi
 ok
 
-step "Looking for an existing vim config; Backing Up if it exists."
+step "Looking for an existing vim config"
 if [ -f ~/.vimrc ] || [ -h ~/.vimrc ]; then
 	info "Found ~/.vimrc. Backing up to ~/.vimrc.old";
 	mv ~/.vimrc ~/.vimrc.old;
+else
+info "No existing vim config found";
 fi
 ok
 
@@ -117,7 +132,7 @@ stow -t ~ nvim
 ok
 
 step "Installing vim plugins"
-vim +PlugInstall +qa
+vim +PlugInstall +GrammarousCheck +qa
 ok
 
 step "Enabling python support in nvim"
@@ -128,6 +143,23 @@ info "nvim/vim configuration is complete"
 
 step "Applying base16 brewer theme"
 bash -lic base16_brewer
+ok
+
+action "Configuring git"
+stow -t ~ -D git
+if [ ! -f git/.gituser_info.sec ]; then
+cp git/.gituser_info.sec.example git/.gituser_info.sec
+input "Enter your name as git user"
+read username
+input "Enter your e-mail address as git user"
+read email
+input "Enter your github username (if any; if you do not have leave it blank)"
+read github_username
+sed -i "s/\[USER_NAME\]/$username/g" git/.gituser_info.sec
+sed -i "s/\[E_MAIL_ID\]/$email/g" git/.gituser_info.sec
+sed -i "s/\[GITHUB_USER\]/$github_username/g" git/.gituser_info.sec
+fi
+stow -t ~ git
 ok
 
 info "Installation Complete."

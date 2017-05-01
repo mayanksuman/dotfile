@@ -41,6 +41,10 @@ function step() {
 	echo -e "${BLUE} ⇒ $1 ... ${NORMAL}"
 }
 
+function input() {
+	printf "${BLUE} $1 : ${NORMAL}"
+}
+
 function warning() {
 	echo -e "${YELLOW}[warning]: $1 ${NORMAL}"
 }

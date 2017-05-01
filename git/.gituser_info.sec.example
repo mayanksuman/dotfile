@@ -1,5 +1,5 @@
 [user]
-    name = [NAME]
-    email = [E_MAIL ID]
+    name = [USER_NAME]
+    email = [E_MAIL_ID]
 [github]
-    user = [USER_NAME]
+    user = [GITHUB_USER]
