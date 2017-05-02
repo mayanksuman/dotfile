@@ -102,7 +102,7 @@ tmux new-session -d
 # install the plugins
 bash $HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh
 # killing the tmux server
-tmux kill-server
+# tmux kill-server
 ok
 #tmux setup complete
 info "tmux is configured"
