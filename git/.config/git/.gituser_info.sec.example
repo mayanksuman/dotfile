@@ -1,0 +1,6 @@
+[user]
+    name = [USER_NAME]
+    email = [E_MAIL_ID]
+
+[credential "https://github.com"]
+    username = [GITHUB_USER]
