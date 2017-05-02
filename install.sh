@@ -43,7 +43,9 @@ ok
 action "Configuring Bash"
 stow -t ~ -D shell_common
 stow -t ~ shell_common
-echo "source ~/.shell_common_config">>~/.bashrc
+if ! grep -q 'source ~/.shell_common_config' ~/.bashrc ; then
+  echo "source ~/.shell_common_config">>~/.bashrc
+fi
 ok
 
 # ZSH setup
