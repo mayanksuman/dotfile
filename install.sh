@@ -98,11 +98,11 @@ step "Installing the tmux plugins"
 # start a server but don't attach to it
 tmux start-server
 # create a new session but don't attach to it either
-tmux new-session -d
+tmux new-session -d -s "install_session"
 # install the plugins
 bash $HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh
-# killing the tmux server
-# tmux kill-server
+# killing the tmux session
+tmux kill-session -t "install_session"
 ok
 #tmux setup complete
 info "tmux is configured"
