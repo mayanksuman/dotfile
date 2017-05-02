@@ -148,21 +148,21 @@ ok
 
 action "Configuring git"
 stow -t ~ -D git
-if [ -f git/.gituser_info.sec ] || [ -h git/.gituser_info.sec ]; then
+if [ -f git/.config/git/.gituser_info.sec ] || [ -h git/.config/git/.gituser_info.sec ]; then
 info "git user info file is found. The contents are"
-cat git/.gituser_info.sec
+cat git/.config/git/.gituser_info.sec
 info "If you want to change, then please edit $(pwd)/git/.gituser_info.sec file."
 else
-cp git/.gituser_info.sec.example git/.gituser_info.sec
 input "Enter your name as git user"
 read username
 input "Enter your e-mail address as git user"
 read email
 input "Enter your github username (if any; if you do not have leave it blank)"
 read github_username
-sed -i "s/\[USER_NAME\]/$username/g" git/.gituser_info.sec
-sed -i "s/\[E_MAIL_ID\]/$email/g" git/.gituser_info.sec
-sed -i "s/\[GITHUB_USER\]/$github_username/g" git/.gituser_info.sec
+cp git/.config/git/.gituser_info.sec.example git/.config/git/.gituser_info.sec
+sed -i "s/\[USER_NAME\]/$username/g" git/.config/git/.gituser_info.sec
+sed -i "s/\[E_MAIL_ID\]/$email/g" git/.config/git/.gituser_info.sec
+sed -i "s/\[GITHUB_USER\]/$github_username/g" git/.config/git/.gituser_info.sec
 fi
 stow -t ~ git
 ok
