@@ -15,10 +15,10 @@ set background=dark
 " -----------------------------
 " File Locations
 " -----------------------------
-set backup
 exe 'set backupdir='. g:runtime_data_location. 'backup//,.'
 exe 'set directory='. g:runtime_data_location. 'swap//'
 exe 'set viewdir='. g:runtime_data_location. 'view//'
+set backup             " Turn on backups
 " Persistent Undo
 if has('persistent_undo')
 	set undofile
@@ -57,7 +57,6 @@ endif
 " Behaviors
 " ---------------
 syntax enable
-set backup             " Turn on backups
 set autoread           " Automatically reload changes if detected
 set wildmenu           " Turn on Wild menu
 " Command <Tab> completion, list matches, then longest common part, then all.
@@ -75,6 +74,7 @@ if has('clipboard')
 endif
 set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
+set virtualedit=onemore             " Allow for cursor beyond last character
 set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
 set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
 set autowrite          " Writes on make/shell commands
