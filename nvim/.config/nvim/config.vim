@@ -44,9 +44,6 @@ set encoding=utf-8	" Ask vim to use utf-8 internally instead of latin-1
 set fileencoding=utf-8	" file should be encode in utf-8
 set noshowmode		" Don't show the mode since Powerline shows it
 set title		" Set the title of terminal window to the file
-highlight clear SignColumn      " SignColumn should match background
-highlight clear LineNr		" Current line number row will have
-				" same background color in relative mode
 if exists('+colorcolumn')
 	set colorcolumn=80	" Color the 80th column differently as a wrapping guide.
 endif
