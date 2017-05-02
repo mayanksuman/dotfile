@@ -8,6 +8,9 @@ TERM=xterm-256color
 # unicode support in tmux
 alias tmux='tmux -u'
 
+# Enable compression in ccache
+export CCACHE_COMPRESS=1
+
 # -- Improved X11 forwarding through GNU Screen (or tmux).
 # If not in screen or tmux, update the DISPLAY cache.
 # If we are, update the value of DISPLAY to be that in the cache.

@@ -24,8 +24,8 @@ step "Update the apt "
 sudo -E apt-get update
 ok
 step "Downloading and installing the packages"
-sudo -E apt-get install -ym build-essential exuberant-ctags cmake python-pip \
-	python3-pip nodejs git zsh tmux markdown pandoc sed xsel\
+sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
+	python-pip python3-pip nodejs git zsh tmux markdown pandoc sed xsel\
 	silversearcher-ag pandoc stow \
 	neovim 
 ok
@@ -43,7 +43,8 @@ ok
 action "Configuring Bash"
 stow -t ~ -D shell_common
 stow -t ~ shell_common
-if ! grep -q 'source ~/.shell_common_config' ~/.bashrc ; then
+# Check for source line; if it does not exist then add it in ~/.bashrc
+if ! grep -qsFx 'source ~/.shell_common_config' ~/.bashrc ; then
   echo "source ~/.shell_common_config">>~/.bashrc
 fi
 ok
@@ -167,6 +168,10 @@ sed -i "s/\[E_MAIL_ID\]/$email/g" git/.config/git/.gituser_info.sec
 sed -i "s/\[GITHUB_USER\]/$github_username/g" git/.config/git/.gituser_info.sec
 fi
 stow -t ~ git
+ok
+
+action "Increasing C/C++ compilation cache to 32G"
+ccache --max-size 32G
 ok
 
 info "Installation Complete."
