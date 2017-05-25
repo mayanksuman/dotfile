@@ -74,7 +74,7 @@ if has('clipboard')
 endif
 set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
-set virtualedit=onemore             " Allow for cursor beyond last character
+set virtualedit=onemore             " Allow for cursor till the end of line
 set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
 set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
 set autowrite          " Writes on make/shell commands
@@ -93,9 +93,9 @@ end
 " ---------------
 " Text Format
 " ---------------
-set tabstop=8
-set shiftwidth=8 " Tabs under smart indent
-set softtabstop=8
+set tabstop=4
+set shiftwidth=4 " Tabs under smart indent
+set softtabstop=4
 set smarttab
 set noexpandtab
 set shiftround
