@@ -16,6 +16,20 @@ alias tns='tmux -u new-session -s'
 # Enable compression in ccache
 export CCACHE_COMPRESS=1
 
+# set PATH so it includes user's private bin if it exists
+priv_bin_path="$HOME/.local/bin"
+if [ -d "${priv_bin_path}" ] ; then
+	if ! printf '%s' ":${PATH-}:" | grep -Fq ":${priv_bin_path-}:"; then
+		PATH="${priv_bin_path-}:${PATH-}"
+	fi
+fi
+priv_bin_path="$HOME/bin"
+if [ -d "${priv_bin_path}" ] ; then
+	if ! printf '%s' ":${PATH-}:" | grep -Fq ":${priv_bin_path-}:"; then
+		PATH="${priv_bin_path-}:${PATH-}"
+	fi
+fi
+
 # -- Improved X11 forwarding through GNU Screen (or tmux).
 # If not in screen or tmux, update the DISPLAY cache.
 # If we are, update the value of DISPLAY to be that in the cache.
