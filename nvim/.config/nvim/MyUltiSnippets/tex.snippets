@@ -35,7 +35,7 @@ $0
 endsnippet
 
 snippet chap "chapter"
-\chapter{$1}\label{$2}
+\chapter{$1}\label{chap:$2}
 $0
 endsnippet
 
@@ -51,32 +51,51 @@ endsnippet
 
 snippet env "start environment block"
 \begin{$1}
-$0
+$2
 \end{$1}
+$0
+endsnippet
+
+snippet lsn "Numbered List"
+\begin{enumerate}
+\item $1
+\end{enumerate}
+$0
+endsnippet
+
+snippet lsu "Unordered List"
+\begin{itemize}
+\item $1
+\end{itemize}
+$0
 endsnippet
 
 snippet ls_num "Numbered List"
 \begin{enumerate}
-\item $0
+\item $1
 \end{enumerate}
+$0
 endsnippet
 
 snippet ls_un "Unordered List"
 \begin{itemize}
-\item $0
+\item $1
 \end{itemize}
+$0
 endsnippet
 
 snippet enumerate "Numbered List 2"
 \begin{enumerate}
-\item $0
+\item $1
 \end{enumerate}
+$0
 endsnippet
 
 snippet itemize "Unordered List 2"
 \begin{itemize}
-\item $0
+\item $1
 \end{itemize}
+$0
 endsnippet
 
 snippet align "Align Equation"
@@ -87,7 +106,7 @@ snippet align "Align Equation"
 $0
 endsnippet
 
-snippet equation "Equation 2"
+snippet equation "Equation"
 \begin{equation}
 	$1
 	\label{eq:$2}
@@ -103,11 +122,20 @@ snippet eqn "Equation 2"
 $0
 endsnippet
 
+snippet eq "Equation 3"
+\begin{equation}
+	$1
+	\label{eq:$2}
+\end{equation}
+$0
+endsnippet
+
 snippet figure "Figure Block"
 \begin{figure}
 	\centering
 	\includegraphics[${2:width=}]{$1}
-	\label{fig:$3}
+	\caption{$3}
+	\label{fig:$4}
 \end{figure}
 $0
 endsnippet
@@ -116,7 +144,8 @@ snippet fig "Figure Block 2"
 \begin{figure}
 	\centering
 	\includegraphics[${2:width=}]{$1}
-	\label{fig:$3}
+	\caption{$3}
+	\label{fig:$4}
 \end{figure}
 $0
 endsnippet
@@ -143,3 +172,50 @@ $1
 $0
 endsnippet
 
+snippet table "Table Environment"
+\begin{table}
+	\centering
+	\caption{$1}
+	\label{tab:$2}
+	\begin{tabular}
+	$3
+	\end{tabular}
+\end{table}
+$0
+endsnippet
+
+snippet tab "Table Environment 2"
+\begin{table}
+	\centering
+	\caption{$1}
+	\label{tab:$2}
+	\begin{tabular}
+	$3
+	\end{tabular}
+\end{table}
+$0
+endsnippet
+
+snippet ref "Reference"
+\ref{$1}$0
+endsnippet
+
+snippet req "Refer Equation"
+\ref{eq:$1}$0
+endsnippet
+
+snippet rfig "Refer Figure"
+\ref{fig:$1}$0
+endsnippet
+
+snippet rtab "Refer Table"
+\ref{tab:$1}$0
+endsnippet
+
+snippet rsec "Refer Section"
+\ref{sec:$1}$0
+endsnippet
+
+snippet rchap "Refer Chapter"
+\ref{chap:$1}$0
+endsnippet
