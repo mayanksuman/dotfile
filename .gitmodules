@@ -7,6 +7,3 @@
 [submodule "tmux/.local/share/tmux/plugins/tpm"]
 	path = tmux/.local/share/tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "latex/.local/share/ltx2any"]
-	path = latex/.local/share/ltx2any
-	url = https://github.com/akerbos/ltx2any.git
