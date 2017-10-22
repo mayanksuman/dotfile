@@ -7,3 +7,9 @@
 [submodule "tmux/.local/share/tmux/plugins/tpm"]
 	path = tmux/.local/share/tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
+[submodule "git/.local/share/git/third_party/git-quick-stats"]
+	path = git/.local/share/git/third_party/git-quick-stats
+	url = https://github.com/arzzen/git-quick-stats.git
+[submodule "git/.local/share/git/third_party/diff-so-fancy"]
+	path = git/.local/share/git/third_party/diff-so-fancy
+	url = https://github.com/so-fancy/diff-so-fancy.git
