@@ -26,7 +26,7 @@ ok
 step "Downloading and installing the packages"
 sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 	python-pip python3-pip nodejs git zsh tmux markdown pandoc sed xsel\
-	silversearcher-ag pandoc stow \
+	silversearcher-ag pandoc stow vim-gnome\
 	neovim 
 ok
 
@@ -36,8 +36,9 @@ stow -t ~ stow
 ok
 
 action "Installing fonts"
-stow -t ~ -D terminal_fonts
-stow -t ~ terminal_fonts
+mkdir -p ~/.local/share/fonts/
+stow -t ~ -D fonts
+stow -t ~ fonts
 ok
 
 action "Configuring Bash"
