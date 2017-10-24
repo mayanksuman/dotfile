@@ -26,7 +26,7 @@ ok
 step "Downloading and installing the packages"
 sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 	python-pip python3-pip nodejs git zsh tmux markdown pandoc sed xsel\
-	silversearcher-ag pandoc stow vim-gnome unifont\
+	silversearcher-ag pandoc stow vim-gnome\
 	neovim 
 ok
 
@@ -39,6 +39,9 @@ action "Installing fonts"
 mkdir -p ~/.local/share/fonts/
 stow -t ~ -D fonts
 stow -t ~ fonts
+ok
+action "Updating font cache"
+sudo fc-cache -f -v
 ok
 
 action "Configuring Bash"
