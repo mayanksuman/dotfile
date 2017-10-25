@@ -6,7 +6,7 @@ source ./_scripts/msg.sh
   info "Please note that only configuration will be removed not the installed softwares."
 
 action "Removing Fonts."
-stow -t ~ -D terminal_fonts
+stow -t ~ -D fonts
 ok
 
 action "Removing git configuration"
