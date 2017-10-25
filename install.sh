@@ -30,6 +30,15 @@ sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 	neovim 
 ok
 
+step "Installing python packages"
+sudo -E chown -R $USER:$USER ~/local/lib
+sudo -E chown -R $USER:$USER ~/local/include
+sudo -E chown -R $USER:$USER ~/local/bin
+sudo -E chown -R $USER:$USER ~/local/share
+pip3 install numpy sympy scipy pandas matplotlib bokeh holoviews jupyter
+ok
+
+
 action "Configuring stow"
 stow -t ~ -D stow
 stow -t ~ stow
