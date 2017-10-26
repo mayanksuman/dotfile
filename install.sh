@@ -36,8 +36,8 @@ sudo -E chown -R $USER:$USER ~/local/include
 sudo -E chown -R $USER:$USER ~/local/bin
 sudo -E chown -R $USER:$USER ~/local/share
 pip3 install numpy sympy scipy pandas matplotlib bokeh holoviews jupyter statsmodels\
-	ipywidgets numba cython ipython nose scikit-learn h5py notebook tensorflow\
-	multiprocessing
+	ipywidgets numba cython ipython nose scikit-learn h5py notebook tensorflow \
+	xarray pytables
 ok
 
 
