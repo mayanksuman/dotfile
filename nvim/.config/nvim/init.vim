@@ -18,7 +18,7 @@ exe 'source '. g:config_file_location. 'config.vim'
 " New commands
 exe 'source '. g:config_file_location. 'commands.vim'
 
-" Small custom functions.
+" Custom functions.
 exe 'source '. g:config_file_location. 'functions.vim'
 
 " Load plugin-specific configuration.

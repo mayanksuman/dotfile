@@ -27,7 +27,8 @@ step "Downloading and installing the packages"
 sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 	python-pip python3-pip nodejs git zsh tmux markdown pandoc sed xsel\
 	silversearcher-ag pandoc stow vim-gnome fonts-noto-hinted unifont\
-	neovim 
+	neovim texlive texlive-latex-extra texlive-formats-extra \
+	texlive-pulishers texlive-bibtex-extra biber
 ok
 
 step "Installing python packages"
@@ -37,7 +38,7 @@ sudo -E chown -R $USER:$USER ~/local/bin
 sudo -E chown -R $USER:$USER ~/local/share
 pip3 install numpy sympy scipy pandas matplotlib bokeh holoviews jupyter statsmodels\
 	ipywidgets numba cython ipython nose scikit-learn h5py notebook tensorflow \
-	xarray pytables
+	xarray tables
 ok
 
 

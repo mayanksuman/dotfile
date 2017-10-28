@@ -27,6 +27,7 @@ if has('persistent_undo')
 	set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
 endif
 
+
 " ---------------
 " UI
 " ---------------
