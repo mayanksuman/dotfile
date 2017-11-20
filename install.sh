@@ -16,7 +16,7 @@ do
 done 2>/dev/null &
 
 action "Adding repository for latest nodejs and npm"
-curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 ok
 
 action "Installing required packages"
