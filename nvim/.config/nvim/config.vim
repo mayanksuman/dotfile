@@ -11,6 +11,8 @@ if $TERM =~ '-256color'
 	set t_ut=
 endif
 set background=dark
+hi Normal ctermbg=NONE
+
 
 " -----------------------------
 " File Locations
