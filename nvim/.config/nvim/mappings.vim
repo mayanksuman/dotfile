@@ -29,11 +29,6 @@ nnoremap gO O<Esc>j
 " from http://vimbits.com/bits/356
 nnoremap U <C-r>
 
-" Swap implementations of ` and ' jump to markers
-" By default, ' jumps to the marked line, ` jumps to the marked line and
-" column, so swap them
-nnoremap ' `
-nnoremap ` '
 
 " Don't move on *
 nnoremap <silent> * :let stay_star_view = winsaveview()<cr>*:call winrestview(stay_star_view)<cr>
@@ -118,10 +113,6 @@ nnoremap <leader>fef mx=ggG='x
 " Format a json file with Underscore CLI
 " Inspirited by https://github.com/spf13/spf13-vim/blob/3.0/.vimrc#L390
 nnoremap <leader>fj <Esc>:%!underscore print<CR><Esc>:set filetype=json<CR>
-
-" Split window vertically or horizontally *and* switch to the new split!
-nnoremap <silent> <leader>hs :split<Bar>:wincmd j<CR>:wincmd =<CR>
-nnoremap <silent> <leader>vs :vsplit<Bar>:wincmd l<CR>:wincmd =<CR>
 
 " Close the current window
 nnoremap <silent> <m-w> :close<CR>
