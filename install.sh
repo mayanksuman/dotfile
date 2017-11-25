@@ -28,7 +28,7 @@ sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 	python-pip python3-pip python3-tk nodejs git zsh tmux markdown pandoc \
 	sed xsel silversearcher-ag pandoc stow vim-gnome fonts-noto-hinted \
 	neovim texlive texlive-latex-extra texlive-formats-extra \
-	texlive-pulishers texlive-bibtex-extra biber texlive-font-utils \
+	texlive-publishers texlive-bibtex-extra biber texlive-font-utils \
 	dvipng
 ok
 
