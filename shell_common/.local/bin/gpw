@@ -30,6 +30,9 @@ process_args()
 	if ! [ -z "$1" ]
 	then
 		site="$1"
+	else
+		read -sp 'Site: ' site
+		echo
 	fi
 	if ! [ -z "$2" ]
 	then
@@ -50,8 +53,9 @@ process_args()
 }
 
 
-gen_pass() {
-	data="$secret_msg + $user@$site + $random_data"
+gen_rnd_str() {
+	data="$secret_msg + $user_prefix$user$user_suffix"
+	data="$data@$site_prefix$site$site_suffix + $random_data"
 	i=0
 	while [ $i -le $iter_count ]; do
 		data=$(echo "$data$random_data"|base64|sha256sum|xargs -0)
@@ -59,13 +63,11 @@ gen_pass() {
 	done
 	data=$(echo $data|base64|head -c ${length}|xargs -0)
 	random_output_for_site=$(echo "$data$required_msg"|xargs -0)
-	old_clip_content=$(xsel -b -o)
-	echo "$random_output_for_site"|xsel -i -b
-	echo "The output is copied to clipboard. Will be erased in $wait_sec sec"
+	echo "$random_output_for_site"|xsel -i -p
+	echo "The output is available for $wait_sec sec."
 	sleep $wait_sec
-	xsel -c -b
-	echo "Output Erased. Bye"
-	echo "$old_clip_content"|xargs|xsel -i -b
+	xsel -c -p
+	echo "Bye."
 }
 
 main()
@@ -82,15 +84,14 @@ main()
 		echo "Check the salt file - $random_data_file"
 		exit 1
 	fi
-	echo "Generating randomised bits for $user@$site"
-	gen_pass
+	gen_rnd_str
 	exit 0
 }
 
-if [ $# -eq 0 ]
+if [ "$1" = "help" ] || [ "$1" = "?" ]
 then
 	usage
-	exit 1
+	exit 0
 else
 	main "$1" "$2" "$3" "$4" "$5"
 fi
