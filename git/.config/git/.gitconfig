@@ -1,7 +1,7 @@
 # gitconfig
 [include]
     # User Information
-    path=~/.config/git/.gituser_info.sec
+    path=~/.config/git/.gituser_info.secret
 [init]
 # templatedir = ~/.config/git/.git_template
 [alias]

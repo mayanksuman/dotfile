@@ -1,4 +1,4 @@
-*.sec*
+*.secret
 .DS_Store
 .gitsecret
 /bin/
