@@ -8,7 +8,7 @@ Only tested on Debian/Ubuntu based systems.
 
 1. `git clone http://github.com/mayanksuman/dotfile.git ~/.dotfile` && cd ~/.dotfile
 1. `./install.sh`.
-1. Use RoboMOno Nerd Medium font for terminal
+1. Use RoboMono Nerd Medium font for terminal.
 
 ## Customized VIM Mappings
 
@@ -49,8 +49,8 @@ This example installs [`vim-move`](https://github.com/matze/vim-move).
 
 ## Included Terminal and Indic fonts
 
-Indic font (Sakal Bharti; License:SIL OFL 1.1) is available at [`C-Dac`](https://cdac.in/index.aspx?id=dl_sakal_bharati_font)
-RObotoMono Nerd font version 1.2.0 (MIT License) is available at [`NERD Fonts`](https://github.com/ryanoasis/nerd-fonts)
+* Indic font (Sakal Bharti; License:SIL OFL 1.1) is available at [`C-Dac`](https://cdac.in/index.aspx?id=dl_sakal_bharati_font)
+* RobotoMono Nerd font version 1.2.0 (MIT License) is available at [`NERD Fonts`](https://github.com/ryanoasis/nerd-fonts)
 
 ## Other Features
 
@@ -63,4 +63,4 @@ RObotoMono Nerd font version 1.2.0 (MIT License) is available at [`NERD Fonts`](
 
 ## License
 
-GNU Public License 3 except for included fonts
+GNU Public License 3 except for included fonts.
