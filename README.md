@@ -6,7 +6,7 @@ Version 3.0! Dotfile managed by GNU stow using an Install script.
 
 Only tested on Debian/Ubuntu based systems.
 
-1. `git clone http://github.com/mayanksuman/dotfile.git ~/.dotfile` && cd ~/.dotfile
+1. `git clone --depth 1 https://github.com/mayanksuman/dotfile.git ~/.dotfile && cd ~/.dotfile`
 1. `./install.sh`.
 1. Use RoboMono Nerd Medium font for terminal.
 
@@ -49,7 +49,7 @@ This example installs [`vim-move`](https://github.com/matze/vim-move).
 
 ## Included Terminal and Indic fonts
 
-* Indic font (Sakal Bharti; License:SIL OFL 1.1) is available at [`C-Dac`](https://cdac.in/index.aspx?id=dl_sakal_bharati_font)
+* Indic font (Sakal Bharti; License: SIL OFL 1.1) is available at [`C-Dac`](https://cdac.in/index.aspx?id=dl_sakal_bharati_font)
 * RobotoMono Nerd font version 1.2.0 (MIT License) is available at [`NERD Fonts`](https://github.com/ryanoasis/nerd-fonts)
 
 ## Other Features
