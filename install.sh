@@ -78,8 +78,8 @@ if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
 		info "Please enter your password if asked."
 		chsh -s $(grep /zsh$ /etc/shells | tail -1)
 		ok
-		# Else, suggest the user do so manually.
 	else
+		# Suggest the user do so manually.
 		warning "I can't change your shell automatically because this system does not have chsh."
 		info "Please manually change your default shell to zsh!"
 	fi

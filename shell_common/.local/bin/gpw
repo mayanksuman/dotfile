@@ -12,17 +12,17 @@ usage()
 	echo "      \$5 - hash algorithm iteration count (optional)"
 }
 
-read_config()
+read_config_vars()
 {
 	CFG_FILE="$1"
-	if [ -s $CFG_FILE ] && [ -r $CFG_FILE ]
-	then
+	if [ -s $CFG_FILE ] && [ -r $CFG_FILE ]; then
 		CFG_CONTENT=$(cat $CFG_FILE | sed -r '/[^=]+=[^=]+/!d' | sed -r 's/\s+=\s/=/g')
+		eval "$CFG_CONTENT"
+		CFG_CONTENT=""
 	else
-		echo "Check the config file - $CFG_FILE"
+		echo "Error: Check the config file - $CFG_FILE. Exitting"
 		exit 1
 	fi
-	eval "$CFG_CONTENT"
 }
 
 process_args()
@@ -52,44 +52,102 @@ process_args()
 	fi
 }
 
-
 gen_rnd_str() {
 	data="$secret_msg + $user_prefix$user$user_suffix"
 	data="$data@$site_prefix$site$site_suffix + $random_data"
 	i=0
 	while [ $i -le $iter_count ]; do
-		data=$(echo "$data$random_data"|base64|sha256sum|xargs -0)
+		data=$(echo "$data$random_data"|base64|sha512sum|xargs -0)
 		i=$(($i+1))
 	done
-	data=$(echo $data|base64|head -c ${length}|xargs -0)
+	length_wo_requited_msg=$((length-${#required_msg}))
+	data=$(echo $data|base64|$head_prog -c $length_wo_requited_msg|xargs -0)
 	random_output_for_site=$(echo "$data$required_msg"|xargs -0)
-	echo "$random_output_for_site"|xsel -i -p
-	echo "The output is available for $wait_sec sec."
-	sleep $wait_sec
-	xsel -c -p
-	echo "Bye."
+	if [ "$clipboard_name" != "stdout" ]; then
+		echo "$random_output_for_site"|$clipboard_function -i
+		echo "The output is available for $wait_sec sec."
+		sleep $wait_sec
+		curr_clip_content=$($clipboard_function -o)
+		if [ "$curr_clip_content" = "$random_output_for_site" ]; then
+			eval "$clipboard_function -c"
+		fi
+		echo "Bye."
+	else
+		echo "$random_output_for_site"
+		echo
+	fi
+}
+
+read_set_len_config()
+{
+	CFG_FILE="$1"
+	if [ -s $CFG_FILE ] && [ -r $CFG_FILE ]; then
+		CFG_CONTENT=$(cat $CFG_FILE | grep -e ^set_len)
+		eval "$CFG_CONTENT"
+		CFG_CONTENT=""
+	else
+		echo "Error: Check the config file - $CFG_FILE. Exitting"
+		exit 1
+	fi
+
+}
+
+set_len()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		length="$2"
+	fi
+}
+
+set_clipboard_function()
+{
+	case "$1" in
+		primary)
+			clipboard_function="xsel -p"
+			;;
+		secondary)
+			clipboard_function="xsel -s"
+			;;
+		clipboard)
+			clipboard_function="xsel -b"
+			;;
+		stdout)
+			;;
+		*)
+			echo "Error: wrong clipboard name. Exitting"
+			exit 1
+	esac
 }
 
 main()
 {
-	CFG_FILE=~/.config/gpw/gpw.conf.secret
-	read_config $CFG_FILE
+	read_config_vars $CFG_FILE
 	process_args "$1" "$2" "$3" "$4" "$5"
+	read_set_len_config $CFG_FILE
+	set_clipboard_function $clipboard_name
 	read -sp 'Secret Sause (Message): ' secret_msg
 	echo
-	if [ -s $random_data_file ] && [ -r $random_data_file ]
-	then
+	if [ -s $random_data_file ] && [ -r $random_data_file ]; then
 		random_data=$(cat $random_data_file)
 	else
-		echo "Check the salt file - $random_data_file"
+		echo "Error: Check the salt file - $random_data_file. Exitting"
 		exit 1
 	fi
 	gen_rnd_str
+	if [ $save_site_info -eq 1 ]; then
+		if ! grep -qsFx "$site" "$site_file" ; then
+			echo "$site">>$site_file
+		fi
+	fi
 	exit 0
 }
 
-if [ "$1" = "help" ] || [ "$1" = "?" ]
-then
+CFG_FILE=~/.config/gpw/gpw.conf.secret
+head_prog=head
+# head_prog=/usr/bin/head
+
+if [ "$1" = "help" ] || [ "$1" = "?" ]; then
 	usage
 	exit 0
 else
