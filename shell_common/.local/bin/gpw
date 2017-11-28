@@ -143,7 +143,9 @@ main()
 	exit 0
 }
 
-CFG_FILE=~/.config/gpw/gpw.conf.secret
+gpw_data_location=~/.local/share/gpw
+gpw_config_location=~/.config/gpw
+CFG_FILE=$gpw_config_location/gpw.conf.secret
 head_prog=head
 # head_prog=/usr/bin/head
 

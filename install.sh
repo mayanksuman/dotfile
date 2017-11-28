@@ -2,6 +2,12 @@
 
 source ./_scripts/msg.sh
 
+if [ $EUID -eq 0 ]; then
+	error "This bash script should not be run as root. Exitting"
+	exit 1
+fi
+
+
 action "Initializing submodule(s)"
 git submodule update --init --recursive
 ok
@@ -33,13 +39,14 @@ sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 ok
 
 step "Installing python packages"
-sudo -E chown -R $USER:$USER ~/local/lib
-sudo -E chown -R $USER:$USER ~/local/include
-sudo -E chown -R $USER:$USER ~/local/bin
-sudo -E chown -R $USER:$USER ~/local/share
-pip3 install numpy sympy scipy pandas matplotlib bokeh holoviews jupyter statsmodels\
-	ipywidgets numba cython ipython nose scikit-learn h5py notebook tensorflow \
-	xarray tables
+mkdir -p ~/.local/{bin,share,lib,include}
+sudo -E chown -R $USER:$USER ~/.local/lib
+sudo -E chown -R $USER:$USER ~/.local/bin
+sudo -E chown -R $USER:$USER ~/.local/include
+sudo -E chown -R $USER:$USER ~/.local/share
+pip3 install numpy sympy scipy pandas matplotlib bokeh holoviews jupyter \
+	statsmodels ipywidgets numba cython ipython nose scikit-learn h5py \
+	notebook tensorflow xarray tables
 ok
 
 
@@ -80,7 +87,8 @@ if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
 		ok
 	else
 		# Suggest the user do so manually.
-		warning "I can't change your shell automatically because this system does not have chsh."
+		warning "I can't change your shell automatically"
+		warning "because this system does not have chsh."
 		info "Please manually change your default shell to zsh!"
 	fi
 fi
@@ -168,10 +176,11 @@ ok
 
 action "Configuring git"
 stow -t ~ -D git
-if [ -f git/.config/git/.gituser_info.secret ] || [ -h git/.config/git/.gituser_info.secret ]; then
+gituser_info_file=git/.config/git/.gituser_info.secret
+if [ -f "$gituser_info_file" ] || [ -h "$gituser_info_file" ]; then
 info "git user info file is found. The contents are"
-cat git/.config/git/.gituser_info.secret
-info "If you want to change, then please edit $(pwd)/git/.gituser_info.secret file."
+cat "$gituser_info_file"
+info "If you want to change, then please edit $(pwd)/$gituser_info_file file."
 else
 input "Enter your name as git user"
 read username
@@ -179,10 +188,10 @@ input "Enter your e-mail address as git user"
 read email
 input "Enter your github username (if any; if you do not have leave it blank)"
 read github_username
-cp git/.config/git/.gituser_info.secret.example git/.config/git/.gituser_info.secret
-sed -i "s/\[USER_NAME\]/$username/g" git/.config/git/.gituser_info.secret
-sed -i "s/\[E_MAIL_ID\]/$email/g" git/.config/git/.gituser_info.secret
-sed -i "s/\[GITHUB_USER\]/$github_username/g" git/.config/git/.gituser_info.secret
+cp git/.config/git/.gituser_info.secret.example "$gituser_info_file"
+sed -i "s/\[USER_NAME\]/$username/g" "$gituser_info_file"
+sed -i "s/\[E_MAIL_ID\]/$email/g" "$gituser_info_file"
+sed -i "s/\[GITHUB_USER\]/$github_username/g" "$gituser_info_file"
 fi
 stow -t ~ git
 ok
@@ -193,4 +202,6 @@ ok
 
 info "Installation Complete."
 info "Post Installation manual configuration"
-info " The theme can be changed by issueing base16_* command in ZSH or BASH."
+info "  The theme can be changed by issueing base16_* command in ZSH or BASH."
+info "  The default font for the terminal can be changed to"
+info "  RobotoMono Nerd Medium."
