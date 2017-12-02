@@ -70,10 +70,10 @@ vnoremap gk 15gkzz
 " ---------------
 
 " Let's make escape better, together.
-inoremap jk <Esc>
-inoremap JK <Esc>
-inoremap Jk <Esc>
-inoremap jK <Esc>
+inoremap jj <Esc>
+inoremap JJ <Esc>
+inoremap Jj <Esc>
+inoremap jJ <Esc>
 
 " ---------------
 " Leader Mappings
@@ -147,6 +147,9 @@ map <leader>ew :e %%
 
 " Easier formatting
 nnoremap <silent> <leader>f gwip
+
+" git blame support
+vmap <Leader>b :<C-U>!git blame <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
 
 
 " ---------------

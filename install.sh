@@ -22,6 +22,9 @@ do
 done 2>/dev/null &
 
 action "Adding repository for latest nodejs and npm"
+step "Update the apt and installing curl"
+sudo -E apt-get update && sudo -E apt-get install curl
+ok
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 ok
 
@@ -31,11 +34,10 @@ sudo -E apt-get update
 ok
 step "Downloading and installing the packages"
 sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
-	python-pip python3-pip python3-tk nodejs git zsh tmux markdown pandoc \
-	sed xsel silversearcher-ag pandoc stow vim-gnome fonts-noto-hinted \
-	neovim texlive texlive-latex-extra texlive-formats-extra \
-	texlive-publishers texlive-bibtex-extra biber texlive-font-utils \
-	dvipng
+	python-pip python3-pip python3-tk nodejs git zsh tmux markdown \
+	pandoc sed xsel stow vim-gnome fonts-noto-hinted neovim texlive \
+	texlive-latex-extra texlive-formats-extra texlive-publishers \
+	texlive-bibtex-extra biber texlive-font-utils dvipng composer
 ok
 
 step "Installing python packages"
@@ -44,9 +46,9 @@ sudo -E chown -R $USER:$USER ~/.local/lib
 sudo -E chown -R $USER:$USER ~/.local/bin
 sudo -E chown -R $USER:$USER ~/.local/include
 sudo -E chown -R $USER:$USER ~/.local/share
-pip3 install numpy sympy scipy pandas matplotlib bokeh holoviews jupyter \
-	statsmodels ipywidgets numba cython ipython nose scikit-learn h5py \
-	notebook tensorflow xarray tables
+pip3 install --user numpy sympy scipy pandas matplotlib bokeh holoviews \
+	jupyter statsmodels ipywidgets numba cython ipython nose scikit-learn \
+	h5py notebook tensorflow netcdf4 xarray tables jedi psutil setproctitle
 ok
 
 
@@ -167,6 +169,21 @@ ok
 step "Enabling python support in nvim"
 sudo -E pip2 install --user neovim
 sudo -E pip3 install --user neovim
+ok
+
+step "Installing Language Servers"
+#cland -Language Server for clang C/C++
+sudo apt purge clang
+sudo apt autoremove
+sudo -E apt install clang-5.0
+sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-5.0 100
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-5.0 100
+sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-5.0 100
+# Language Server for Python
+sudo -E pip3 install --user python-language-server
+# Language server for javascript and typescript
+npm install -g javascript-typescript-langserver
+# Language server for PHP is installed by during vim plugin install
 ok
 info "nvim/vim configuration is complete"
 

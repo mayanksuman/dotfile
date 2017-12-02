@@ -5,11 +5,9 @@ usage()
 	echo "Usage: "
 	echo "   genpass \$1 \$2 \$3 \$4 \$5"
 	echo 
-	echo "      \$1 - site name such as hotmail.com"
+	echo "      \$1 - site name such as hotmail.com (optional)"
 	echo "      \$2 - user name (optional)"
 	echo "      \$3 - Output length (optional)"
-	echo "      \$4 - custom salt file path (optional)"
-	echo "      \$5 - hash algorithm iteration count (optional)"
 }
 
 read_config_vars()
@@ -42,14 +40,6 @@ process_args()
 	then
 		length="$3"
 	fi
-	if ! [ -z "$4" ]
-	then
-		random_data_file="$4"
-	fi
-	if ! [ -z "$5" ]
-	then
-		iter_count="$5"
-	fi
 }
 
 gen_rnd_str() {
@@ -78,11 +68,11 @@ gen_rnd_str() {
 	fi
 }
 
-read_set_len_config()
+read_custom_config()
 {
 	CFG_FILE="$1"
 	if [ -s $CFG_FILE ] && [ -r $CFG_FILE ]; then
-		CFG_CONTENT=$(cat $CFG_FILE | grep -e ^set_len)
+		CFG_CONTENT=$(cat $CFG_FILE | grep -e ^set_)
 		eval "$CFG_CONTENT"
 		CFG_CONTENT=""
 	else
@@ -96,7 +86,67 @@ set_len()
 {
 	curr_site="$1"
 	if [ "$site" = "$curr_site" ]; then
-		length="$2"
+		if [ "$2" -eq "$2" ] 2> /dev/null; then
+			length="$2"
+		fi
+	fi
+}
+
+set_iter_count()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		if [ "$2" -eq "$2" ] 2> /dev/null; then
+			iter_count="$2"
+		fi
+	fi
+}
+
+set_user()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		user="$2"
+	fi
+}
+
+set_user_prefix()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		user_prefix="$2"
+	fi
+}
+
+set_user_suffix()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		user_suffix="$2"
+	fi
+}
+
+set_site_prefix()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		site_prefix="$2"
+	fi
+}
+
+set_site_suffix()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		site_suffix="$2"
+	fi
+}
+
+set_random_data_file()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		random_data_file="$2"
 	fi
 }
 
@@ -123,8 +173,8 @@ set_clipboard_function()
 main()
 {
 	read_config_vars $CFG_FILE
-	process_args "$1" "$2" "$3" "$4" "$5"
-	read_set_len_config $CFG_FILE
+	process_args "$1" "$2" "$3"
+	read_custom_config $CUSTOM_CFG_FILE
 	set_clipboard_function $clipboard_name
 	read -sp 'Secret Sause (Message): ' secret_msg
 	echo
@@ -146,6 +196,7 @@ main()
 gpw_data_location=~/.local/share/gpw
 gpw_config_location=~/.config/gpw
 CFG_FILE=$gpw_config_location/gpw.conf.secret
+CUSTOM_CFG_FILE=$gpw_config_location/gpw.conf.secret
 head_prog=head
 # head_prog=/usr/bin/head
 
