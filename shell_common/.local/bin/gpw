@@ -3,13 +3,18 @@
 usage()
 {
 	echo "Usage: "
-	echo "   genpass \$1 \$2 \$3 \$4 \$5"
+	echo "   gpw \$1 \$2 \$3 \$4 \$5"
 	echo 
 	echo "      \$1 - site name such as hotmail.com (optional)"
 	echo "      \$2 - user name (optional)"
 	echo "      \$3 - Output length (optional)"
+	echo "      \$4 - Iteration Count (optional)"
+	echo "      \$5 - Random data file (optional)"
+	echo
+	echo "   'gpw help' or 'gpw ?' shows this usage report."
 }
 
+# Read default configs for all sites
 read_config_vars()
 {
 	CFG_FILE="$1"
@@ -23,22 +28,38 @@ read_config_vars()
 	fi
 }
 
+# Read custom configs for selected sites
+read_custom_config()
+{
+	CFG_FILE="$1"
+	if [ -s $CFG_FILE ] && [ -r $CFG_FILE ]; then
+		CFG_CONTENT=$(cat $CFG_FILE | grep -e ^set_)
+		eval "$CFG_CONTENT"
+		CFG_CONTENT=""
+	else
+		echo "Error: Check the config file - $CFG_FILE. Exitting"
+		exit 1
+	fi
+}
+
+# Process all arguments except site argument
 process_args()
 {
 	if ! [ -z "$1" ]
 	then
-		site="$1"
-	else
-		read -sp 'Site: ' site
-		echo
+		user="$1"
 	fi
 	if ! [ -z "$2" ]
 	then
-		user="$2"
+		length="$2"
 	fi
 	if ! [ -z "$3" ]
 	then
-		length="$3"
+		iter_count="$3"
+	fi
+	if ! [ -z "$4" ]
+	then
+		random_data_file="$4"
 	fi
 }
 
@@ -68,20 +89,7 @@ gen_rnd_str() {
 	fi
 }
 
-read_custom_config()
-{
-	CFG_FILE="$1"
-	if [ -s $CFG_FILE ] && [ -r $CFG_FILE ]; then
-		CFG_CONTENT=$(cat $CFG_FILE | grep -e ^set_)
-		eval "$CFG_CONTENT"
-		CFG_CONTENT=""
-	else
-		echo "Error: Check the config file - $CFG_FILE. Exitting"
-		exit 1
-	fi
-
-}
-
+# Site specific customization functions
 set_len()
 {
 	curr_site="$1"
@@ -170,11 +178,19 @@ set_clipboard_function()
 	esac
 }
 
+
 main()
 {
+	if ! [ -z "$1" ]
+	then
+		site="$1"
+	else
+		read -sp 'Site: ' site
+		echo
+	fi
 	read_config_vars $CFG_FILE
-	process_args "$1" "$2" "$3"
 	read_custom_config $CUSTOM_CFG_FILE
+	process_args "$2" "$3" "$4" "$5"
 	set_clipboard_function $clipboard_name
 	read -sp 'Secret Sause (Message): ' secret_msg
 	echo
@@ -196,7 +212,7 @@ main()
 gpw_data_location=~/.local/share/gpw
 gpw_config_location=~/.config/gpw
 CFG_FILE=$gpw_config_location/gpw.conf.secret
-CUSTOM_CFG_FILE=$gpw_config_location/gpw.conf.secret
+CUSTOM_CFG_FILE=$gpw_config_location/gpw.custom.conf.secret
 head_prog=head
 # head_prog=/usr/bin/head
 
