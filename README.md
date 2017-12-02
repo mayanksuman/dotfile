@@ -12,11 +12,11 @@ Only tested on Debian/Ubuntu based systems.
 
 ## Customized VIM Mappings
 
-* Typing `jk` insert mode is equivalent to `Escape`.
+* Typing `jj` in insert mode is equivalent to `Escape`.
 * `fzf` for fuzzy search in current directory and 'fzh' for fuzzy search in $HOME folder.
 * Easy movement between vim/tmux panes using `Ctrl+h/j/k/l`
 * Easy pane resizing by `Ctrl+=`
- 
+
 
 And many more. See [`mappings.vim`](nvim/mappings.vim) for more.
 
@@ -45,7 +45,7 @@ This example installs [`vim-move`](https://github.com/matze/vim-move).
 * `ta` attaches to last tmux session.
 * `tns` create new tmux session.
 * `tls` list all the tmux sessions.
- 
+
 
 ## Included Terminal and Indic fonts
 
