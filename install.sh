@@ -40,6 +40,10 @@ sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 	texlive-bibtex-extra biber texlive-font-utils dvipng composer
 ok
 
+step "Setting up npm install path"
+mkdir -p ~/.local
+npm config set prefix '~/.local'
+
 step "Installing python packages"
 mkdir -p ~/.local/{bin,share,lib,include}
 sudo -E chown -R $USER:$USER ~/.local/lib
@@ -173,17 +177,17 @@ ok
 
 step "Installing Language Servers"
 #cland -Language Server for clang C/C++
-sudo apt purge clang
-sudo apt autoremove
-sudo -E apt install clang-5.0
+sudo apt -ym purge clang
+sudo apt -ym autoremove
+sudo -E apt -ym install clang-5.0
 sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-5.0 100
 sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-5.0 100
 sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-5.0 100
 # Language Server for Python
-sudo -E pip3 install --user python-language-server
+pip3 install --user python-language-server
 # Language server for javascript and typescript
 npm install -g javascript-typescript-langserver
-# Language server for PHP is installed by during vim plugin install
+# Language server for PHP is installed by vim during plugin install
 ok
 info "nvim/vim configuration is complete"
 

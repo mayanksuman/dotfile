@@ -57,3 +57,5 @@ preexec() {
 }
 trap 'preexec' DEBUG
 
+#Set npm default location
+npm config set prefix '~/.local'
