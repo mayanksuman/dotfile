@@ -118,6 +118,14 @@ set_user()
 	fi
 }
 
+set_required_msg()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		required_msg="$2"
+	fi
+}
+
 set_user_prefix()
 {
 	curr_site="$1"
