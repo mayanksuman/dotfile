@@ -26,7 +26,11 @@ fi
 set -e
 
 function ok() {
-	echo -e "${GREEN}[ok]${NORMAL} "$1
+	echo -e "${GREEN}[ok]${NORMAL} "
+}
+
+function ok_msg() {
+	echo -e "${GREEN}[ok]${NORMAL} $1"
 }
 
 function info() {
@@ -42,7 +46,7 @@ function step() {
 }
 
 function input() {
-	printf "${BLUE} $1 : ${NORMAL}"
+	echo -e "${BLUE} $1 : ${NORMAL}"
 }
 
 function warning() {

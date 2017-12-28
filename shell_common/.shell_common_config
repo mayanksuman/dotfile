@@ -1,6 +1,6 @@
 # BASE16-Shell Entry
 BASE16_SHELL=$HOME/.local/share/shell_common/base16-shell/
-[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+[ -n "$PS1" ] && [ -s "$BASE16_SHELL/profile_helper.sh" ] && eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 # 256 color support for vim
 TERM=xterm-256color
@@ -30,17 +30,19 @@ if [ -d "${priv_bin_path}" ] ; then
 	fi
 fi
 
-export GPG_TTY=$(tty)
+GPG_TTY=$(tty)
+export GPG_TTY
 
 # -- Improved X11 forwarding through GNU Screen (or tmux).
 # If not in screen or tmux, update the DISPLAY cache.
 # If we are, update the value of DISPLAY to be that in the cache.
 function update-x11-forwarding
 {
-    if [ -z "$STY" -a -z "$TMUX" ]; then
-        echo $DISPLAY > ~/.display.txt
+    if [ -z "$STY" ] && [ -z "$TMUX" ]; then
+        echo "$DISPLAY" > "$HOME/.display.txt"
     else
-        export DISPLAY=`cat ~/.display.txt`
+		DISPLAY="$(cat $HOME/.display.txt)"
+        export DISPLAY
     fi
 }
 
@@ -58,4 +60,4 @@ preexec() {
 trap 'preexec' DEBUG
 
 #Set npm default location
-npm config set prefix '~/.local'
+npm config set prefix ~/.local

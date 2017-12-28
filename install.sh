@@ -42,14 +42,14 @@ ok
 
 step "Setting up npm install path"
 mkdir -p ~/.local
-npm config set prefix '~/.local'
+npm config set prefix "$HOME/.local"
 
 step "Installing python packages"
 mkdir -p ~/.local/{bin,share,lib,include}
-sudo -E chown -R $USER:$USER ~/.local/lib
-sudo -E chown -R $USER:$USER ~/.local/bin
-sudo -E chown -R $USER:$USER ~/.local/include
-sudo -E chown -R $USER:$USER ~/.local/share
+sudo -E chown -R "$USER:$USER" ~/.local/lib
+sudo -E chown -R "$USER:$USER" ~/.local/bin
+sudo -E chown -R "$USER:$USER" ~/.local/include
+sudo -E chown -R "$USER:$USER" ~/.local/share
 pip3 install --user numpy sympy scipy pandas matplotlib bokeh holoviews \
 	jupyter statsmodels ipywidgets numba cython ipython nose scikit-learn \
 	h5py notebook tensorflow netcdf4 xarray tables jedi psutil setproctitle
@@ -89,7 +89,7 @@ if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
 	# check for chsh and change the shell
 	if hash chsh >/dev/null 2>&1; then
 		info "Please enter your password if asked."
-		chsh -s $(grep /zsh$ /etc/shells | tail -1)
+		chsh -s "$(grep /zsh$ /etc/shells | tail -1)"
 		ok
 	else
 		# Suggest the user do so manually.
@@ -134,7 +134,7 @@ tmux start-server
 # create a new session but don't attach to it either
 tmux new-session -d -s "install_session"
 # install the plugins
-bash $HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh
+bash "$HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh"
 # killing the tmux session
 tmux kill-session -t "install_session"
 ok
@@ -204,15 +204,15 @@ cat "$gituser_info_file"
 info "If you want to change, then please edit $(pwd)/$gituser_info_file file."
 else
 input "Enter your name as git user"
-read username
+read -r username
 input "Enter your e-mail address as git user"
-read email
+read -r email
 input "Enter your github username (if any; if you do not have leave it blank)"
-read github_username
+read -r github_username
 cp git/.config/git/.gituser_info.secret.example "$gituser_info_file"
-sed -i "s/\[USER_NAME\]/$username/g" "$gituser_info_file"
-sed -i "s/\[E_MAIL_ID\]/$email/g" "$gituser_info_file"
-sed -i "s/\[GITHUB_USER\]/$github_username/g" "$gituser_info_file"
+sed -i "s/\\[USER_NAME\\]/$username/g" "$gituser_info_file"
+sed -i "s/\\[E_MAIL_ID\\]/$email/g" "$gituser_info_file"
+sed -i "s/\\[GITHUB_USER\\]/$github_username/g" "$gituser_info_file"
 fi
 stow -t ~ git
 ok

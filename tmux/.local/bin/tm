@@ -7,7 +7,7 @@
 
 # present menu for user to choose which workspace to open
 PS3="Please choose your session: "
-options=($(tmux list-sessions -F "#S" 2>/dev/null) "New TMUX Session" "zsh" "exit")
+options=("$(tmux list-sessions -F "#S" 2>/dev/null)" "New TMUX Session" "zsh" "exit")
 echo "Available TMUX sessions"
 echo "------------------"
 echo " "
@@ -15,7 +15,7 @@ select opt in "${options[@]}"
 do
 	case $opt in
 		"New TMUX Session")
-			read -p "Enter new session name: " SESSION_NAME
+			read -p -r "Enter new session name: " SESSION_NAME
 			tmux -u new -s "$SESSION_NAME"
 			break
 			;;
@@ -25,7 +25,7 @@ do
 		"exit")
 			break;;
 		*)
-			tmux -u attach-session -t $opt
+			tmux -u attach-session -t "$opt"
 			break
 			;;
 	esac

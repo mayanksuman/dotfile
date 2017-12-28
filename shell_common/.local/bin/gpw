@@ -18,8 +18,8 @@ usage()
 read_config_vars()
 {
 	CFG_FILE="$1"
-	if [ -s $CFG_FILE ] && [ -r $CFG_FILE ]; then
-		CFG_CONTENT=$(cat $CFG_FILE | sed -r '/[^=]+=[^=]+/!d' | sed -r 's/\s+=\s/=/g')
+	if [ -s "$CFG_FILE" ] && [ -r "$CFG_FILE" ]; then
+		CFG_CONTENT="$(sed -r '/[^=]+=[^=]+/!d' "$CFG_FILE" | sed -r 's/\s+=\s/=/g')"
 		eval "$CFG_CONTENT"
 		CFG_CONTENT=""
 	else
@@ -32,8 +32,8 @@ read_config_vars()
 read_custom_config()
 {
 	CFG_FILE="$1"
-	if [ -s $CFG_FILE ] && [ -r $CFG_FILE ]; then
-		CFG_CONTENT=$(cat $CFG_FILE | grep -e ^set_)
+	if [ -s "$CFG_FILE" ] && [ -r "$CFG_FILE" ]; then
+		CFG_CONTENT=$(grep -e ^set_ "$CFG_FILE")
 		eval "$CFG_CONTENT"
 		CFG_CONTENT=""
 	else
@@ -67,17 +67,17 @@ gen_rnd_str() {
 	data="$secret_msg + $user_prefix$user$user_suffix"
 	data="$data@$site_prefix$site$site_suffix + $random_data"
 	i=0
-	while [ $i -le $iter_count ]; do
+	while [ $i -le "$iter_count" ]; do
 		data=$(echo "$data$random_data"|base64|sha512sum|xargs -0)
-		i=$(($i+1))
+		i=$((i+1))
 	done
 	length_wo_requited_msg=$((length-${#required_msg}))
-	data=$(echo $data|base64|$head_prog -c $length_wo_requited_msg|xargs -0)
+	data=$(echo "$data"|base64|$head_prog -c $length_wo_requited_msg|xargs -0)
 	random_output_for_site=$(echo "$data$required_msg"|xargs -0)
 	if [ "$clipboard_name" != "stdout" ]; then
 		echo "$random_output_for_site"|$clipboard_function -i
 		echo "The output is available for $wait_sec sec."
-		sleep $wait_sec
+		sleep "$wait_sec"
 		curr_clip_content=$($clipboard_function -o)
 		if [ "$curr_clip_content" = "$random_output_for_site" ]; then
 			eval "$clipboard_function -c"
@@ -193,25 +193,25 @@ main()
 	then
 		site="$1"
 	else
-		read -sp 'Site: ' site
+		read -r -sp 'Site: ' site
 		echo
 	fi
-	read_config_vars $CFG_FILE
-	read_custom_config $CUSTOM_CFG_FILE
+	read_config_vars "$CFG_FILE"
+	read_custom_config "$CUSTOM_CFG_FILE"
 	process_args "$2" "$3" "$4" "$5"
-	set_clipboard_function $clipboard_name
-	read -sp 'Secret Sause (Message): ' secret_msg
+	set_clipboard_function "$clipboard_name"
+	read -r -sp 'Secret Sause (Message): ' secret_msg
 	echo
-	if [ -s $random_data_file ] && [ -r $random_data_file ]; then
-		random_data=$(cat $random_data_file)
+	if [ -s "$random_data_file" ] && [ -r "$random_data_file" ]; then
+		random_data=$(cat "$random_data_file")
 	else
 		echo "Error: Check the salt file - $random_data_file. Exitting"
 		exit 1
 	fi
 	gen_rnd_str
-	if [ $save_site_info -eq 1 ]; then
+	if [ "$save_site_info" -eq 1 ]; then
 		if ! grep -qsFx "$site" "$site_file" ; then
-			echo "$site">>$site_file
+			echo "$site">>"$site_file"
 		fi
 	fi
 	exit 0
