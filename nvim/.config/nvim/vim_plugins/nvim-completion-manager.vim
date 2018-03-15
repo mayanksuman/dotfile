@@ -2,11 +2,9 @@ if exists('g:vim_plug_installing_plugins')
 	Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
+    \ 'for': ['rust','javascript','python','c','cpp','php']
     \ }
 	Plug 'roxma/nvim-completion-manager', { 'do': ':UpdateRemotePlugins' }
-	if !has('nvim')
-		Plug 'roxma/vim-hug-neovim-rpc'
-	endif
 	finish
 endif
 
