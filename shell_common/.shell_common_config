@@ -60,4 +60,5 @@ preexec() {
 trap 'preexec' DEBUG
 
 #Set npm default location
-npm config set prefix ~/.local
+npm config set prefix $HOME
+export PATH=$HOME/node_modules/.bin:$PATH

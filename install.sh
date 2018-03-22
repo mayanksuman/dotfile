@@ -34,27 +34,33 @@ sudo -E apt-get update
 ok
 step "Downloading and installing the packages"
 sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
-	python-pip python3-pip python3-tk nodejs git zsh tmux markdown \
-	pandoc sed xsel stow vim-gnome fonts-noto-hinted neovim texlive \
-	texlive-latex-extra texlive-formats-extra texlive-publishers \
-	texlive-bibtex-extra biber texlive-font-utils dvipng composer
+	python-pip python3-pip python3-tk nodejs git zsh tmux markdown dvipng \
+	pandoc sed xsel stow fonts-noto-hinted neovim texlive \
+	texlive-latex-extra texlive-formats-extra texlive-publishers composer \
+	texlive-bibtex-extra biber texlive-font-utils chktex tidy
 ok
 
-step "Setting up npm install path"
+step "Setting up local install paths"
 mkdir -p ~/.local
-npm config set prefix "$HOME/.local"
-
-step "Installing python packages"
 mkdir -p ~/.local/{bin,share,lib,include}
 sudo -E chown -R "$USER:$USER" ~/.local/lib
 sudo -E chown -R "$USER:$USER" ~/.local/bin
 sudo -E chown -R "$USER:$USER" ~/.local/include
 sudo -E chown -R "$USER:$USER" ~/.local/share
-pip3 install --user numpy sympy scipy pandas matplotlib bokeh holoviews \
-	jupyter statsmodels ipywidgets numba cython ipython nose scikit-learn \
-	h5py notebook tensorflow netcdf4 xarray tables jedi psutil setproctitle
 ok
 
+step "Installing python packages"
+pip3 install --user numpy sympy scipy pandas matplotlib bokeh holoviews \
+	jupyter statsmodels ipywidgets numba cython ipython nose scikit-learn \
+	h5py notebook tensorflow netcdf4 xarray tables jedi psutil setproctitle \
+	yamllint
+ok
+
+step "Installing nodejs packages"
+npm config set prefix $HOME
+npm install csslint eslint textlint jsonlint -u
+export PATH=$HOME/node_modules/.bin:$PATH
+ok
 
 action "Configuring stow"
 stow -t ~ -D stow
@@ -166,8 +172,8 @@ stow -t ~ nvim
 ok
 
 step "Installing vim plugins"
-vim +PlugInstall +qa
-vim +GrammarousCheck +qa
+nvim +PlugInstall +qa
+nvim +GrammarousCheck +qa
 ok
 
 step "Enabling python support in nvim"
@@ -226,3 +232,5 @@ info "Post Installation manual configuration"
 info "  The theme can be changed by issueing base16_* command in ZSH or BASH."
 info "  The default font for the terminal can be changed to"
 info "  RobotoMono Nerd Medium."
+info "You can uninstall all vim package and use neovim entirely."
+info "Use update-alternatives for that."

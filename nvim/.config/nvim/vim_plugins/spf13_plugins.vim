@@ -1,8 +1,5 @@
 if exists('g:vim_plug_installing_plugins')
-"	Plug 'MarcWeber/vim-addon-mw-utils'
-"	Plug 'tomtom/tlib_vim'
 	Plug 'rhysd/conflict-marker.vim'
-"	Plug 'tacahiroy/ctrlp-funky'
 	Plug 'terryma/vim-multiple-cursors'
 "	Plug 'powerline/fonts'
 "	Plug 'ryanoasis/nerd-fonts' " very large font set
@@ -17,16 +14,7 @@ if exists('g:vim_plug_installing_plugins')
 	Plug 'reedes/vim-textobj-quote'
 	Plug 'reedes/vim-wordy'
 	Plug 'scrooloose/nerdcommenter'
-"	Plug 'tpope/vim-commentary'
-"	Plug 'Shougo/neosnippet'
-"	Plug 'Shougo/neosnippet-snippets'
 	Plug 'arnaud-lb/vim-php-namespace', { 'for': 'php' }
-"	Plug 'lumiliet/vim-twig', { 'for': 'twig' }
-	"Plug 'klen/python-mode', { 'for': 'python' }
-	"Plug 'pwolfram/python.vim', { 'for': 'python' }
-	"Plug 'python_match.vim', { 'for': 'python' }
-	"Plug 'pythoncomplete', { 'for': 'python' }
-"	Plug 'briancollins/vim-jst' , { 'for': 'jst' }
 	Plug 'vim-scripts/HTML-AutoCloseTag', { 'for': 'html' }
 	Plug 'ap/vim-css-color', { 'for': ['css','less','sass','javascript','python','stylus'] }
 	Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' } " sass scss syntax support
