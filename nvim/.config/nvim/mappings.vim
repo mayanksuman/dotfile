@@ -145,6 +145,10 @@ vnoremap . :normal .<CR>
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
 map <leader>ew :e %%
 
+" Easy diff merging (git merge)
+map <leader>gdc :diffget //2\|diffupdate<CR>	"accept the diff from current branch
+map <leader>gdm :diffget //3\|diffupdate<CR>	"accept the diff from merging branch
+
 " Easier formatting
 nnoremap <silent> <leader>f gwip
 

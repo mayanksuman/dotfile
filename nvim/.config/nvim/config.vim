@@ -123,19 +123,22 @@ set wildignore+=*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,
 set showmatch   " Show matching brackets.
 set matchtime=2 " How many tenths of a second to blink
 set winminheight=0              " Non Current Windows can be 0 line high
+
+
 " Show invisible characters
 set list
-
 " Reset the listchars
 set listchars=""
 " make tabs visible and show trailing spaces as dots
-set listchars=tab:▸\ ,trail:•
+"set listchars=tab:▸\ ,trail:•
+" make tabs invisible and show trailing spaces as dots
+set listchars=tab:\ \ ,trail:•
 " The character to show in the last column when wrap is off and the line
 " continues beyond the right of the screen
-set listchars+=extends:>
+"set listchars+=extends:>
 " The character to show in the last column when wrap is off and the line
 " continues beyond the right of the screen
-set listchars+=precedes:<
+"set listchars+=precedes:<
 
 " ---------------
 " Sounds
@@ -153,4 +156,7 @@ set mousehide  " Hide mouse after chars typed
 
 " Better complete options to speed it up
 set complete=.,w,b,u,U
+
+filetype plugin indent on
+filetype plugin on
 

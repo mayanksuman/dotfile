@@ -11,6 +11,8 @@ command! -nargs=1 SilentCmd
 
 command! MakeTags !ctags -R .
 
+
 " Fixes common typos
 command! W w
+command! Wq wq
 command! Q q

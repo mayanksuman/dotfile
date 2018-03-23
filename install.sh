@@ -53,12 +53,12 @@ step "Installing python packages"
 pip3 install --user numpy sympy scipy pandas matplotlib bokeh holoviews \
 	jupyter statsmodels ipywidgets numba cython ipython nose scikit-learn \
 	h5py notebook tensorflow netcdf4 xarray tables jedi psutil setproctitle \
-	yamllint
+	yamllint proselint demjson
 ok
 
 step "Installing nodejs packages"
 npm config set prefix $HOME
-npm install csslint eslint textlint jsonlint -u
+npm install stylelint csslint jshint -u
 export PATH=$HOME/node_modules/.bin:$PATH
 ok
 

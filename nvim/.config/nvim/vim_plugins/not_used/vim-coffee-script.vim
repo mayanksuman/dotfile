@@ -1,4 +1,4 @@
 if exists('g:vim_plug_installing_plugins')
-  Plug 'tpope/vim-haml'
+  Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
   finish
 endif
