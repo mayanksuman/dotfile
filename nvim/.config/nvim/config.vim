@@ -157,6 +157,6 @@ set mousehide  " Hide mouse after chars typed
 " Better complete options to speed it up
 set complete=.,w,b,u,U
 
-filetype plugin indent on
-filetype plugin on
+" set file format to unix -- for easier git use
+set fileformat=unix
 

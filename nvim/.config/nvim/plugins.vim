@@ -2,6 +2,7 @@
 " Plugins using vim-plug
 " ----------------------------------------
 
+let g:plug_shallow = 1
 set nocompatible " Don't use compatibility mode
 filetype off     " required for plug install
 let g:plugin_config_location=g:config_file_location.'vim_plugins/'
@@ -25,6 +26,7 @@ call plug#end()
 
 " Automatically detect file types. (must turn on after vim-plug)
 filetype plugin indent on
+filetype plugin on
 
 " Source all the plugin files again, this time loading their configuration.
 if isdirectory(g:runtime_data_location . 'plugged')

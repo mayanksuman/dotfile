@@ -1,4 +1,4 @@
 if exists('g:vim_plug_installing_plugins')
-  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' } 
+  Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
   finish
 endif
