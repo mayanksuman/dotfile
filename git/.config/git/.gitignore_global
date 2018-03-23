@@ -23,3 +23,5 @@ tscommand*.txt
 
 #tags file
 tags
+tags.lock
+tags.temp
