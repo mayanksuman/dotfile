@@ -1,12 +1,4 @@
 if exists('g:vim_plug_installing_plugins')
-  Plug 'Valloric/MatchTagAlways'
+  Plug 'Valloric/MatchTagAlways', { 'for': ['html','xhtml','xml','svg','handlebars','eruby'] }
   finish
 endif
-
-let g:mta_filetypes = {
-    \ 'html' : 1,
-    \ 'xhtml' : 1,
-    \ 'xml' : 1,
-    \ 'handlebars' : 1,
-    \ 'eruby' : 1,
-    \}

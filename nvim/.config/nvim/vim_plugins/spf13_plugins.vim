@@ -5,11 +5,6 @@ if exists('g:vim_plug_installing_plugins')
 	Plug 'bling/vim-bufferline'
 	Plug 'vim-scripts/restore_view.vim'
 	Plug 'gcmt/wildfire.vim'
-	Plug 'reedes/vim-litecorrect'
-	Plug 'reedes/vim-wordy'
-	
-	Plug 'tpope/vim-rails', { 'for': 'ruby' }
-	Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 	Plug 'maxbrunsfeld/vim-yankstack'
 endif
 

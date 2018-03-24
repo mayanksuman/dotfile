@@ -1,5 +1,5 @@
 if exists('g:vim_plug_installing_plugins')
-  Plug 'majutsushi/tagbar'
+  Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
   finish
 endif
 

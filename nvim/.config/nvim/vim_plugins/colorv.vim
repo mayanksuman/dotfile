@@ -1,5 +1,5 @@
 if exists('g:vim_plug_installing_plugins')
-  Plug 'Rykka/colorv.vim', { 'for': ['css','less','sass','scss','javascript','python','stylus'] }
+  Plug 'Rykka/colorv.vim', { 'for': ['css','less','sass','scss','html','javascript','python','stylus'] }
   finish
 endif
 

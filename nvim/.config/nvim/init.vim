@@ -1,9 +1,3 @@
-" try to run local vimrc settings specific to folder
-try
-	source vimrc.local
-catch
-endtry
-
 let g:config_file_location=$HOME.'/.config/nvim/'
 let g:runtime_data_location=$HOME.'/.local/share/nvim/'
 
@@ -29,10 +23,3 @@ exe 'source '. g:config_file_location. 'platforms.vim'
 
 " Auto commands.
 exe 'source '. g:config_file_location. 'autocmds.vim'
-
-" try to run local vimrc settings specific to folder
-" again if something has changed
-try
-	source vimrc.local
-catch
-endtry

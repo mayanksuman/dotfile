@@ -4,10 +4,8 @@ if exists('g:vim_plug_installing_plugins')
   finish
 endif
 
-nnoremap fzf :FZF<CR>
-vnoremap fzf :FZF<CR>
+nnoremap ff :FZF<CR>
+vnoremap ff :FZF<CR>
 
-nnoremap fzh :FZF ~<CR>
-vnoremap fzh :FZF ~<CR>
-
-
+nnoremap fh :FZF ~<CR>
+vnoremap fh :FZF ~<CR>
