@@ -4,6 +4,7 @@ if exists('g:vim_plug_installing_plugins')
 endif
 
 autocmd! BufWritePost * Neomake
+
 " When reading a buffer (after 1s), and when writing.
 call neomake#configure#automake('rn', 1000)
 

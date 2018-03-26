@@ -20,6 +20,7 @@ hi Normal ctermbg=NONE
 exe 'set backupdir='. g:runtime_data_location. 'backup//,.'
 exe 'set directory='. g:runtime_data_location. 'swap//'
 exe 'set viewdir='. g:runtime_data_location. 'view//'
+let g:netrw_home= g:runtime_data_location
 set backup             " Turn on backups
 " Persistent Undo
 if has('persistent_undo')
@@ -159,4 +160,3 @@ set complete=.,w,b,u,U
 
 " set file format to unix -- for easier git use
 set fileformat=unix
-
