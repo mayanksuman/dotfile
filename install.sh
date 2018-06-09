@@ -181,6 +181,10 @@ sudo -E pip2 install --user neovim
 sudo -E pip3 install --user neovim
 ok
 
+step "Enabling ruby support in nvim"
+sudo -E gem install --user neovim
+ok
+
 step "Installing Language Servers"
 #cland -Language Server for clang C/C++
 sudo apt -ym purge clang

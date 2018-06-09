@@ -1,6 +1,7 @@
 *.secret
 .DS_Store
 .gitsecret
+.uuid
 /bin/
 !README.md
 !*example
