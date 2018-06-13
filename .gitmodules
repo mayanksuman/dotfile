@@ -13,3 +13,6 @@
 [submodule "git/.local/share/git/third_party/diff-so-fancy"]
 	path = git/.local/share/git/third_party/diff-so-fancy
 	url = https://github.com/so-fancy/diff-so-fancy.git
+[submodule "git/.local/share/git/third_party/gitignore"]
+	path = git/.local/share/git/third_party/gitignore
+	url = https://github.com/github/gitignore.git
