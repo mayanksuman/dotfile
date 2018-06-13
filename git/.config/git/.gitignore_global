@@ -25,3 +25,7 @@ tscommand*.txt
 tags
 tags.lock
 tags.temp
+
+#python virtualenv
+venv/*
+venv*/*
