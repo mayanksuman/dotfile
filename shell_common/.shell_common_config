@@ -62,3 +62,6 @@ trap 'preexec' DEBUG
 #Set npm default location
 npm config set prefix $HOME
 export PATH=$HOME/node_modules/.bin:$PATH
+
+# Some python specific commands
+source ~/.shell_common_python_config

@@ -8,7 +8,6 @@
 source "$HOME/.zshrc-oh-my-zsh"
 source "$HOME/.shell_common_config"
 
-
-[ -f "$HOME/.fzf.zsh"  ] && source "$HOME/.fzf.zsh"
+eval "$(direnv hook zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

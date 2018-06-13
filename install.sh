@@ -35,7 +35,7 @@ ok
 step "Downloading and installing the packages"
 sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 	python-pip python3-pip python3-tk nodejs git zsh tmux markdown dvipng \
-	pandoc sed xsel stow fonts-noto-hinted neovim texlive \
+	pandoc sed xsel stow fonts-noto-hinted neovim direnv texlive \
 	texlive-latex-extra texlive-formats-extra texlive-publishers composer \
 	texlive-bibtex-extra biber texlive-font-utils chktex tidy
 ok
@@ -50,10 +50,10 @@ sudo -E chown -R "$USER:$USER" ~/.local/share
 ok
 
 step "Installing python packages"
-pip3 install --user numpy sympy scipy pandas matplotlib bokeh holoviews \
+pip3 install --user -U numpy sympy scipy pandas matplotlib bokeh holoviews \
 	jupyter statsmodels ipywidgets numba cython ipython nose scikit-learn \
 	h5py notebook tensorflow netcdf4 xarray tables jedi psutil setproctitle \
-	yamllint proselint demjson
+	geopandas cartopy pysal yamllint proselint demjson
 ok
 
 step "Installing nodejs packages"
@@ -84,6 +84,10 @@ if ! grep -qsFx 'source ~/.shell_common_config' ~/.bashrc ; then
   echo "source ~/.shell_common_config">>~/.bashrc
 fi
 ok
+# Add direnv support in bash
+if ! grep -qsFx 'eval "$(direnv hook bash)"' ~/.bashrc ; then
+  echo 'eval "$(direnv hook bash)"'>>~/.bashrc
+fi
 
 # ZSH setup
 action "Configuring ZSH"
