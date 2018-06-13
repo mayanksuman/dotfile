@@ -27,5 +27,13 @@ tags.lock
 tags.temp
 
 #python virtualenv
+venv
 venv/*
 venv*/*
+
+# python cache 
+__pycache__
+
+
+# python ropeproject
+.ropeproject
