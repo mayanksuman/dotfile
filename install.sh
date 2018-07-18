@@ -37,7 +37,9 @@ sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
 	python-pip python3-pip python3-tk nodejs git zsh tmux markdown dvipng \
 	pandoc sed xsel stow fonts-noto-hinted neovim direnv texlive \
 	texlive-latex-extra texlive-formats-extra texlive-publishers composer \
-	texlive-bibtex-extra biber texlive-font-utils chktex tidy
+	texlive-bibtex-extra biber texlive-font-utils chktex tidy \
+	dictd dict-gcide dict-vera dict-jargon dict-elements dict-moby-thesaurus \
+	dict
 ok
 
 step "Setting up local install paths"
@@ -49,11 +51,12 @@ sudo -E chown -R "$USER:$USER" ~/.local/include
 sudo -E chown -R "$USER:$USER" ~/.local/share
 ok
 
-step "Installing python packages"
-pip3 install --user -U numpy sympy scipy pandas matplotlib bokeh holoviews \
-	jupyter statsmodels ipywidgets numba cython ipython nose scikit-learn \
-	h5py notebook tensorflow netcdf4 xarray tables jedi psutil setproctitle \
-	geopandas cartopy pysal yamllint proselint demjson
+step "Installing python packages"   
+pip3 install --user -U numpy sympy scipy statsmodels scikit-learn dask \
+	tensorflow pywavelets pandas xarray geopandas pysal pyresample pillow \
+	matplotlib bokeh holoviews seaborn cartopy numba cython nose netcdf4 \
+	tables h5py xlwt ipython jupyter ipywidgets notebook jedi psutil \
+	setproctitle yamllint proselint demjson scrapy beautifulsoup4
 ok
 
 step "Installing nodejs packages"

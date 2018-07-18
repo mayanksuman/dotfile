@@ -144,3 +144,5 @@
 	# helper = osxkeychain
 [rebase]
 	instructionFormat = "[%an - %ar] %s"
+[pack]
+	packSizeLimit = 600m
