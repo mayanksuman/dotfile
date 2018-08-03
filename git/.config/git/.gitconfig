@@ -97,16 +97,18 @@
     status = auto
     branch = auto
     interactive = auto
-    ui = auto
+	ui = true
 [color "branch"]
     current = green bold
     local = green
     remote = red bold
 [color "diff"]
-    meta = yellow bold
-    frag = magenta bold
-    old = red bold
-    new = green bold
+	meta = yellow
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	commit = yellow bold
+	whitespace = red reverse
 [color "status"]
     added = green bold
     changed = yellow bold
@@ -146,3 +148,8 @@
 	instructionFormat = "[%an - %ar] %s"
 [pack]
 	packSizeLimit = 600m
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
