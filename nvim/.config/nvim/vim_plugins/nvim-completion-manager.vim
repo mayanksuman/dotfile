@@ -4,7 +4,8 @@ if exists('g:vim_plug_installing_plugins')
     \ 'do': 'bash install.sh',
     \ 'for': ['rust','javascript','python','c','cpp','php']
     \ }
-	Plug 'roxma/nvim-completion-manager', { 'do': ':UpdateRemotePlugins' }
+	Plug 'ncm2/ncm2'
+	Plug 'roxma/nvim-yarp'
 	finish
 endif
 

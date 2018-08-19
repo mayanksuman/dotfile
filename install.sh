@@ -33,13 +33,24 @@ step "Update the apt "
 sudo -E apt-get update
 ok
 step "Downloading and installing the packages"
-sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache \
-	python-pip python3-pip python3-tk nodejs git zsh tmux markdown dvipng \
-	pandoc sed xsel stow fonts-noto-hinted neovim direnv texlive \
+# setting up environment
+sudo -E apt-get install -ym zsh tmux sed xsel stow fonts-noto-hinted neovim direnv
+# for C/C++ development
+sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache git
+# for python 
+sudo -E apt install -ym python3-pip python3-tk 
+# for nodejs
+sudo -E apt install -ym nodejs
+# for markdown and latex
+sudo -E apt-get install -ym pandoc markdown texlive dvipng \
 	texlive-latex-extra texlive-formats-extra texlive-publishers composer \
-	texlive-bibtex-extra biber texlive-font-utils chktex tidy \
-	dictd dict-gcide dict-vera dict-jargon dict-elements dict-moby-thesaurus \
-	dict
+	texlive-bibtex-extra biber texlive-font-utils chktex tidy
+# for english dictionary
+#sudo -E apt install -ym dictd dict-gcide dict-vera dict-jargon dict-elements \
+#	dict-moby-thesaurus dict
+# for GIS related work
+sudo -E apt install -ym proj-bin libproj-dev gdal-bin libgdal-dev libgeos++-dev \
+	libgeos-3.6.2
 ok
 
 step "Setting up local install paths"
@@ -57,12 +68,6 @@ pip3 install --user -U numpy sympy scipy statsmodels scikit-learn dask \
 	matplotlib bokeh holoviews seaborn cartopy numba cython nose netcdf4 \
 	tables h5py xlwt ipython jupyter ipywidgets notebook jedi psutil \
 	setproctitle yamllint proselint demjson scrapy beautifulsoup4
-ok
-
-step "Installing nodejs packages"
-npm config set prefix $HOME
-npm install stylelint csslint jshint -u
-export PATH=$HOME/node_modules/.bin:$PATH
 ok
 
 action "Configuring stow"
@@ -194,15 +199,12 @@ ok
 
 step "Installing Language Servers"
 #cland -Language Server for clang C/C++
-sudo apt -ym purge clang
-sudo apt -ym autoremove
-sudo -E apt -ym install clang-5.0
-sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-5.0 100
-sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-5.0 100
-sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-5.0 100
+sudo -E apt -ym install clang
 # Language Server for Python
 pip3 install --user python-language-server
 # Language server for javascript and typescript
+npm config set prefix $HOME
+export PATH=$HOME/node_modules/.bin:$PATH
 npm install -g javascript-typescript-langserver
 # Language server for PHP is installed by vim during plugin install
 ok
