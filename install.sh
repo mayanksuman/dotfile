@@ -36,7 +36,8 @@ step "Downloading and installing the packages"
 # setting up environment
 sudo -E apt-get install -ym zsh tmux sed xsel stow fonts-noto-hinted neovim direnv
 # for C/C++ development
-sudo -E apt-get install -ym build-essential exuberant-ctags cmake ccache git
+sudo -E apt-get install -ym build-essential clang-6.0 clang-tools-6.0 global \
+	universal-ctags cmake ccache git
 # for python 
 sudo -E apt install -ym python3-pip python3-tk 
 # for nodejs
@@ -71,13 +72,11 @@ pip3 install --user -U numpy sympy scipy statsmodels scikit-learn dask \
 ok
 
 action "Configuring stow"
-stow -t ~ -D stow
 stow -t ~ stow
 ok
 
 action "Installing fonts"
 mkdir -p ~/.local/share/fonts/
-stow -t ~ -D fonts
 stow -t ~ fonts
 ok
 action "Updating font cache"
@@ -85,7 +84,6 @@ sudo fc-cache -f -v
 ok
 
 action "Configuring Bash"
-stow -t ~ -D shell_common
 stow -t ~ shell_common
 # Check for source line; if it does not exist then add it in ~/.bashrc
 if ! grep -qsFx 'source ~/.shell_common_config' ~/.bashrc ; then
@@ -99,7 +97,6 @@ fi
 
 # ZSH setup
 action "Configuring ZSH"
-stow -t ~ -D zsh
 step "Setting up ZSH as default shell"
 # If this user's login shell is not already "zsh", attempt to switch.
 TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
@@ -122,9 +119,10 @@ if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
 	info "Found ~/.zshrc. Backing up to ~/.zshrc.old";
 	mv ~/.zshrc ~/.zshrc.old;
 else
-info "No existing zsh config found";
+	info "No existing zsh config found";
 fi
 ok
+
 step "setting up new ZSH configuration"
 stow -t ~ zsh
 ok
@@ -132,7 +130,6 @@ info "ZSH configuration complete."
 # ZSH setup complete
 
 action "Configuring tmux"
-stow -t ~ -D tmux
 step "Looking for an existing tmux config"
 if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
 	info "Found ~/.tmux.conf. Backing up to ~/.tmux.conf.old";
@@ -160,13 +157,12 @@ ok
 info "tmux is configured"
 
 action "Configuring nvim/vim"
-stow -t ~ -D nvim
 step "Looking for an existing nvim config"
 if [ -d ~/.config/nvim ]; then
 	info "Found ~/.config/nvim. Backing up to ~/.config/nvim.old";
 	mv ~/.config/nvim ~/.config/nvim.old;
-elsehttps://github.com/prabirshrestha/vim-lsp
-info "No existing nvim config found";
+else
+	info "No existing nvim config found";
 fi
 ok
 
@@ -175,7 +171,7 @@ if [ -f ~/.vimrc ] || [ -h ~/.vimrc ]; then
 	info "Found ~/.vimrc. Backing up to ~/.vimrc.old";
 	mv ~/.vimrc ~/.vimrc.old;
 else
-info "No existing vim config found";
+	info "No existing vim config found";
 fi
 ok
 
@@ -184,12 +180,12 @@ stow -t ~ nvim
 ok
 
 step "Enabling python support in nvim"
-sudo -E pip2 install --user -U neovim
-sudo -E pip3 install --user -U neovim
+pip2 install --user -U neovim
+pip3 install --user -U neovim
 ok
 
 # step "Enabling ruby support in nvim"
-# sudo -E gem install --user neovim
+# gem install --user neovim
 # ok
 
 step "Installing vim plugins"
@@ -199,7 +195,6 @@ ok
 
 step "Installing Language Servers"
 #cland -Language Server for clang C/C++
-sudo -E apt -ym install clang-6.0 clang-tools-6.0
 sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-6.0 100
 sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-6.0 100
 sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-6.0 100
@@ -218,7 +213,6 @@ bash -lic base16_brewer
 ok
 
 action "Configuring git"
-stow -t ~ -D git
 gituser_info_file=git/.config/git/.gituser_info.secret
 if [ -f "$gituser_info_file" ] || [ -h "$gituser_info_file" ]; then
 info "git user info file is found. The contents are"

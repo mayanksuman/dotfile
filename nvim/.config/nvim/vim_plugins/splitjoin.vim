@@ -1,5 +1,5 @@
 if exists('g:vim_plug_installing_plugins')
-  Plug 'AndrewRadev/splitjoin.vim'
+  Plug 'AndrewRadev/splitjoin.vim' " for making multiline code into single line
   finish
 endif
 

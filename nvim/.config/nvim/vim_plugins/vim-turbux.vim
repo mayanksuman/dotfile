@@ -1,5 +1,6 @@
 if exists('g:vim_plug_installing_plugins')
-  Plug 'jgdavey/vim-turbux'
+  Plug 'jgdavey/vim-turbux' "helps in running rspec and cucumber test.
+  Plug 'pitluga/vimux-nose-test' "help in running python nose test
   finish
 endif
 

@@ -45,13 +45,7 @@ let g:LanguageClient_serverCommands = {
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_loggingFile = '/tmp/lc.log'
 let g:LanguageClient_loggingLevel = 'DEBUG'
-autocmd filetype python LanguageClientStart
-autocmd filetype c LanguageClientStart
-autocmd filetype cpp LanguageClientStart
-autocmd filetype rust LanguageClientStart
-autocmd filetype javascript LanguageClientStart
-autocmd filetype typescript LanguageClientStart
-autocmd filetype php LanguageClientStart
+autocmd filetype python,c,cpp,rust,javascript,typescript,php LanguageClientStart
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
