@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 source ./_scripts/msg.sh
 
 if [ $EUID -eq 0 ]; then
@@ -59,3 +61,5 @@ rm -f bin/languageclient
 bash install.sh
 cd -
 ok
+
+info "Maintainance Complete."
