@@ -1,4 +1,5 @@
 if exists('g:vim_plug_installing_plugins')
+  Plug 'xolox/vim-misc'
   Plug 'xolox/vim-session'
   Plug 'tpope/vim-obsession'
   finish

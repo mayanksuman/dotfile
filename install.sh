@@ -165,7 +165,7 @@ step "Looking for an existing nvim config"
 if [ -d ~/.config/nvim ]; then
 	info "Found ~/.config/nvim. Backing up to ~/.config/nvim.old";
 	mv ~/.config/nvim ~/.config/nvim.old;
-else
+elsehttps://github.com/prabirshrestha/vim-lsp
 info "No existing nvim config found";
 fi
 ok
@@ -183,25 +183,28 @@ step "Setting up new nvim/vim configuration"
 stow -t ~ nvim
 ok
 
+step "Enabling python support in nvim"
+sudo -E pip2 install --user -U neovim
+sudo -E pip3 install --user -U neovim
+ok
+
+# step "Enabling ruby support in nvim"
+# sudo -E gem install --user neovim
+# ok
+
 step "Installing vim plugins"
 nvim +PlugInstall +qa
 nvim +GrammarousCheck +qa
 ok
 
-step "Enabling python support in nvim"
-sudo -E pip2 install --user neovim
-sudo -E pip3 install --user neovim
-ok
-
-step "Enabling ruby support in nvim"
-sudo -E gem install --user neovim
-ok
-
 step "Installing Language Servers"
 #cland -Language Server for clang C/C++
-sudo -E apt -ym install clang
+sudo -E apt -ym install clang-6.0 clang-tools-6.0
+sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-6.0 100
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-6.0 100
+sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-6.0 100
 # Language Server for Python
-pip3 install --user python-language-server
+pip3 install --user -U python-language-server
 # Language server for javascript and typescript
 npm config set prefix $HOME
 export PATH=$HOME/node_modules/.bin:$PATH
