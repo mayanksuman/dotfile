@@ -50,8 +50,8 @@ sudo -E apt-get install -ym pandoc markdown texlive dvipng \
 #sudo -E apt install -ym dictd dict-gcide dict-vera dict-jargon dict-elements \
 #	dict-moby-thesaurus dict
 # for GIS related work
-sudo -E apt install -ym proj-bin libproj-dev gdal-bin libgdal-dev libgeos++-dev \
-	libgeos-3.6.2
+sudo -E apt install -ym proj-bin libproj-dev gdal-bin libgdal-dev python3-gdal \
+	libgeos++-dev libgeos-3.6.2
 ok
 
 step "Setting up local install paths"
@@ -69,6 +69,9 @@ pip3 install --user -U numpy sympy scipy statsmodels scikit-learn dask \
 	matplotlib bokeh holoviews seaborn cartopy numba cython nose netcdf4 \
 	tables h5py xlwt ipython jupyter ipywidgets notebook jedi psutil \
 	setproctitle yamllint proselint demjson scrapy beautifulsoup4
+# GDAL support - Install this way only if python3-GDAL fail
+#pip install --user -U GDAL==$(gdal-config --version) --global-option=build_ext \
+#	--global-option=-I/usr/include/gdal
 ok
 
 action "Configuring stow"
