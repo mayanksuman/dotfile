@@ -9,6 +9,10 @@ action "Removing Fonts."
 stow -t ~ -D fonts
 ok
 
+action "Removing cheatsheets/examples."
+stow -t ~ -D eg
+ok
+
 action "Removing git configuration"
 stow -t ~ -D git
 info "Looking for an old git config..."

@@ -1,0 +1,3 @@
+[eg-config]
+examples-dir = $HOME/.local/share/eg_examples
+squeeze = true

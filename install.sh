@@ -98,6 +98,7 @@ if ! grep -qsFx 'eval "$(direnv hook bash)"' ~/.bashrc ; then
   echo 'eval "$(direnv hook bash)"'>>~/.bashrc
 fi
 
+
 # ZSH setup
 action "Configuring ZSH"
 step "Setting up ZSH as default shell"
@@ -158,6 +159,11 @@ tmux kill-session -t "install_session"
 ok
 #tmux setup complete
 info "tmux is configured"
+
+action "Installing Cheatsheets/Example"
+pip3 install --user -U eg
+stow -t ~ eg
+ok
 
 action "Configuring nvim/vim"
 step "Looking for an existing nvim config"

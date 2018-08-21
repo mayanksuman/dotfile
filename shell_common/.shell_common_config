@@ -63,5 +63,28 @@ trap 'preexec' DEBUG
 npm config set prefix $HOME
 export PATH=$HOME/node_modules/.bin:$PATH
 
+# cheatsheets location and autocompletion
+export EDITOR=nvim
+if [ -n "$BASH_VERSION" ]; then
+  function _eg_autocomplete {
+    cheatsheets="$(eg -l | cut -d' ' -f1)"
+    COMPREPLY=()
+    if [ $COMP_CWORD = 1 ]; then
+	COMPREPLY=(`compgen -W "$cheatsheets" -- $2`)
+    fi
+  }
+
+  complete -F _eg_autocomplete eg
+
+elif [ -n "$ZSH_VERSION" ]; then
+  function _eg_autocomplete {
+    local cheatsheets
+    cheatsheets="$(eg -l | cut -d' ' -f1)"
+    reply=( "${(ps:\n:)cheatsheets}" )
+  }
+
+  compctl -K _eg_autocomplete eg
+fi
+
 # Some python specific commands
 source ~/.shell_common_python_config

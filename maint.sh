@@ -29,6 +29,7 @@ stow -t ~ -R tmux
 stow -t ~ -R zsh
 stow -t ~ -R nvim
 stow -t ~ -R git
+stow -t ~ -R eg
 ok
 
 action "Updating font cache"
