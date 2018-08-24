@@ -160,8 +160,9 @@ ok
 #tmux setup complete
 info "tmux is configured"
 
-action "Installing Cheatsheets/Example"
-pip3 install --user -U eg
+action "Installing Cheatsheets/Examples"
+mkdir -p ~/.local/share/eg
+sudo -E chown -R "$USER:$USER" ~/.local/share/eg
 stow -t ~ eg
 ok
 
