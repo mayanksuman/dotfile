@@ -11,7 +11,6 @@ import urllib.request
 from urllib.error import HTTPError
 from zipfile import ZipFile
 import subprocess
-import pdb
 
 from .config import get_config
 from .parser import parse_page
@@ -180,7 +179,6 @@ def update_tldr_pages(remote="https://tldr.sh/assets/tldr.zip"):
     os.chdir(tldr_pages_dir)
     if path.isdir('shell'):
         os.rename('shell', 'pages')
-    pdb.set_trace()
     try:
         opener=urllib.request.build_opener()
         opener.addheaders=[('User-Agent',"Mozilla/5.0 (Windows NT 6.1; WOW64) "
