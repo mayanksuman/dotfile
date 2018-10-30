@@ -167,6 +167,7 @@ def process_usage_line(line, colors):
 
     line = _color_command_option(line, colors['command'], default_color)
     line = _color_inline_command(line, colors['command'], default_color)
+    line = _color_command_parameter(line, colors['parameter'], default_color)
     line = click.style(line, fg=default_color)
 
     return line
@@ -180,6 +181,7 @@ def process_description_line(line, colors):
 
     line = _color_command_option(line, colors['command'], default_color)
     line = _color_inline_command(line, colors['command'], default_color)
+    line = _color_command_parameter(line, colors['parameter'], default_color)
     line = click.style(line, fg=default_color)
 
     return line
