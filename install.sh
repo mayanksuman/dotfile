@@ -73,8 +73,10 @@ pip3 install --user -U numpy sympy scipy statsmodels scikit-learn dask \
 pip3 install --user -U orange3 glueviz
 
 # GDAL support - Install this way only if python3-GDAL fail
-#pip install --user -U GDAL==$(gdal-config --version) --global-option=build_ext \
+#pip3 install --user -U GDAL==$(gdal-config --version) --global-option=build_ext \
 #	--global-option=-I/usr/include/gdal
+# If cartopy cause Ipython to crash: hint: try ax.coastlines()
+#pip3 install --user -U shapely cartopy --no-binary shapely --no-binary cartopy
 ok
 
 action "Configuring stow"
