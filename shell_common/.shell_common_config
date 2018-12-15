@@ -1,4 +1,4 @@
-# BASE16-Shell Entry
+# BASE16-Shell Entry : Helps in getting even color scheme in zsh, bash and nvim
 BASE16_SHELL=$HOME/.local/share/shell_common/base16-shell/
 [ -n "$PS1" ] && [ -s "$BASE16_SHELL/profile_helper.sh" ] && eval "$("$BASE16_SHELL/profile_helper.sh")"
 
@@ -60,8 +60,8 @@ preexec() {
 trap 'preexec' DEBUG
 
 #Set npm default location
-npm config set prefix $HOME
-export PATH=$HOME/node_modules/.bin:$PATH
+#npm config set prefix $HOME
+#export PATH=$HOME/node_modules/.bin:$PATH
 
 # cheatsheets location and autocompletion
 export EDITOR=nvim
