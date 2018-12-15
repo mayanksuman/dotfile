@@ -6,7 +6,7 @@ if exists('g:vim_plug_installing_plugins')
 	Plug 'ncm2/ncm2-tmux'
 	Plug 'ncm2/ncm2-html-subscope'
 	Plug 'ncm2/ncm2-markdown-subscope'
-	"Plug 'ncm2/ncm2-jedi', { 'for': 'python' }
+	Plug 'ncm2/ncm2-jedi', { 'for': 'python' }
 	"Plug 'ncm2/ncm2-pyclang', { 'for': ['c','cpp'] }
 	Plug 'ncm2/ncm2-ultisnips'
 	Plug 'filipekiss/ncm2-look.vim'

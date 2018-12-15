@@ -47,8 +47,14 @@ if has('autocmd')
 		autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType")
 					\&& b:NERDTreeType == "primary") | q | endif
 
-		autocmd BufWinLeave *.* mkview!
-		autocmd BufWinEnter *.* silent loadview
+		autocmd BufWritePost *
+			\   if expand('%') != '' && &buftype !~ 'nofile'
+			\|      mkview!
+			\|  endif
+    		autocmd BufRead *
+			\   if expand('%') != '' && &buftype !~ 'nofile'
+			\|      silent! loadview
+			\|  endif
 		autocmd BufWritePost * :silent! :syntax sync fromstart<cr>:redraw!<cr>
 		autocmd GUIEnter * set visualbell t_vb=
 	augroup END

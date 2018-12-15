@@ -63,12 +63,15 @@ sudo -E chown -R "$USER:$USER" ~/.local/include
 sudo -E chown -R "$USER:$USER" ~/.local/share
 ok
 
-step "Installing python packages"   
+step "Installing python packages"
+pip3 install --user -U cython
 pip3 install --user -U numpy sympy scipy statsmodels scikit-learn dask \
 	tensorflow pywavelets pandas xarray geopandas pysal pyresample pillow \
-	matplotlib bokeh holoviews seaborn cartopy numba cython nose netcdf4 \
+	matplotlib bokeh holoviews seaborn cartopy numba nose netcdf4 \
 	tables h5py xlwt ipython jupyter ipywidgets notebook jedi psutil \
 	setproctitle yamllint proselint demjson scrapy beautifulsoup4
+pip3 install --user -U orange3 glueviz
+
 # GDAL support - Install this way only if python3-GDAL fail
 #pip install --user -U GDAL==$(gdal-config --version) --global-option=build_ext \
 #	--global-option=-I/usr/include/gdal
