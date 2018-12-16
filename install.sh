@@ -8,7 +8,7 @@ if [ $EUID -eq 0 ]; then
 fi
 
 
-action "Initializing submodule(s)"
+action "Initializing and updating submodule(s)"
 git submodule update --init --recursive
 ok
 
