@@ -12,6 +12,7 @@ action "Initializing and updating submodule(s)"
 git submodule update --init --recursive
 cd 'zsh/.local/share/zsh/prezto'
 git submodule update --init --recursive
+cd -
 git submodule foreach git pull origin master --recursive
 ok
 
