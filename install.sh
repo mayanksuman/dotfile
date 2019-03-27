@@ -49,7 +49,7 @@ sudo -E apt install -ym nodejs
 # for markdown and latex
 sudo -E apt-get install -ym pandoc markdown texlive dvipng \
 	texlive-latex-extra texlive-formats-extra texlive-publishers composer \
-	texlive-bibtex-extra biber texlive-font-utils chktex tidy
+	texlive-bibtex-extra biber texlive-font-utils chktex tidy odt2txt
 # for english dictionary
 #sudo -E apt install -ym dictd dict-gcide dict-vera dict-jargon dict-elements \
 #	dict-moby-thesaurus dict

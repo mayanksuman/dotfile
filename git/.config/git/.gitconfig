@@ -135,6 +135,7 @@
     pager = diff-so-fancy | less --tabs=4 -RFX
     editor = vim
     whitespace = cr-at-eol
+	attributesfile = ~/.config/git/.gitattributes_global
 [rerere]
     enabled = true
 [gitsh]
@@ -153,3 +154,5 @@
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
+[diff "odf"]
+	textconv = odf2txt
