@@ -232,17 +232,20 @@ ok
 action "Configuring git"
 gituser_info_file=git/.config/git/.gituser_info.secret
 if [ -f "$gituser_info_file" ] || [ -h "$gituser_info_file" ]; then
-	info "git user info file is found. The contents are"
-	cat "$gituser_info_file"
-	info "If you want to change, then please edit $(pwd)/$gituser_info_file file."
+info "git user info file is found. The contents are"
+cat "$gituser_info_file"
+info "If you want to change, then please edit $(pwd)/$gituser_info_file file."
 else
-	input "Enter your github username (if any; if you do not have leave it blank)"
-	read -r username
-	input "Enter your e-mail address as git user"
-	read -r email
-	cp git/.config/git/.gituser_info.secret.example "$gituser_info_file"
-	sed -i "s/\\[USER_NAME\\]/$username/g" "$gituser_info_file"
-	sed -i "s/\\[E_MAIL_ID\\]/$email/g" "$gituser_info_file"
+input "Enter your name as git user"
+read -r username
+input "Enter your e-mail address as git user"
+read -r email
+input "Enter your github username (if any; if you do not have leave it blank)"
+read -r github_username
+cp git/.config/git/.gituser_info.secret.example "$gituser_info_file"
+sed -i "s/\\[USER_NAME\\]/$username/g" "$gituser_info_file"
+sed -i "s/\\[E_MAIL_ID\\]/$email/g" "$gituser_info_file"
+sed -i "s/\\[GITHUB_USER\\]/$github_username/g" "$gituser_info_file"
 fi
 stow -t ~ git
 ok
