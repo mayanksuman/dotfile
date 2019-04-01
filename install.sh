@@ -25,12 +25,14 @@ do
 	sudo -n true; sleep 60; kill -0 "$$" || exit; 
 done 2>/dev/null &
 
-action "Adding repository for latest nodejs and npm"
-step "Update the apt and installing curl"
-sudo -E apt-get update && sudo -E apt-get install curl
+action "Update the apt and installing curl"
+sudo -E apt-get update && sudo -E apt-get upgrade
+sudo -E apt install curl
 ok
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-ok
+
+# action "Adding repository for latest nodejs and npm"
+# curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+# ok
 
 action "Installing required packages"
 step "Update the apt "
@@ -40,7 +42,7 @@ step "Downloading and installing the packages"
 # setting up environment
 sudo -E apt-get install -ym zsh tmux sed xsel stow fonts-noto-hinted neovim direnv
 # for C/C++ development
-sudo -E apt-get install -ym build-essential clang-6.0 clang-tools-6.0 global \
+sudo -E apt-get install -ym build-essential clang clang-tools global \
 	universal-ctags cmake ccache git
 # for python 
 sudo -E apt install -ym python3-pip python3-tk 
@@ -55,7 +57,7 @@ sudo -E apt-get install -ym pandoc markdown texlive dvipng \
 #	dict-moby-thesaurus dict
 # for GIS related work
 sudo -E apt install -ym proj-bin libproj-dev gdal-bin libgdal-dev python3-gdal \
-	libgeos++-dev libgeos-3.6.2
+	libgeos++-dev libgeos-dev
 ok
 
 step "Setting up local install paths"
@@ -73,7 +75,7 @@ pip3 install --user -U numpy sympy scipy statsmodels scikit-learn dask \
 	tensorflow pywavelets pandas xarray geopandas pysal pyresample pillow \
 	matplotlib bokeh holoviews seaborn cartopy numba nose netcdf4 \
 	tables h5py xlwt ipython jupyter ipywidgets notebook jedi psutil \
-	setproctitle yamllint proselint demjson scrapy beautifulsoup4
+	setproctitle yamllint proselint demjson scrapy beautifulsoup4 notedown
 pip3 install --user -U orange3 glueviz
 
 # GDAL support - Install this way only if python3-GDAL fail
@@ -99,12 +101,12 @@ action "Configuring Bash"
 stow -t ~ shell_common
 # Check for source line; if it does not exist then add it in ~/.bashrc
 if ! grep -qsFx 'source ~/.shell_common_config' ~/.bashrc ; then
-  echo "source ~/.shell_common_config">>~/.bashrc
+	echo "source ~/.shell_common_config">>~/.bashrc
 fi
 ok
 # Add direnv support in bash
 if ! grep -qsFx 'eval "$(direnv hook bash)"' ~/.bashrc ; then
-  echo 'eval "$(direnv hook bash)"'>>~/.bashrc
+	echo 'eval "$(direnv hook bash)"'>>~/.bashrc
 fi
 
 
@@ -199,7 +201,7 @@ stow -t ~ nvim
 ok
 
 step "Enabling python support in nvim"
-pip2 install --user -U neovim
+#pip install --user -U neovim
 pip3 install --user -U neovim
 ok
 
@@ -213,16 +215,12 @@ nvim +GrammarousCheck +qa
 ok
 
 step "Installing Language Servers"
-#cland -Language Server for clang C/C++
-sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-6.0 100
-sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-6.0 100
-sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-6.0 100
 # Language Server for Python
 pip3 install --user -U python-language-server
 # Language server for javascript and typescript
-npm config set prefix $HOME
-export PATH=$HOME/node_modules/.bin:$PATH
-npm install -g javascript-typescript-langserver
+# npm config set prefix $HOME
+# export PATH=$HOME/node_modules/.bin:$PATH
+# npm install -g javascript-typescript-langserver
 # Language server for PHP is installed by vim during plugin install
 ok
 info "nvim/vim configuration is complete"
@@ -234,20 +232,17 @@ ok
 action "Configuring git"
 gituser_info_file=git/.config/git/.gituser_info.secret
 if [ -f "$gituser_info_file" ] || [ -h "$gituser_info_file" ]; then
-info "git user info file is found. The contents are"
-cat "$gituser_info_file"
-info "If you want to change, then please edit $(pwd)/$gituser_info_file file."
+	info "git user info file is found. The contents are"
+	cat "$gituser_info_file"
+	info "If you want to change, then please edit $(pwd)/$gituser_info_file file."
 else
-input "Enter your name as git user"
-read -r username
-input "Enter your e-mail address as git user"
-read -r email
-input "Enter your github username (if any; if you do not have leave it blank)"
-read -r github_username
-cp git/.config/git/.gituser_info.secret.example "$gituser_info_file"
-sed -i "s/\\[USER_NAME\\]/$username/g" "$gituser_info_file"
-sed -i "s/\\[E_MAIL_ID\\]/$email/g" "$gituser_info_file"
-sed -i "s/\\[GITHUB_USER\\]/$github_username/g" "$gituser_info_file"
+	input "Enter your github username (if any; if you do not have leave it blank)"
+	read -r username
+	input "Enter your e-mail address as git user"
+	read -r email
+	cp git/.config/git/.gituser_info.secret.example "$gituser_info_file"
+	sed -i "s/\\[USER_NAME\\]/$username/g" "$gituser_info_file"
+	sed -i "s/\\[E_MAIL_ID\\]/$email/g" "$gituser_info_file"
 fi
 stow -t ~ git
 ok
