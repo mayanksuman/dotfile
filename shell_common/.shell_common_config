@@ -85,3 +85,8 @@ fi
 
 # Some python specific commands
 source ~/.shell_common_python_config
+#export PATH="~/.pyenv/bin:$PATH"
+#if command -v pyenv 1>/dev/null 2>&1; then
+  #eval "$(pyenv init -)"
+  #eval "$(pyenv virtualenv-init -)"
+#fi
