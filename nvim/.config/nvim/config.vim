@@ -38,6 +38,7 @@ set showcmd		" Show partial commands in status line and
 			" Selected characters/lines in visual mode
 set number		" Line numbers on
 set wrap		" Line wrapping on
+set linebreak	" Do not break words while wrapping
 set breakindent		" Line Wrap with indent
 set breakindentopt=shift:5  " Put five character space before the indented wrap
 set laststatus=2	" Always show the statusline
@@ -49,11 +50,6 @@ set noshowmode		" Don't show the mode since Powerline shows it
 set title		" Set the title of terminal window to the file
 if exists('+colorcolumn')
 	set colorcolumn=80	" Color the 80th column differently as a wrapping guide.
-endif
-let G_IS_VIM=eval("has('nvim')")=='0'
-if G_IS_VIM
-	set cryptmethod=blowfish2	" Stronger crypt strength : Need vim 7.4.399+
-					" Not supported in nvim
 endif
 
 " ---------------
@@ -135,10 +131,10 @@ set listchars=""
 set listchars=tab:\ \ ,trail:•
 " The character to show in the last column when wrap is off and the line
 " continues beyond the right of the screen
-"set listchars+=extends:>
+set listchars+=extends:>
 " The character to show in the last column when wrap is off and the line
 " continues beyond the right of the screen
-"set listchars+=precedes:<
+set listchars+=precedes:<
 
 " ---------------
 " Sounds

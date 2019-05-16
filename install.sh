@@ -40,10 +40,10 @@ sudo -E apt-get update
 ok
 step "Downloading and installing the packages"
 # setting up environment
-sudo -E apt-get install -ym zsh tmux sed xsel stow fonts-noto-hinted neovim direnv
+sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv fonts-noto-core
 # for C/C++ development
-sudo -E apt-get install -ym build-essential clang clang-tools global \
-	universal-ctags cmake ccache git
+sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
+	global universal-ctags cmake ccache git
 # for python 
 sudo -E apt install -ym python3-pip python3-tk 
 # for nodejs

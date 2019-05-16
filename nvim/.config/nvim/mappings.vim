@@ -17,18 +17,13 @@ let maplocalleader = ' '
 " Hat-tip http://vimbits.com/bits/11
 nnoremap Y y$
 
-" Just to beginning and end of lines easier. From http://vimbits.com/bits/16
-noremap H ^
-noremap L $
+" Always show search result in the middle of screen
+nnoremap n nzz
+nnoremap N Nzz
 
 " Create newlines without entering insert mode
 nnoremap go o<Esc>k
 nnoremap gO O<Esc>j
-
-" remap U to <C-r> for easier redo
-" from http://vimbits.com/bits/356
-nnoremap U <C-r>
-
 
 " Don't move on *
 nnoremap <silent> * :let stay_star_view = winsaveview()<cr>*:call winrestview(stay_star_view)<cr>
@@ -164,16 +159,13 @@ noremap <F1> <Esc>
 inoremap <F1> <Esc>
 cnoremap w' w<CR>
 
-" Disable the ever-annoying Ex mode shortcut key. Type visual my ass. Instead,
+" Disable the ever-annoying Ex mode shortcut key.
 " make Q repeat the last macro instead. *hat tip* http://vimbits.com/bits/263
 nnoremap Q @@
 
 " Removes doc lookup mapping because it's easy to fat finger and never useful.
 nnoremap K k
 vnoremap K k
-
-" Toggle paste mode with F5
-nnoremap <silent> <F5> :set paste!<CR>
 
 " Paste and select pasted
 nnoremap <expr> gpp '`[' . strpart(getregtype(), 0, 1) . '`]'
