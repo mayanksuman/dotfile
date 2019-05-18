@@ -55,7 +55,6 @@ endif
 " ---------------
 " Behaviors
 " ---------------
-syntax enable
 set autoread           " Automatically reload changes if detected
 set wildmenu           " Turn on Wild menu
 " Command <Tab> completion, list matches, then longest common part, then all.

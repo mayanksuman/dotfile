@@ -10,7 +10,6 @@ if exists('g:vim_plug_installing_plugins')
 	"Plug 'ncm2/ncm2-pyclang', { 'for': ['c','cpp'] }
 	Plug 'ncm2/ncm2-ultisnips'
 	Plug 'filipekiss/ncm2-look.vim'
-	Plug 'lervag/vimtex', { 'for': ['tex','latex'] }
  	Plug 'autozimu/LanguageClient-neovim', {
  	\ 'branch': 'next',
  	\ 'do': 'bash install.sh',

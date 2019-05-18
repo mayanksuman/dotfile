@@ -1,6 +1,6 @@
 if exists('g:vim_plug_installing_plugins')
-  Plug 'wilywampa/vim-ipython'
-  Plug 'vyzyv/vimpyter'
+  Plug 'wilywampa/vim-ipython', { 'for': ['ipynb', 'ipython'] }
+  Plug 'vyzyv/vimpyter', { 'for': ['ipynb', 'ipython'] }
   finish
 endif
 

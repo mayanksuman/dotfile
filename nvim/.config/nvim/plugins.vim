@@ -27,6 +27,9 @@ call plug#end()
 " Automatically detect file types. (must turn on after vim-plug)
 filetype plugin indent on
 filetype plugin on
+if !exists("g:syntax_on")
+    syntax enable
+endif
 
 " Source all the plugin files again, this time loading their configuration.
 if isdirectory(g:runtime_data_location . 'plugged')

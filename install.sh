@@ -204,7 +204,13 @@ ok
 
 step "Enabling python support in nvim"
 #pip install --user -U neovim
-pip3 install --user -U neovim
+pip install --user -U pynvim
+pip3 install --user -U pynvim
+
+# Required by ncm2-ultisnips
+pip3 install --user -U notedown
+# Required by vimtex
+pip3 install --user -U neovim-remote
 ok
 
 # step "Enabling ruby support in nvim"
