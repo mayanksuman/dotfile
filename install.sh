@@ -26,8 +26,8 @@ do
 done 2>/dev/null &
 
 action "Update the apt and installing curl"
-sudo -E apt-get update && sudo -E apt-get upgrade
-sudo -E apt install curl
+sudo -E apt-get update && sudo -E apt-get upgrade -ym
+sudo -E apt-get install -ym curl
 ok
 
 # action "Adding repository for latest nodejs and npm"
@@ -61,6 +61,11 @@ sudo -E apt-get install ttf-mscorefonts-installer
 sudo -E apt install -ym proj-bin libproj-dev gdal-bin libgdal-dev python3-gdal \
 	libgeos++-dev libgeos-dev
 ok
+step "Removing unnecessary packages"
+sudo -E apt-get autoremove -ym
+sudo -E apt-get autoclean -ym
+sudo -E apt-get clean -ym
+ok
 
 step "Setting up local install paths"
 mkdir -p ~/.local
@@ -88,19 +93,19 @@ pip3 install --user -U orange3 glueviz
 ok
 
 action "Configuring stow"
-stow -t ~ stow
+stow -t ~ -R stow
 ok
 
 action "Installing fonts"
 mkdir -p ~/.local/share/fonts/
-stow -t ~ fonts
+stow -t ~ -R fonts
 ok
 action "Updating font cache"
 sudo fc-cache -f -v
 ok
 
 action "Configuring Bash"
-stow -t ~ shell_common
+stow -t ~ -R shell_common
 # Check for source line; if it does not exist then add it in ~/.bashrc
 if ! grep -qsFx 'source ~/.shell_common_config' ~/.bashrc ; then
 	echo "source ~/.shell_common_config">>~/.bashrc
@@ -132,6 +137,7 @@ if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
 fi
 # Check for old ZSH config
 step "Looking for an existing zsh config"
+stow -t ~ -D zsh
 if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
 	info "Found ~/.zshrc. Backing up to ~/.zshrc.old";
 	mv ~/.zshrc ~/.zshrc.old;
@@ -141,13 +147,14 @@ fi
 ok
 
 step "setting up new ZSH configuration"
-stow -t ~ zsh
+stow -t ~ -R zsh
 ok
 info "ZSH configuration complete."
 # ZSH setup complete
 
 action "Configuring tmux"
 step "Looking for an existing tmux config"
+stow -t ~ -D tmux
 if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
 	info "Found ~/.tmux.conf. Backing up to ~/.tmux.conf.old";
 	mv ~/.tmux.conf ~/.tmux.conf.old;
@@ -156,7 +163,7 @@ info "No existing tmux config found";
 fi
 ok
 step "Setting up new tmux configuration"
-stow -t ~ tmux
+stow -t ~ -R tmux
 ok
 
 step "Installing the tmux plugins"
@@ -176,11 +183,12 @@ info "tmux is configured"
 action "Installing Cheatsheets/Examples"
 mkdir -p ~/.local/share/eg
 sudo -E chown -R "$USER:$USER" ~/.local/share/eg
-stow -t ~ eg
+stow -t ~ -R eg
 ok
 
 action "Configuring nvim/vim"
 step "Looking for an existing nvim config"
+stow -t ~ -D nvim
 if [ -d ~/.config/nvim ]; then
 	info "Found ~/.config/nvim. Backing up to ~/.config/nvim.old";
 	mv ~/.config/nvim ~/.config/nvim.old;
@@ -199,7 +207,7 @@ fi
 ok
 
 step "Setting up new nvim/vim configuration"
-stow -t ~ nvim
+stow -t ~ -R nvim
 ok
 
 step "Enabling python support in nvim"
@@ -218,8 +226,20 @@ ok
 # ok
 
 step "Installing vim plugins"
-nvim +PlugInstall +qa
-nvim +GrammarousCheck +qa
+nvim +PlugInstall +PlugUpdate +UpdateRemotePlugins +PlugUpgrade +PlugClean +qa
+ok
+
+step "Fixing spell check in vim"
+if [ "$(ls -A ~/.local/share/nvim/plugged/vim-grammarous/misc)" ]; then
+	echo "If you are facing problem with spell check in vim"
+	echo "Delete the old languagetools"
+	rm -iRf ~/.local/share/nvim/plugged/vim-grammarous/misc
+	nvim +GrammarousCheck +qa
+	cd ~/.local/share/nvim/plugged/LanguageClient-neovim/
+	rm -f bin/languageclient
+	bash install.sh
+	cd -
+fi
 ok
 
 step "Installing Language Servers"
@@ -255,7 +275,7 @@ sed -i "s/\\[USER_NAME\\]/$username/g" "$gituser_info_file"
 sed -i "s/\\[E_MAIL_ID\\]/$email/g" "$gituser_info_file"
 sed -i "s/\\[GITHUB_USER\\]/$github_username/g" "$gituser_info_file"
 fi
-stow -t ~ git
+stow -t ~ -R git
 ok
 
 action "Increasing C/C++ compilation cache to 32G"
