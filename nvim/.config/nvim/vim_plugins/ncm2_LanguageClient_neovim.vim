@@ -6,16 +6,16 @@ if exists('g:vim_plug_installing_plugins')
 	Plug 'ncm2/ncm2-tmux'
 	Plug 'ncm2/ncm2-html-subscope'
 	Plug 'ncm2/ncm2-markdown-subscope'
-	"Plug 'ncm2/ncm2-jedi', { 'for': 'python' }
-	"Plug 'ncm2/ncm2-pyclang', { 'for': ['c','cpp'] }
+	Plug 'ncm2/ncm2-jedi', { 'for': 'python' }
+	Plug 'ncm2/ncm2-pyclang', { 'for': ['c','cpp'] }
 	Plug 'ncm2/ncm2-ultisnips'
 	Plug 'filipekiss/ncm2-look.vim'
-	Plug 'Shougo/echodoc.vim'
+	"Plug 'Shougo/echodoc.vim'
 	Plug 'autozimu/LanguageClient-neovim', {
  	\ 'branch': 'next',
  	\ 'do': 'bash install.sh',
- 	\ 'for': ['rust','javascript', 'typescript','python','c','cpp','php']
- 	\ }
+ 	\ 'for': ['rust','javascript', 'typescript','c','cpp','php']
+ 	\ } "not working for python
 " 	Plug 'prabirshrestha/async.vim'
 " 	Plug 'prabirshrestha/vim-lsp'
 " 	Plug 'ncm2/ncm2-vim-lsp'
@@ -51,8 +51,3 @@ nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> fs :call LanguageClient_textDocument_documentSymbol()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-
-" Settings for echodoc
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'signature'
-
