@@ -1,3 +1,4 @@
+# Extra shell function and environment setup for python
 function mkpyvenv() {
   virtualenv venv
   
@@ -37,4 +38,6 @@ fi
 unset __conda_setup
 
 # Activate conda by default: I need python environment to start on its own.
-conda activate
+if which conda >/dev/null; then
+	conda activate
+fi

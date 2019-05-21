@@ -25,31 +25,31 @@ do
 	sudo -n true; sleep 60; kill -0 "$$" || exit; 
 done 2>/dev/null &
 
-action "Update the apt and installing download managers"
+action "Installing required packages"
+step "Upgrading the system softwares"
 sudo -E apt-get update && sudo -E apt-get upgrade -ym
+ok
+
+step "Installing download managers"
 sudo -E apt-get install -ym curl aria2
 ok
 
-action "Installing required packages"
-step "Update the apt "
-sudo -E apt-get update
-ok
-step "Downloading and installing the packages"
+step "Downloading and installing the required packages"
 # setting up environment
 sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv fonts-noto-core
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global universal-ctags cmake ccache git
-# for python
-sudo -E apt install -ym python3-pip python3-tk
-# for markdown and latex
+# for python (pip3)
+sudo -E apt-get install -ym python3-pip
+# for markdown, latex and other text utilities
 sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
 	texlive-science texworks texlive-bibtex-extra biber texlive-font-utils \
 	chktex tidy odt2txt dos2unix
 # for php composer framework
 sudo -E apt-get install -ym composer
-#Install common truetype font
+# for common truetype font
 sudo -E apt-get install -ym ttf-mscorefonts-installer
 # for english dictionary
 #sudo -E apt install -ym dictd dict-gcide dict-vera dict-jargon dict-elements \
@@ -230,13 +230,13 @@ ok
 step "Installing Language Servers"
 # Language Server for Python
 $SYSPIP3 install --user -U python-language-server
-# Language server for javascript and typescript
+## Language server for javascript and typescript
 ## install nodejs
 #sudo -E apt install -ym nodejs
 # npm config set prefix $HOME
 # export PATH=$HOME/node_modules/.bin:$PATH
 # npm install -g javascript-typescript-langserver
-# Language server for PHP is installed by vim during plugin install
+## Language server for PHP is installed by vim during plugin install
 ok
 
 step "Fixing spell check in vim if any"
@@ -265,27 +265,25 @@ read -p "Do you want to setup miniconda3?(Y/N) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	step "Installing/updating miniconda3"
+	step "Installing/updating miniconda3 in $HOME/.miniconda3"
 	curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh --output ~/miniconda3.sh
 	chmod +x ~/miniconda3.sh
 	mkdir -p ~/.miniconda3
 	bash ~/miniconda3.sh -b -u -p ~/.miniconda3
 	rm -f ~/miniconda3.sh
 	ok
-	
-	step "Setting up conda"
+
+	step "Setting up conda and base environment"
 	stow -t ~ -R conda
-	# By now ~/.shell_common_config is present and can be loaded to init conda
-	source ~/.shell_common_config
-	conda activate
-	conda install -y numpy scipy statsmodels pandas xarray geopandas matplotlib \
-		cartopy ipython jupyter ipywidgets notebook nb_conda_kernels ipykernel \
-		jupyter_contrib_nbextensions
-	conda install h5py netcdf4 orange3 glueviz bottleneck
+	bash -ic "conda activate;conda install -y numpy scipy statsmodels pandas \
+		xarray geopandas matplotlib cartopy ipython jupyter ipywidgets \
+		notebook nb_conda_kernels ipykernel jupyter_contrib_nbextensions \
+		h5py netcdf4 orange3 glueviz bottleneck seaborn xlwt"
+	ok
+	info "Setting miniconda3 environment is complete"
 else
 	info "User opted to not set up miniconda3."
 fi
-ok
 
 step "Applying base16 brewer theme"
 bash -lic base16_brewer
