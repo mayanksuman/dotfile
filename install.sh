@@ -90,15 +90,6 @@ $SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
 	setproctitle demjson ipython tqdm
 ok
 
-step "Setting up python environment"
-cd python
-for dir in ./*
-do
-	stow -t ~ -R ${dir:2}
-done
-cd -
-ok
-
 action "Configuring stow"
 stow -t ~ -R stow
 ok
@@ -285,14 +276,33 @@ then
 	step "Setting up conda and base environment"
 	stow -t ~ -R conda
 	bash -ic "conda activate;conda install -y numpy scipy statsmodels pandas \
-		xarray geopandas matplotlib cartopy ipython jupyter ipywidgets \
-		notebook nb_conda_kernels ipykernel jupyter_contrib_nbextensions \
-		jupyterlab h5py netcdf4 orange3 glueviz bottleneck seaborn xlwt"
+		xarray geopandas matplotlib cartopy h5py netcdf4 orange3 glueviz \
+		bottleneck seaborn xlwt"
+	ok
+	step "Setting up jupyterlab"
+	bash -ic "conda activate;conda install -y ipython jupyter ipywidgets \
+		notebook jupyterlab nb_conda_kernels ipykernel nodejs \
+		jupyter_contrib_nbextensions black jupyterlab_code_formatter"
+	bash -ic "conda activate; \
+		jupyter labextension install jupyterlab-drawio jupyterlab-spreadsheet \
+		@ryantam626/jupyterlab_code_formatter @jupyterlab/toc @jupyterlab/git \
+		@jupyterlab/toc;\
+		jupyter serverextension enable --py jupyterlab_code_formatter"
 	ok
 	info "Setting miniconda3 environment is complete"
 else
 	info "User opted to not set up miniconda3."
 fi
+
+step "Finalizing setting up python environment"
+cd python
+mkdir -p ~/.jupyter/lab/
+for dir in ./*
+do
+	stow -t ~ -R ${dir:2}
+done
+cd -
+ok
 
 step "Applying base16 brewer theme"
 bash -lic base16_brewer
