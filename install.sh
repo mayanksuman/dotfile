@@ -287,7 +287,7 @@ then
 	bash -ic "conda activate;conda install -y numpy scipy statsmodels pandas \
 		xarray geopandas matplotlib cartopy ipython jupyter ipywidgets \
 		notebook nb_conda_kernels ipykernel jupyter_contrib_nbextensions \
-		h5py netcdf4 orange3 glueviz bottleneck seaborn xlwt"
+		jupyterlab h5py netcdf4 orange3 glueviz bottleneck seaborn xlwt"
 	ok
 	info "Setting miniconda3 environment is complete"
 else
