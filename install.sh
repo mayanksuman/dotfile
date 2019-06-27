@@ -286,7 +286,7 @@ then
 	bash -ic "conda activate; \
 		jupyter labextension install jupyterlab-drawio jupyterlab-spreadsheet \
 		@ryantam626/jupyterlab_code_formatter @jupyterlab/toc @jupyterlab/git \
-		@jupyterlab/toc;\
+		@jupyterlab/geojson-extension;\
 		jupyter serverextension enable --py jupyterlab_code_formatter"
 	ok
 	info "Setting miniconda3 environment is complete"
