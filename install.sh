@@ -90,6 +90,15 @@ $SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
 	setproctitle demjson ipython tqdm
 ok
 
+step "Setting up python environment"
+cd python
+for dir in ./*
+do
+	stow -t ~ -R ${dir:2}
+done
+cd -
+ok
+
 action "Configuring stow"
 stow -t ~ -R stow
 ok

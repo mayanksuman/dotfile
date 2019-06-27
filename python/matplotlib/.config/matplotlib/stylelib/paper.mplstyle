@@ -1,0 +1,56 @@
+#Author: Cameron Davidson-Pilon, original styles from Bayesian Methods for Hackers
+# https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/
+
+figure.dpi : 300
+figure.figsize : 7.1, 4.3	#(width, height) in inches : Width taken from Nature recommendation 
+							# Height is calculated by using golden ratio
+
+lines.linewidth : 1.0
+
+patch.linewidth: 0.5
+patch.facecolor: blue
+patch.edgecolor: eeeeee
+patch.antialiased: True
+
+text.usetex : True
+text.hinting_factor : 10
+mathtext.fontset : cm
+
+font.family: serif
+font.sans-serif: Arial, Liberation Sans, DejaVu Sans, Bitstream Vera Sans, sans-serif
+font.serif     : Times New Roman, Times, Liberation Serif, DejaVu Serif, New Century Schoolbook, Century Schoolbook L, Utopia, ITC Bookman, Bookman, Nimbus Roman No9 L, Palatino, Charter, serif
+font.cursive   : Apple Chancery, Textile, Zapf Chancery, Sand, Script MT, Felipa, cursive
+font.fantasy   : Comic Sans MS, Chicago, Charcoal, ImpactWestern, Humor Sans, fantasy
+font.monospace : Liberation Mono, DejaVu Sans Mono, Andale Mono, Nimbus Mono L, Courier New, Courier, Fixed, Terminal, monospace
+
+
+axes.facecolor: eeeeee
+axes.edgecolor: bcbcbc
+axes.grid : True
+axes.axisbelow: True       # grid/ticks are below elements (e.g., lines, text)
+axes.prop_cycle: cycler('color', ['348ABD', 'A60628', '7A68A6', '467821', 'D55E00', 'CC79A7', '56B4E9', '009E73', 'F0E442', '0072B2'])
+xtick.labelsize : x-small
+ytick.labelsize : x-small
+legend.fontsize : small
+axes.labelweight : bold
+
+grid.color: b2b2b2
+grid.linestyle: --
+grid.linewidth: 0.125
+
+legend.fancybox: True
+
+xtick.color: 222222
+xtick.direction: out
+
+ytick.color: 222222
+ytick.direction: out
+
+figure.facecolor: white
+figure.edgecolor: 0.50
+
+savefig.dpi         : figure      # figure dots per inch
+savefig.facecolor   : w        # figure facecolor when saving
+savefig.edgecolor   : w        # figure edgecolor when saving
+savefig.format      : png      # png, ps, pdf, svg
+

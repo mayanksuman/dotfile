@@ -1,0 +1,6 @@
+lines.linewidth : 0.5
+
+figure.figsize : 3.4, 2.1		#(width, height) in inches : Width taken from Nature recommendation 
+								# Height is calculated by using golden ratio
+
+grid.linewidth: 0.125
