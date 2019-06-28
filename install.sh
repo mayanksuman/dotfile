@@ -274,20 +274,23 @@ then
 	ok
 
 	step "Setting up conda and base environment"
+	cd python
 	stow -t ~ -R conda
+	cd -
 	bash -ic "conda activate;conda install -y numpy scipy statsmodels pandas \
 		xarray geopandas matplotlib cartopy h5py netcdf4 orange3 glueviz \
 		bottleneck seaborn xlwt"
 	ok
 	step "Setting up jupyterlab"
 	bash -ic "conda activate;conda install -y ipython jupyter ipywidgets \
-		notebook jupyterlab nb_conda_kernels ipykernel nodejs \
-		jupyter_contrib_nbextensions black jupyterlab_code_formatter"
+		notebook jupyterlab nb_conda_kernels ipykernel nodejs black \
+		jupyterlab_code_formatter jupyterlab-git jupyter_contrib_nbextensions"
 	bash -ic "conda activate; \
 		jupyter labextension install jupyterlab-drawio jupyterlab-spreadsheet \
 		@ryantam626/jupyterlab_code_formatter @jupyterlab/toc @jupyterlab/git \
 		@jupyterlab/geojson-extension;\
-		jupyter serverextension enable --py jupyterlab_code_formatter"
+		jupyter serverextension enable --py jupyterlab_git \
+		jupyterlab_code_formatter;jupyter lab build"
 	ok
 	info "Setting miniconda3 environment is complete"
 else
