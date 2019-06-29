@@ -4,15 +4,18 @@
 [submodule "tmux/.local/share/tmux/plugins/tpm"]
 	path = tmux/.local/share/tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
+	ignore = dirty
 [submodule "git/.local/share/git/third_party/git-quick-stats"]
 	path = git/.local/share/git/third_party/git-quick-stats
 	url = https://github.com/arzzen/git-quick-stats.git
 [submodule "git/.local/share/git/third_party/diff-so-fancy"]
 	path = git/.local/share/git/third_party/diff-so-fancy
 	url = https://github.com/so-fancy/diff-so-fancy.git
+	ignore = dirty
 [submodule "git/.local/share/git/third_party/gitignore"]
 	path = git/.local/share/git/third_party/gitignore
 	url = https://github.com/github/gitignore.git
 [submodule "zsh/.local/share/zsh/prezto"]
 	path = zsh/.local/share/zsh/prezto
 	url = https://github.com/mayanksuman/prezto.git
+	ignore = dirty
