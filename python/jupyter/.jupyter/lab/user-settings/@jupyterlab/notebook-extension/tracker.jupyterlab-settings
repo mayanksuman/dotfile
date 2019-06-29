@@ -1,3 +1,7 @@
-{"codeCellConfig": {
-      "fontSize": 14,
-       "fontFamily": "RobotoMono Nerd Font Mono"}}
+{
+    "codeCellConfig": {
+        "fontSize": 14,
+        "fontFamily": "RobotoMono Nerd Font Mono",
+        "lineNumbers": true,
+        "codeFolding": true}
+}

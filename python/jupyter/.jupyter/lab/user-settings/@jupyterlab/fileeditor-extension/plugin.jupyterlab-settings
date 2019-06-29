@@ -1,3 +1,5 @@
 {"editorConfig": {
       "fontSize": 14,
-       "fontFamily": "RobotoMono Nerd Font"}}
+       "fontFamily": "RobotoMono Nerd Font",
+        "codeFolding": true
+}}

@@ -87,7 +87,7 @@ step "Installing python packages for system python"
 SYSPIP=/usr/bin/pip
 SYSPIP3=/usr/bin/pip3
 $SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
-	setproctitle demjson ipython tqdm
+	setproctitle demjson ipython tqdm autopep8 black
 ok
 
 action "Configuring stow"
@@ -274,23 +274,43 @@ then
 	ok
 
 	step "Setting up conda and base environment"
-	cd python
+	cd ~/.dotfile/python
 	stow -t ~ -R conda
 	cd -
-	bash -ic "conda activate;conda install -y numpy scipy statsmodels pandas \
-		xarray geopandas matplotlib cartopy h5py netcdf4 orange3 glueviz \
-		bottleneck seaborn xlwt"
-	ok
-	step "Setting up jupyterlab"
-	bash -ic "conda activate;conda install -y ipython jupyter ipywidgets \
-		notebook jupyterlab nb_conda_kernels ipykernel nodejs black \
-		jupyterlab_code_formatter jupyterlab-git jupyter_contrib_nbextensions"
-	bash -ic "conda activate; \
-		jupyter labextension install jupyterlab-drawio jupyterlab-spreadsheet \
-		@ryantam626/jupyterlab_code_formatter @jupyterlab/toc @jupyterlab/git \
-		@jupyterlab/geojson-extension;\
-		jupyter serverextension enable --py jupyterlab_git \
-		jupyterlab_code_formatter;jupyter lab build"
+
+	bash -ic "conda activate;conda install -y numpy scipy statsmodels \
+		pandas xarray geopandas matplotlib cartopy h5py netcdf4 orange3 \
+		glueviz bottleneck seaborn xlwt ipython jupyter ipykernel \
+		jupyterlab nb_conda_kernels ipywidgets ipyleaflet ipympl nodejs"
+			
+
+	info "Note: obsolete jupyterlab extenstion may break the installation."
+	read -p "Do you want to install jupyterlab extensions anyway?(Y/N) " -n 1 -r
+	echo
+	if [[ $REPLY =~ ^[Yy]$ ]]
+	then
+		bash -ic "conda activate;conda install -y jupyterlab_code_formatter \
+			jupyterlab-git jupyter_contrib_nbextensions"
+
+		# Last time I checked some of the jupyterlab extension were not 
+		# available in conda
+		#bash -ic "conda activate;pip install --user jupyterlab-sql \
+		#							jupyterlab_github"
+
+		# Better widget (interactive visualization) support in jupyterlab
+		bash -ic "conda activate;jupyter-labextension install \
+			@jupyter-widgets/jupyterlab-manager jupyter-matplotlib \
+			jupyter-leaflet jupyterlab_voyager jupyterlab-drawio"
+			
+	
+		# Some additional extentions and final setup of jupyter notebook
+		bash -ic "conda activate;jupyter-labextension install @jupyterlab/toc \
+			@jupyterlab/git @jupyterlab/geojson-extension \
+			jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
+			@ryantam626/jupyterlab_code_formatter @ijmbarr/jupyterlab_spellchecker;\
+			jupyter-serverextension enable --py jupyterlab_git \
+			jupyterlab_code_formatter;jupyter lab build"
+	fi
 	ok
 	info "Setting miniconda3 environment is complete"
 else

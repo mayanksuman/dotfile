@@ -3,6 +3,7 @@
 .gitsecret
 .uuid
 .netrwhist
+.ipynb_checkpoints
 /bin/
 !README.md
 !*example
