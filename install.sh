@@ -371,7 +371,7 @@ bash -ic "eg -r"
 ok
 
 step "Applying base16 brewer theme"
-bash -lic base16_brewer
+bash -ic base16_brewer
 ok
 
 action "Increasing C/C++ compilation cache to 32G"
