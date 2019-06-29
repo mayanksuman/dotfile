@@ -41,3 +41,11 @@ unset __conda_setup
 if which conda >/dev/null; then
 	conda activate
 fi
+
+# I do not want any python package saving their data directly in $HOME
+# Additional setting for jupyter.
+export JUPYTER_CONFIG_DIR="$HOME/.config/jupyter"
+export IPYTHONDIR="$HOME/.local/share/ipython"
+
+# Additional setting for cookie cutter.
+export COOKIECUTTER_CONFIG="$HOME/.config/cookiecutter/cookiecutterrc.secret"

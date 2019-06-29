@@ -7,13 +7,43 @@ if [ $EUID -eq 0 ]; then
 	exit 1
 fi
 
+is_config_file_present(){
+	argAry1=("${!1}")
+	for item in ${argAry1[*]}
+	do
+		if ! ( [ -f "$item" ] || [ -h "$item" ] ); then
+			false
+			return
+		fi
+	done
+	true
+}
 
-action "Initializing and updating submodule(s)"
-git submodule update --init --recursive
-cd 'zsh/.local/share/zsh/prezto'
-git submodule update --init --recursive
-cd -
-git submodule foreach git pull origin master --recursive
+action "Configuring user"
+gituser_info_file=git/.config/git/.gituser_info.secret
+cookiecutter_config_file=python/cookiecutter/.config/cookiecutter/cookiecutterrc.secret
+user_config_files=("$gituser_info_file" "$cookiecutter_config_file")
+if is_config_file_present user_config_files[@]; then
+	info "User configiruation are already set in following files."
+	for item in ${user_config_files[*]}; do
+		disp_file "$item"
+	done
+	info "If you want to change them, then please edit the respective file."
+else
+	input "Enter your name" username
+	input "Enter your e-mail address" email
+	input "Enter your github username (if any; Otherwise leave blank)" \
+		github_username
+	
+	info "Writing configuration file"
+	for item in ${user_config_files[*]}; do
+		cp "$item".example "$item"
+		sed -i "s/\\[USER_NAME\\]/$username/g" "$item"
+		sed -i "s/\\[E_MAIL_ID\\]/$email/g" "$item"
+		sed -i "s/\\[GITHUB_USER\\]/$github_username/g" "$item"
+		echo "$item"
+	done
+fi
 ok
 
 info "  You need to be a sudo user for installing softwares."
@@ -24,6 +54,14 @@ while true;
 do
 	sudo -n true; sleep 60; kill -0 "$$" || exit; 
 done 2>/dev/null &
+
+action "Initializing and updating submodule(s)"
+git submodule update --init --recursive
+cd 'zsh/.local/share/zsh/prezto'
+git submodule update --init --recursive
+cd -
+git submodule foreach git pull origin master --recursive
+ok
 
 action "Installing required packages"
 step "Upgrading the system softwares"
@@ -54,6 +92,8 @@ sudo -E apt-get install -ym ttf-mscorefonts-installer
 # for english dictionary
 #sudo -E apt install -ym dictd dict-gcide dict-vera dict-jargon dict-elements \
 #	dict-moby-thesaurus dict
+# for docker
+sudo -E apt install -ym docker.io docker-compose
 # for GIS related work
 sudo -E apt install -ym proj-bin libproj-dev gdal-bin libgdal-dev python3-gdal \
 	libgeos++-dev libgeos-dev
@@ -76,7 +116,7 @@ ok
 
 step "Installing python packages for system python"
 # Note: This file also setup miniconda. The idea is non-data science package 
-# that is needed by user doftware like neovim is installed outside miniconda,
+# that is needed by user software like neovim is installed outside miniconda,
 # so they are available does not matter which conda environment is active.
 #
 # Further, these package can be also import in miniconda as miniconda python 
@@ -87,7 +127,7 @@ step "Installing python packages for system python"
 SYSPIP=/usr/bin/pip
 SYSPIP3=/usr/bin/pip3
 $SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
-	setproctitle demjson ipython tqdm autopep8 black
+	setproctitle demjson ipython tqdm autopep8 black colorama cookiecutter
 ok
 
 action "Configuring stow"
@@ -113,7 +153,6 @@ ok
 if ! grep -qsFx 'eval "$(direnv hook bash)"' ~/.bashrc ; then
 	echo 'eval "$(direnv hook bash)"'>>~/.bashrc
 fi
-
 
 # ZSH setup
 action "Configuring ZSH"
@@ -177,12 +216,6 @@ tmux kill-session -t "install_session"
 ok
 #tmux setup complete
 info "tmux is configured"
-
-action "Installing Cheatsheets/Examples"
-mkdir -p ~/.local/share/eg
-sudo -E chown -R "$USER:$USER" ~/.local/share/eg
-stow -t ~ -R eg
-ok
 
 action "Configuring nvim/vim"
 step "Looking for an existing nvim config"
@@ -260,11 +293,14 @@ fi
 ok
 info "nvim/vim configuration is complete"
 
+action "Configuring git"
+stow -t ~ -R git
+ok
+
 action "Setting up miniconda3 environment"
 read -p "Do you want to setup miniconda3?(Y/N) " -n 1 -r
 echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	step "Installing/updating miniconda3 in $HOME/.miniconda3"
 	curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh --output ~/miniconda3.sh
 	chmod +x ~/miniconda3.sh
@@ -281,14 +317,13 @@ then
 	bash -ic "conda activate;conda install -y numpy scipy statsmodels \
 		pandas xarray geopandas matplotlib cartopy h5py netcdf4 orange3 \
 		glueviz bottleneck seaborn xlwt ipython jupyter ipykernel \
-		jupyterlab nb_conda_kernels ipywidgets ipyleaflet ipympl nodejs"
-			
+		jupyterlab nb_conda_kernels ipywidgets ipyleaflet ipympl nodejs;\
+		conda clean -y --all"
 
 	info "Note: obsolete jupyterlab extenstion may break the installation."
 	read -p "Do you want to install jupyterlab extensions anyway?(Y/N) " -n 1 -r
 	echo
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		bash -ic "conda activate;conda install -y jupyterlab_code_formatter \
 			jupyterlab-git jupyter_contrib_nbextensions"
 
@@ -319,7 +354,11 @@ fi
 
 step "Finalizing setting up python environment"
 cd python
-mkdir -p ~/.jupyter/lab/
+mkdir -p ~/.config/jupyter/lab/
+sudo -E chown -R "$USER:$USER" ~/.config/jupyter/lab
+# For installing Cheatsheets/Examples
+mkdir -p ~/.local/share/eg
+sudo -E chown -R "$USER:$USER" ~/.local/share/eg
 for dir in ./*
 do
 	stow -t ~ -R ${dir:2}
@@ -327,29 +366,12 @@ done
 cd -
 ok
 
-step "Applying base16 brewer theme"
-bash -lic base16_brewer
+step "Indexing the cheatsheets/Examples"
+bash -ic "eg -r"
 ok
 
-action "Configuring git"
-gituser_info_file=git/.config/git/.gituser_info.secret
-if [ -f "$gituser_info_file" ] || [ -h "$gituser_info_file" ]; then
-info "git user info file is found. The contents are"
-cat "$gituser_info_file"
-info "If you want to change, then please edit $(pwd)/$gituser_info_file file."
-else
-input "Enter your name as git user"
-read -r username
-input "Enter your e-mail address as git user"
-read -r email
-input "Enter your github username (if any; if you do not have leave it blank)"
-read -r github_username
-cp git/.config/git/.gituser_info.secret.example "$gituser_info_file"
-sed -i "s/\\[USER_NAME\\]/$username/g" "$gituser_info_file"
-sed -i "s/\\[E_MAIL_ID\\]/$email/g" "$gituser_info_file"
-sed -i "s/\\[GITHUB_USER\\]/$github_username/g" "$gituser_info_file"
-fi
-stow -t ~ -R git
+step "Applying base16 brewer theme"
+bash -lic base16_brewer
 ok
 
 action "Increasing C/C++ compilation cache to 32G"

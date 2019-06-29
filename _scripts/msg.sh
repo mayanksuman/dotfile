@@ -37,6 +37,10 @@ function info() {
 	echo -e "${GREEN}$1${NORMAL} "
 }
 
+function disp_file() {
+	echo -e "${YELLOW}$1${NORMAL}";cat $1;echo
+}
+
 function action() {
 	echo -e "${BOLD}${BLUE}[action]: $1 ... ${NORMAL}"
 }
@@ -46,7 +50,7 @@ function step() {
 }
 
 function input() {
-	echo -e "${BLUE} $1 : ${NORMAL}"
+	read -p "${BLUE} $1 : ${NORMAL}" $2
 }
 
 function warning() {
