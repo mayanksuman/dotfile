@@ -18,15 +18,15 @@ Only tested on Debian/Ubuntu based systems.
 * Easy pane resizing by `Ctrl+=`
 
 
-And many more. See [`mappings.vim`](nvim/mappings.vim) for more.
+And many more. See [`mappings.vim`](nvim/.config/nvim/mappings.vim) for more.
 
 ## Installing Custom VIM Plugins
 
 Create a new `.vim` file with the same name as the plugin you'd like to install
-in [`nvim/vim_plugs/custom`](nvim/vim_plugins/custom). Then add the installation
+in [`~/.config/nvim/vim_plugins/custom`](nvim/.config/nvim/vim_plugins/custom). Then add the installation
 block. For example:
 
-`nvim/vim_plugs/custom/vim-move.vim`
+`nvim/vim_plugins/custom/vim-move.vim`
 
 ```viml
 if exists('g:vim_plug_installing_plugins')
@@ -63,4 +63,4 @@ This example installs [`vim-move`](https://github.com/matze/vim-move).
 
 ## License
 
-GNU Public License 3 except for included fonts.
+GNU Public License v3 (GPLv3) except for included fonts.
