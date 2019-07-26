@@ -207,7 +207,7 @@ tmux start-server
 # create a new session but don't attach to it either
 tmux new-session -d -s "install_session"
 # install the plugins
-bash "$HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh"
+bash -i "$HOME/.local/share/tmux/plugins/tpm/scripts/install_plugins.sh"
 # killing the tmux session
 tmux kill-session -t "install_session"
 ok
@@ -281,7 +281,7 @@ then
 		nvim +GrammarousCheck +qa
 		cd ~/.local/share/nvim/plugged/LanguageClient-neovim/
 		rm -f bin/languageclient
-		bash install.sh
+		bash -i install.sh
 		cd -
 	fi
 else
@@ -302,7 +302,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh --output ~/miniconda3.sh
 	chmod +x ~/miniconda3.sh
 	mkdir -p ~/.miniconda3
-	bash ~/miniconda3.sh -b -u -p ~/.miniconda3
+	bash -i ~/miniconda3.sh -b -u -p ~/.miniconda3
 	rm -f ~/miniconda3.sh
 	ok
 
@@ -364,11 +364,11 @@ cd -
 ok
 
 step "Indexing the cheatsheets/Examples"
-bash -ic "eg -r"
+bash -ic "eg -r; exit"
 ok
 
 step "Applying base16 brewer theme"
-bash -ic base16_brewer
+bash -ic "base16_brewer < /dev/null; exit"
 ok
 
 action "Increasing C/C++ compilation cache to 32G"
