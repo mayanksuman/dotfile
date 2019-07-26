@@ -145,14 +145,11 @@ ok
 action "Configuring Bash"
 stow -t ~ -R shell_common
 # Check for source line; if it does not exist then add it in ~/.bashrc
-if ! grep -qsFx 'source ~/.shell_common_config' ~/.bashrc ; then
-	echo "source ~/.shell_common_config">>~/.bashrc
+comm_shell_line='[ -z "$PS1" ] && echo "" || source "$HOME/.shell_common_config"'
+if ! grep -qsFx "$comm_shell_line" ~/.bashrc ; then
+	echo "$comm_shell_line">>~/.bashrc
 fi
 ok
-# Add direnv support in bash
-if ! grep -qsFx 'eval "$(direnv hook bash)"' ~/.bashrc ; then
-	echo 'eval "$(direnv hook bash)"'>>~/.bashrc
-fi
 
 # ZSH setup
 action "Configuring ZSH"
