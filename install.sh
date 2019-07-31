@@ -311,32 +311,36 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	stow -t ~ -R conda
 	cd -
 
-	bash -ic "conda activate;conda install -y numpy scipy statsmodels \
-		pandas xarray geopandas matplotlib cartopy h5py netcdf4 orange3 \
-		glueviz bottleneck seaborn xlwt ipython jupyter ipykernel \
-		jupyterlab nb_conda_kernels ipywidgets ipyleaflet ipympl nodejs;\
+	bash -ic "source ~/.shell_common_config;conda activate;\
+		conda install -y numpy scipy statsmodels pandas xarray \
+		geopandas matplotlib cartopy h5py netcdf4 orange3 glueviz \
+		bottleneck seaborn xlwt ipython jupyter ipykernel jupyterlab \
+		nb_conda_kernels ipywidgets ipyleaflet ipympl nodejs;\
 		conda clean -y --all"
 
 	info "Note: obsolete jupyterlab extenstion may break the installation."
 	read -p "Do you want to install jupyterlab extensions anyway?(Y/N) " -n 1 -r
 	echo
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		bash -ic "conda activate;conda install -y jupyterlab_code_formatter \
+		bash -ic "source ~/.shell_common_config;conda activate;\
+			conda install -y jupyterlab_code_formatter \
 			jupyterlab-git jupyter_contrib_nbextensions"
 
 		# Last time I checked some of the jupyterlab extension were not 
 		# available in conda
-		#bash -ic "conda activate;pip install --user jupyterlab-sql \
+		#bash -ic "source ~/.shell_common_config;conda activate;pip install --user jupyterlab-sql \
 		#							jupyterlab_github"
 
 		# Better widget (interactive visualization) support in jupyterlab
-		bash -ic "conda activate;jupyter-labextension install \
+		bash -ic "source ~/.shell_common_config;conda activate;\
+			jupyter-labextension install \
 			@jupyter-widgets/jupyterlab-manager jupyter-matplotlib \
 			jupyter-leaflet jupyterlab_voyager jupyterlab-drawio"
 			
 	
 		# Some additional extentions and final setup of jupyter notebook
-		bash -ic "conda activate;jupyter-labextension install @jupyterlab/toc \
+		bash -ic "source ~/.shell_common_config;conda activate;\
+			jupyter-labextension install @jupyterlab/toc \
 			@jupyterlab/git @jupyterlab/geojson-extension \
 			jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
 			@ryantam626/jupyterlab_code_formatter @ijmbarr/jupyterlab_spellchecker;\
@@ -364,11 +368,11 @@ cd -
 ok
 
 step "Indexing the cheatsheets/Examples"
-bash -ic "eg -r; exit"
+bash -ic "source ~/.shell_common_config;eg -r; exit"
 ok
 
 step "Applying base16 brewer theme"
-bash -ic "base16_brewer < /dev/null; exit"
+bash -ic "source ~/.shell_common_config;base16_brewer < /dev/null; exit"
 ok
 
 action "Increasing C/C++ compilation cache to 32G"
