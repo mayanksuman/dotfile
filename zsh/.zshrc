@@ -1,7 +1,7 @@
 #
 # ~/.zshrc
 #
-
+#zmodload zsh/zprof
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
@@ -20,4 +20,4 @@ alias -g ......='../../../../..'
 # It fixes bug in which system progs are unable to find system python
 # instead tried to use conda version resulting in errors.
 # It ensures separation between user installed and system executables.
-[ -z "$PS1" ] && echo "" || source "$HOME/.shell_common_config"
+[[ $- != *i* ]] && return || source "$HOME/.shell_common_config"

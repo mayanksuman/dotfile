@@ -148,6 +148,8 @@
 [rebase]
 	instructionFormat = "[%an - %ar] %s"
 [pack]
+	deltaCacheSize = 256m
+	windowMemory = 128m
 	packSizeLimit = 600m
 [color "diff-highlight"]
 	oldNormal = red bold

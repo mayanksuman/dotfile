@@ -3,5 +3,5 @@ if exists('g:vim_plug_installing_plugins')
   finish
 endif
 
-let g:lt_location_list_toggle_map = '<leader>l'
-let g:lt_quickfix_list_toggle_map = '<leader>q'
+let g:lt_location_list_toggle_map = '<leader>tl'
+let g:lt_quickfix_list_toggle_map = '<leader>tq'

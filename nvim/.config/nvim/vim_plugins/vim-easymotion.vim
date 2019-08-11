@@ -13,12 +13,27 @@ let g:EasyMotion_enter_jump_first = 1
 let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
 
-" Modified hjkl 
-map <Leader><Leader>l <Plug>(easymotion-lineforward)
-map <Leader><Leader>j <Plug>(easymotion-j)
-map <Leader><Leader>k <Plug>(easymotion-k)
-map <Leader><Leader>h <Plug>(easymotion-linebackward)
+" Modified hjkl
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
 
 "Move to any line
-map <Leader><Leader>L <Plug>(easymotion-bd-jk)
-nmap <Leader><Leader>L <Plug>(easymotion-overwin-line)
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap <Leader>s <Plug>(easymotion-overwin-f2)
+
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+" Search using easymotion
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
