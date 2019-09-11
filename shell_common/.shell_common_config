@@ -10,6 +10,11 @@ alias tls='tmux -u ls'
 alias tat='tmux -u attach -d -t'
 alias tns='tmux -u new-session -s'
 
+function define
+{
+	sdcv $1 | less -s
+}
+
 # Enable compression in ccache
 export CCACHE_COMPRESS=1
 
