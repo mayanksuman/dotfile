@@ -93,6 +93,7 @@ sudo -E apt-get install -ym composer
 # for common truetype font
 sudo -E apt-get install -ym ttf-mscorefonts-installer
 # for english dictionary
+sudo -E apt install -ym sdcv
 #sudo -E apt install -ym dictd dict-gcide dict-vera dict-jargon dict-elements \
 #	dict-moby-thesaurus dict
 # for docker
