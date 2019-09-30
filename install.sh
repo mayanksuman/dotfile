@@ -80,6 +80,9 @@ sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global universal-ctags cmake ccache git
 # for python (pip3)
 sudo -E apt-get install -ym python3-pip
+# for python and indic support in libreoffice
+sudo -E apt-get install -ym libreoffice-script-provider-python hunspell-hi \
+	libreoffice-l10n-in
 # for markdown, latex and other text utilities
 sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
@@ -127,7 +130,8 @@ step "Installing python packages for system python"
 SYSPIP=/usr/bin/pip
 SYSPIP3=/usr/bin/pip3
 $SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
-	setproctitle demjson ipython tqdm autopep8 black colorama cookiecutter
+	setproctitle demjson ipython tqdm autopep8 black colorama cookiecutter \
+	pygments
 ok
 
 action "Configuring stow"
