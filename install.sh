@@ -60,7 +60,7 @@ git submodule update --init --recursive
 cd 'zsh/.local/share/zsh/prezto'
 git submodule update --init --recursive
 cd -
-git submodule foreach git pull origin master --recursive
+git submodule foreach git pull origin master
 ok
 
 action "Installing required packages"
