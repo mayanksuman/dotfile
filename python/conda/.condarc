@@ -4,5 +4,4 @@ channels:
   - r
 
 
-channel_priority: false
 changeps1: false
