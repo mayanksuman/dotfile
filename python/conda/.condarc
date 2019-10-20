@@ -5,3 +5,4 @@ channels:
 
 
 changeps1: false
+channel_priority: strict
