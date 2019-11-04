@@ -15,6 +15,17 @@ function define
 	sdcv $1 | less -s
 }
 
+function present
+{
+	echo "Starting Projecteur"
+	projecteur &
+	echo "Starting Presentation"
+	pdfpc $1 $@
+	echo "Killing Projecteur"
+	sleep 1s
+	projecteur -c quit
+}
+
 # Enable compression in ccache
 export CCACHE_COMPRESS=1
 
