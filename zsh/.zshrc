@@ -1,7 +1,7 @@
 #
 # ~/.zshrc
 #
-zmodload zsh/zprof
+#zmodload zsh/zprof
 
 # If not running interactively, don't do anything
 case $- in
