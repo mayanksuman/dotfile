@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-source ./_scripts/msg.sh
+. ./_scripts/msg.sh
 
-if [ $EUID -eq 0 ]; then
-	error "This bash script should not be run as root. Exitting"
+if [ "$(id -u)" = 0 ]; then
+	error "This script should not be run as root. Exitting"
 	exit 1
 fi
 
@@ -11,7 +11,7 @@ is_config_file_present(){
 	argAry1=("${!1}")
 	for item in ${argAry1[*]}
 	do
-		if ! ( [ -f "$item" ] || [ -h "$item" ] ); then
+		if ! { [ -f "$item" ] || [ -h "$item" ]; }; then
 			false
 			return
 		fi
@@ -57,9 +57,9 @@ done 2>/dev/null &
 
 action "Initializing and updating submodule(s)"
 git submodule update --init --recursive
-cd 'zsh/.local/share/zsh/prezto'
+cd 'zsh/.local/share/zsh/prezto' || exit
 git submodule update --init --recursive
-cd -
+cd - || exit
 git submodule foreach git pull origin master
 ok
 
@@ -284,10 +284,10 @@ then
 		echo "Delete the old languagetools"
 		rm -iRf ~/.local/share/nvim/plugged/vim-grammarous/misc
 		nvim +GrammarousCheck +qa
-		cd ~/.local/share/nvim/plugged/LanguageClient-neovim/
+		cd ~/.local/share/nvim/plugged/LanguageClient-neovim/ || exit
 		rm -f bin/languageclient
 		bash -i install.sh
-		cd -
+		cd - || exit
 	fi
 else
 	info "No grammar check problem as per user."
@@ -312,9 +312,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	ok
 
 	step "Setting up conda and base environment"
-	cd ~/.dotfile/python
+	cd ~/.dotfile/python || exit
 	stow -t ~ -R conda
-	cd -
+	cd - || exit
 
 	bash -ic "source ~/.shell_common_config;conda activate;\
 		conda install -y numpy scipy statsmodels pandas xarray \
@@ -359,7 +359,7 @@ else
 fi
 
 step "Finalizing setting up python environment"
-cd python
+cd python || exit
 mkdir -p ~/.config/jupyter/lab/
 sudo -E chown -R "$USER:$USER" ~/.config/jupyter/lab
 # For installing Cheatsheets/Examples
@@ -367,9 +367,9 @@ mkdir -p ~/.local/share/eg
 sudo -E chown -R "$USER:$USER" ~/.local/share/eg
 for dir in ./*
 do
-	stow -t ~ -R ${dir:2}
+	stow -t ~ -R "${dir:2}"
 done
-cd -
+cd - || exit
 ok
 
 step "Indexing the cheatsheets/Examples"

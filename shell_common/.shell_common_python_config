@@ -1,14 +1,14 @@
 # Extra shell function and environment setup for python
 function mkpyvenv() {
   virtualenv venv
-  
+
   # Installing libraries if requirements.txt is present.
   source ./venv/bin/activate
   if [ -f requirements.txt ]; then 
 	pip install -r requirements.txt
   fi
   deactivate
-  
+
   # Setting up direnv file
   echo "source ./venv/bin/activate" > .envrc
   direnv allow .
@@ -47,5 +47,5 @@ unset __conda_setup
 
 # Activate conda by default: I need python environment to start on its own.
 if which conda >/dev/null; then
-	conda activate
+    conda activate
 fi
