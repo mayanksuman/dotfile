@@ -132,7 +132,8 @@ SYSPIP=/usr/bin/pip
 SYSPIP3=/usr/bin/pip3
 $SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
 	setproctitle demjson ipython tqdm autopep8 black colorama cookiecutter \
-	pygments
+	pygments virtualenvwrapper
+$SYSPIP install --user -U virtualenvwrapper
 ok
 
 action "Configuring stow"

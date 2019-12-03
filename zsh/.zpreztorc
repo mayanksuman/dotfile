@@ -37,6 +37,7 @@ zstyle ':prezto:load' pmodule \
   'completion' \
   'git'\
   'tmux'\
+  'python'\
   'fsh'\
   'history-substring-search'\
   'autosuggestions'\
@@ -137,6 +138,12 @@ zstyle ':prezto:module:prompt' theme 'paradox'
 
 # Automatically initialize virtualenvwrapper if pre-requisites are met.
 # zstyle ':prezto:module:python:virtualenv' initialize 'yes'
+
+# Skip virtualenvwrapper. I use conda
+zstyle ':prezto:module:python' skip-virtualenvwrapper-init 'on'
+
+# Initialize Conda
+zstyle ':prezto:module:python' conda-init 'on'
 
 #
 # Ruby

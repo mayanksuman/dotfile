@@ -45,7 +45,7 @@ else
 fi
 unset __conda_setup
 
-# Activate conda by default: I need python environment to start on its own.
-if which conda >/dev/null; then
-    conda activate
-fi
+# Do not activate conda by default (Speed Optimization)
+#if which conda >/dev/null; then
+#    conda activate
+#fi
