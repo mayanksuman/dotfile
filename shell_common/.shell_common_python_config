@@ -22,6 +22,7 @@ function mkpyreq() {
 
 # Some alias
 alias ca='conda activate'
+alias ce='conda deactivate'
 alias ipy='ipython'
 alias jl='jupyter lab'
 
