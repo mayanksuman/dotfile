@@ -1,7 +1,7 @@
 {
     "codeCellConfig": {
-        "fontSize": 14,
-        "fontFamily": "RobotoMono Nerd Font Mono",
+        "fontSize": 15,
+        "fontFamily": "Hack",
         "lineNumbers": true,
         "codeFolding": true}
 }

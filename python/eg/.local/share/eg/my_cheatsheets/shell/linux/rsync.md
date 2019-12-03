@@ -1,9 +1,11 @@
 # rsync
 
 
-copy the folder source_dir and its content into destination_dir
+copy the folder source_dir and its content into destination_dir (exact copy or archive mode [-a], verbose [-v], compress [-z], show progress [--progress])
 
-    rsync -av source_dir destination_dir
+    rsync --progress -avz source_dir destination_dir
+
+Note: In case of `source_dir` or `destination_dir` is on ssh then it written as `user@server:dir_path`.
 
 
 copy the contents of source_dir (trailing slash) into destination_dir
@@ -11,7 +13,7 @@ copy the contents of source_dir (trailing slash) into destination_dir
     rsync -av source_dir/ destination_dir
 
 
-copy source_dir into destination_dir converting symlinks to real files
+copy source_dir into destination_dir converting symlinks to real files [-L]
 
     rsync -avL source_dir destination_dir
 
@@ -34,11 +36,6 @@ move the contents of source_dir into destination_dir
 update the contents of destination_dir to be the same as source_dir
 
     rsync -av --delete source_dir/ destination_dir
-
-
-copy the contents of source_dir to a remote machine
-
-    rsync -av source_dir/ user@remote_machine:/path/to/destination_dir
 
 
 copy the contents of source_dir to a remote machine with non-default ssh port
