@@ -2,10 +2,6 @@
 BASE16_SHELL=$HOME/.local/share/shell_common/base16-shell/
 [ -n "$PS1" ] && [ -s "$BASE16_SHELL/profile_helper.sh" ] && eval "$("$BASE16_SHELL/profile_helper.sh")"
 
-# History size is fixed to 2000 - necessary for responsive autocompletion
-HISTSIZE=2000
-SAVEHIST=$HISTSIZE
-
 # unicode support in tmux
 alias tmux='tmux -u'
 # tmux aliases
