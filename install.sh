@@ -74,7 +74,7 @@ ok
 
 step "Downloading and installing the required packages"
 # setting up environment
-sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv fonts-noto-core
+sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv fonts-noto-core fonts-hack
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global universal-ctags cmake ccache git
@@ -388,7 +388,6 @@ ok
 info "Installation Complete."
 info "Post Installation manual configuration"
 info "  The theme can be changed by issueing base16_* command in ZSH or BASH."
-info "  The default font for the terminal can be changed to"
-info "  RobotoMono Nerd Medium."
+info "  The default font for the terminal can be changed to Hack."
 info "You can uninstall all vim package and use neovim entirely."
 info "Use update-alternatives for that."
