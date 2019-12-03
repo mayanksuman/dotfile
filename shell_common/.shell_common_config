@@ -10,6 +10,11 @@ alias tls='tmux -u ls'
 alias tat='tmux -u attach -d -t'
 alias tns='tmux -u new-session -s'
 
+#unalias gs: It is aliased in prezto
+unalias gs 2>/dev/null
+alias gS='git stash'
+
+
 function define
 {
 	sdcv $1 | less -s

@@ -20,6 +20,11 @@ function mkpyreq() {
 	pip freeze > requirements.txt
 }
 
+# Some alias
+alias ca='conda activate'
+alias ipy='ipython'
+alias jl='jupyter lab'
+
 # I do not want any python package saving their data directly in $HOME
 # Additional setting for jupyter.
 export JUPYTER_CONFIG_DIR="$HOME/.config/jupyter"
