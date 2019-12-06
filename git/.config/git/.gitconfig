@@ -120,6 +120,7 @@
 [push]
     # push will only do the current branch, not all branches
     default = current
+	followTags = true
 [branch]
     # set up 'git pull' to rebase instead of merge
     # autosetuprebase = always
