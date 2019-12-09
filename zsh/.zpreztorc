@@ -145,6 +145,9 @@ zstyle ':prezto:module:python' skip-virtualenvwrapper-init 'on'
 # Initialize Conda
 zstyle ':prezto:module:python' conda-init 'on'
 
+# Turn on the virtual environment automatically on directory change
+#zstyle ':prezto:module:python:virtualenv' auto-switch 'yes'
+
 #
 # Ruby
 #

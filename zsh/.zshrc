@@ -9,19 +9,13 @@ case $- in
 	  *) return;;
 esac
 
-# Load prezto before .shell_common_config (speed optimization)
-source "$HOME/.local/share/zsh/prezto/init.zsh"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Easy cd-ing
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
+source "$HOME/.shell_common_config"
 
 # Enable Async autosuggest
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
-source "$HOME/.shell_common_config"
+# load prezto
+source "$HOME/.local/share/zsh/prezto/init.zsh"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
