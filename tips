@@ -1,3 +1,8 @@
+For finding the usage of command quickly
+```
+eg command
+```
+
 For profiling python script
 ```
 python -m cProfile -o myscript.cprof myscript.py
