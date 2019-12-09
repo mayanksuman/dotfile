@@ -79,8 +79,8 @@ sudo -E apt-get install -ym zsh tmux sed xsel stow neovim fonts-noto-core fonts-
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global universal-ctags cmake ccache git
-# for python (pip3)
-sudo -E apt-get install -ym python3-pip
+# for python (pip3 and pipenv)
+sudo -E apt-get install -ym python3-pip pipenv
 # for python and indic support in libreoffice
 sudo -E apt-get install -ym libreoffice-script-provider-python hunspell-hi \
 	libreoffice-l10n-in
@@ -322,7 +322,7 @@ pyenv install miniconda3-latest
 step "Setting up common tools in $PYTHON_VERSION virtualenv tools"
 pyenv virtualenv "$PYTHON_VERSION" tools
 pyenv activate tools
-pip install pipenv youtube-dl autopep8 black colorama cookiecutter \
+pip install youtube-dl autopep8 black colorama cookiecutter \
 		proselint yamllint nose pytest jedi psutil setproctitle demjson \
 		tqdm pygments pynvim notedown neovim-remote odfpy \
 		python-language-server virtualenvwrapper
