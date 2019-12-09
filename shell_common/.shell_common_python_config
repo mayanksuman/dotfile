@@ -20,12 +20,6 @@ function mkpyreq() {
 	pip freeze > requirements.txt
 }
 
-# Some alias
-alias ca='conda activate'
-alias ce='conda deactivate'
-alias ipy='ipython'
-alias jl='jupyter lab'
-
 # I do not want any python package saving their data directly in $HOME
 # Additional setting for jupyter.
 export JUPYTER_CONFIG_DIR="$HOME/.config/jupyter"
@@ -43,24 +37,12 @@ if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -
 # Better integration between pipenv and pyenv
 export PIPENV_PYTHON=="$PYENV_ROOT/shims/python"
 
-# conda initialization
-#if [ -n "$BASH_VERSION" ]; then
-#__conda_setup="$('$HOME/.miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-#elif [ -n "$ZSH_VERSION" ]; then
-#__conda_setup="$('$HOME/.miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-#fi
-#if [ $? -eq 0 ]; then
-#    eval "$__conda_setup"
-#else
-#    if [ -f "$HOME/.miniconda3/etc/profile.d/conda.sh" ]; then
-#        . "$HOME/.miniconda3/etc/profile.d/conda.sh"
-#    else
-#        export PATH="$HOME/.miniconda3/bin:$PATH"
-#    fi
-#fi
-#unset __conda_setup
-
-# Do not activate conda by default (Speed Optimization)
-#if which conda >/dev/null; then
-#    conda activate
-#fi
+# Some alias
+alias pa='pyenv activate'
+alias pe='pyenv deactivate'
+alias pl='pyenv local'
+alias pg='pyenv global'
+alias pi='pyenv install'
+alias pv='pyenv virtualenv'
+alias ipy='ipython'
+alias jl='jupyter lab'
