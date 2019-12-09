@@ -100,11 +100,11 @@ elif [ -n "$ZSH_VERSION" ]; then
 fi
 
 # direnv support
-if [ -n "$BASH_VERSION" ]; then
-    eval "$(direnv hook bash)"
-elif [ -n "$ZSH_VERSION" ]; then
-    eval "$(direnv hook zsh)"
-fi
+#if [ -n "$BASH_VERSION" ]; then
+#    eval "$(direnv hook bash)"
+#elif [ -n "$ZSH_VERSION" ]; then
+#    eval "$(direnv hook zsh)"
+#fi
 
 # Some python specific commands
 source ~/.shell_common_python_config
