@@ -302,6 +302,11 @@ stow -t ~ -R git
 ok
 
 action "Setting up pyenv"
+step "Setting up conda environment"
+cd ~/.dotfile/python || exit
+stow -t ~ -R conda
+cd - || exit
+
 step "Installing/updating pyenv"
 if which pyenv > /dev/null; then
 	pyenv update
@@ -309,12 +314,8 @@ else
 	curl https://pyenv.run | bash
 	source $HOME/.shell_common_config
 fi
-step "Setting up conda and base environment"
-cd ~/.dotfile/python || exit
-stow -t ~ -R conda
-cd - || exit
 
-step "Instlling python $PYTHON_VERSION and miniconda3-latest in pyenv"
+step "Installing python $PYTHON_VERSION and miniconda3-latest in pyenv"
 pyenv install "$PYTHON_VERSION"
 pyenv install miniconda3-latest
 
@@ -335,7 +336,7 @@ conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
 conda install -y jupyterlab-git jupyterlab_code_formatter
 jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
 						jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
-						@ryantam626/jupyterlab_code_formatter
+						@ryantam626/jupyterlab_code_formatter;
 pip install jupyterlab_sql
 jupyter serverextension enable jupyterlab_sql --py --sys-prefix
 jupyter lab build
