@@ -75,7 +75,8 @@ ok
 
 step "Downloading and installing the required packages"
 # setting up environment
-sudo -E apt-get install -ym zsh tmux sed xsel stow neovim fonts-noto-core fonts-hack
+sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv \
+	fonts-noto-core fonts-hack
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global universal-ctags cmake ccache git
