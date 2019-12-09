@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 . ./_scripts/msg.sh
+PYTHON_VERSION=3.8.0;	# default pthon version installed by pyenv
 
 if [ "$(id -u)" = 0 ]; then
 	error "This script should not be run as root. Exitting"
@@ -74,7 +75,7 @@ ok
 
 step "Downloading and installing the required packages"
 # setting up environment
-sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv fonts-noto-core fonts-hack
+sudo -E apt-get install -ym zsh tmux sed xsel stow neovim fonts-noto-core fonts-hack
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global universal-ctags cmake ccache git
@@ -118,23 +119,23 @@ sudo -E chown -R "$USER:$USER" ~/.local/include
 sudo -E chown -R "$USER:$USER" ~/.local/share
 ok
 
-step "Installing python packages for system python"
-# Note: This file also setup miniconda. The idea is non-data science package 
-# that is needed by user software like neovim is installed outside miniconda,
-# so they are available does not matter which conda environment is active.
-#
-# Further, these package can be also import in miniconda as miniconda python 
-# has ~/.local/lib/python3.x in the path. Beware the libraries installed in 
-# ~/.local/lib/python3.x has higher preference in minconda so do not install 
-# any data science packages in ~/.local/lib/python3.x, otherwise sub-optimal
-# performance in data science workload might be observed.
-SYSPIP=/usr/bin/pip
-SYSPIP3=/usr/bin/pip3
-$SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
-	setproctitle demjson ipython tqdm autopep8 black colorama cookiecutter \
-	pygments virtualenvwrapper
-$SYSPIP install --user -U virtualenvwrapper
-ok
+#step "Installing python packages for system python"
+## Note: This file also setup miniconda. The idea is non-data science package 
+## that is needed by user software like neovim is installed outside miniconda,
+## so they are available does not matter which conda environment is active.
+##
+## Further, these package can be also import in miniconda as miniconda python 
+## has ~/.local/lib/python3.x in the path. Beware the libraries installed in 
+## ~/.local/lib/python3.x has higher preference in minconda so do not install 
+## any data science packages in ~/.local/lib/python3.x, otherwise sub-optimal
+## performance in data science workload might be observed.
+#SYSPIP=/usr/bin/pip
+#SYSPIP3=/usr/bin/pip3
+#$SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
+#	setproctitle demjson ipython tqdm autopep8 black colorama cookiecutter \
+#	pygments virtualenvwrapper
+#$SYSPIP install --user -U virtualenvwrapper
+#ok
 
 action "Configuring stow"
 stow -t ~ -R stow
@@ -244,16 +245,16 @@ step "Setting up new nvim/vim configuration"
 stow -t ~ -R nvim
 ok
 
-step "Enabling python support in nvim"
-#pip install --user -U neovim
-$SYSPIP install --user -U pynvim
-$SYSPIP3 install --user -U pynvim
-
-# Required by ncm2-ultisnips
-$SYSPIP3 install --user -U notedown
-# Required by vimtex
-$SYSPIP3 install --user -U neovim-remote
-ok
+#step "Enabling python support in nvim"
+##pip install --user -U neovim
+#$SYSPIP install --user -U pynvim
+#$SYSPIP3 install --user -U pynvim
+#
+## Required by ncm2-ultisnips
+#$SYSPIP3 install --user -U notedown
+## Required by vimtex
+#$SYSPIP3 install --user -U neovim-remote
+#ok
 
 # step "Enabling ruby support in nvim"
 # gem install --user neovim
@@ -265,7 +266,7 @@ ok
 
 step "Installing Language Servers"
 # Language Server for Python
-$SYSPIP3 install --user -U python-language-server
+#$SYSPIP3 install --user -U python-language-server
 ## Language server for javascript and typescript
 ## install nodejs
 #sudo -E apt install -ym nodejs
@@ -300,66 +301,69 @@ action "Configuring git"
 stow -t ~ -R git
 ok
 
-action "Setting up miniconda3 environment"
-read -p "Do you want to setup miniconda3?(Y/N) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-	step "Installing/updating miniconda3 in $HOME/.miniconda3"
-	curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh --output ~/miniconda3.sh
-	chmod +x ~/miniconda3.sh
-	mkdir -p ~/.miniconda3
-	bash -i ~/miniconda3.sh -b -u -p ~/.miniconda3
-	rm -f ~/miniconda3.sh
-	ok
-
-	step "Setting up conda and base environment"
-	cd ~/.dotfile/python || exit
-	stow -t ~ -R conda
-	cd - || exit
-
-	bash -ic "source ~/.shell_common_config;conda activate;\
-		conda install -y numpy scipy statsmodels pandas xarray \
-		geopandas matplotlib cartopy h5py netcdf4 orange3 glueviz \
-		bottleneck seaborn xlwt ipython jupyter ipykernel jupyterlab \
-		nb_conda_kernels ipywidgets ipyleaflet ipympl nodejs;\
-		conda clean -y --all"
-
-	info "Note: obsolete jupyterlab extenstion may break the installation."
-	read -p "Do you want to install jupyterlab extensions anyway?(Y/N) " -n 1 -r
-	echo
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		bash -ic "source ~/.shell_common_config;conda activate;\
-			conda install -y jupyterlab_code_formatter \
-			jupyterlab-git jupyter_contrib_nbextensions"
-
-		# Last time I checked some of the jupyterlab extension were not 
-		# available in conda
-		#bash -ic "source ~/.shell_common_config;conda activate;pip install --user jupyterlab-sql \
-		#							jupyterlab_github"
-
-		# Better widget (interactive visualization) support in jupyterlab
-		bash -ic "source ~/.shell_common_config;conda activate;\
-			jupyter-labextension install \
-			@jupyter-widgets/jupyterlab-manager jupyter-matplotlib \
-			jupyter-leaflet jupyterlab_voyager jupyterlab-drawio"
-			
-	
-		# Some additional extentions and final setup of jupyter notebook
-		bash -ic "source ~/.shell_common_config;conda activate;\
-			jupyter-labextension install @jupyterlab/toc \
-			@jupyterlab/git @jupyterlab/geojson-extension \
-			jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
-			@ryantam626/jupyterlab_code_formatter @ijmbarr/jupyterlab_spellchecker;\
-			jupyter-serverextension enable --py jupyterlab_git \
-			jupyterlab_code_formatter;jupyter lab build"
-	fi
-	ok
-	info "Setting miniconda3 environment is complete"
+action "Setting up pyenv"
+step "Installing/updating pyenv"
+if which pyenv > /dev/null; then
+	pyenv update
 else
-	info "User opted to not set up miniconda3."
+	curl https://pyenv.run | bash
+	source $HOME/.shell_common_config
 fi
+step "Setting up conda and base environment"
+cd ~/.dotfile/python || exit
+stow -t ~ -R conda
+cd - || exit
 
-step "Finalizing setting up python environment"
+step "Instlling python $PYTHON_VERSION and miniconda3-latest in pyenv"
+pyenv install "$PYTHON_VERSION"
+pyenv install miniconda3-latest
+
+step "Setting up common tools in $PYTHON_VERSION virtualenv tools"
+pyenv virtualenv "$PYTHON_VERSION" tools
+pyenv activate tools
+pip install pipenv youtube-dl autopep8 black colorama cookiecutter \
+		proselint yamllint nose pytest jedi psutil setproctitle demjson \
+		tqdm pygments pynvim notedown neovim-remote odfpy \
+		python-language-server virtualenvwrapper
+pyenv deactivate
+
+step "Setting up jupyterlab in miniconda3-latest virtualenv tools"
+pyenv virtualenv miniconda3-latest jupyter
+pyenv activate jupyter
+conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
+		  ipykernel nb_conda_kernels nodejs scipy
+conda install -y jupyterlab-git jupyterlab_code_formatter
+jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
+						jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
+						@ryantam626/jupyterlab_code_formatter
+pip install jupyterlab_sql
+jupyter serverextension enable jupyterlab_sql --py --sys-prefix
+jupyter lab build
+conda clean -y --all
+python -m ipykernel install --user
+pyenv deactivate
+
+step "Setting up numerical/data science tools in miniconda3-latest"
+pyenv virtualenv miniconda3-latest conda_tools
+pyenv activate conda_tools
+conda install -y python==3.7.3;			# Last tested python with Orange3
+conda install -y orange3 glueviz;
+conda clean -y --all
+pyenv deactivate
+
+step "Setting up general scientific python virtualenv from miniconda3-latest"
+pyenv virtualenv miniconda3-latest num_python
+pyenv activate num_python
+conda install -y numpy scipy statsmodels pandas xarray \
+		geopandas matplotlib cartopy h5py netcdf4 dask \
+		bottleneck seaborn xlwt ipykernel
+conda clean -y --all
+pyenv deactivate
+
+step "Setting up the default python version and tools binary in pyenv"
+pyenv global "$PYTHON_VERSION" jupyter tools conda_tools
+
+step "Configuring python modules"
 cd python || exit
 mkdir -p ~/.config/jupyter/lab/
 sudo -E chown -R "$USER:$USER" ~/.config/jupyter/lab
