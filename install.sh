@@ -120,23 +120,22 @@ sudo -E chown -R "$USER:$USER" ~/.local/include
 sudo -E chown -R "$USER:$USER" ~/.local/share
 ok
 
-#step "Installing python packages for system python"
-## Note: This file also setup miniconda. The idea is non-data science package 
-## that is needed by user software like neovim is installed outside miniconda,
-## so they are available does not matter which conda environment is active.
-##
-## Further, these package can be also import in miniconda as miniconda python 
-## has ~/.local/lib/python3.x in the path. Beware the libraries installed in 
-## ~/.local/lib/python3.x has higher preference in minconda so do not install 
-## any data science packages in ~/.local/lib/python3.x, otherwise sub-optimal
-## performance in data science workload might be observed.
-#SYSPIP=/usr/bin/pip
-#SYSPIP3=/usr/bin/pip3
-#$SYSPIP3 install --user -U proselint yamllint nose pytest jedi psutil \
-#	setproctitle demjson ipython tqdm autopep8 black colorama cookiecutter \
-#	pygments virtualenvwrapper
-#$SYSPIP install --user -U virtualenvwrapper
-#ok
+step "Installing python programmes for system python"
+# Note: This file also setup pyenv. The idea is package that provide cli/gui 
+# entry points and are needed by user software like neovim is installed 
+# outside pyenv, so they are available no matter which pyenv environment 
+# is active.
+#
+# However, these package cannot be imported in python running under pyenv as 
+# pyenv python do not have ~/.local/lib/python3.x in the path.
+SYSPIP=/usr/bin/pip
+SYSPIP3=/usr/bin/pip3
+$SYSPIP3 install --user -U youtube-dl autopep8 black colorama cookiecutter \
+		proselint yamllint nose pytest jedi psutil setproctitle demjson \
+		pygments odfpy python-language-server
+$SYSPIP3 install --user -U pynvim notedown neovim-remote virtualenvwrapper
+$SYSPIP install --user -U virtualenvwrapper
+ok
 
 action "Configuring stow"
 stow -t ~ -R stow
@@ -146,8 +145,19 @@ action "Installing fonts"
 mkdir -p ~/.local/share/fonts/
 stow -t ~ -R fonts
 ok
-action "Updating font cache"
+step "Updating font cache"
 sudo fc-cache -f -v
+ok
+
+action "Setting up nodejs and npm for javascript/typescript development"
+# for nodejs and javascript/typescript development
+#curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+sudo -E apt-get install -ym nodejs npm
+mkdir -p "${HOME}/.npm_packages"
+sudo -E chown -R "$USER:$USER" "${HOME}/.npm_packages"
+stow -t ~ -R nodejs
+export PATH=$HOME/.npm_packages/bin:$PATH
+npm install -g typescript javascript-typescript-langserver
 ok
 
 action "Configuring Bash"
@@ -266,15 +276,9 @@ nvim +PlugInstall +PlugUpdate +UpdateRemotePlugins +PlugUpgrade +PlugClean +qa
 ok
 
 step "Installing Language Servers"
-# Language Server for Python
-#$SYSPIP3 install --user -U python-language-server
+## Language Server for Python is already installed
 ## Language server for javascript and typescript
-## install nodejs
-#sudo -E apt install -ym nodejs
-# npm config set prefix $HOME
-# export PATH=$HOME/node_modules/.bin:$PATH
-# npm install -g javascript-typescript-langserver
-## Language server for PHP is installed by vim during plugin install
+## Language server for PHP is installed by neovim during plugin install
 ok
 
 step "Fixing spell check in vim if any"
@@ -320,20 +324,15 @@ step "Installing python $PYTHON_VERSION and miniconda3-latest in pyenv"
 pyenv install "$PYTHON_VERSION"
 pyenv install miniconda3-latest
 
-step "Setting up common tools in $PYTHON_VERSION virtualenv tools"
-pyenv virtualenv "$PYTHON_VERSION" tools
-pyenv activate tools
-pip install youtube-dl autopep8 black colorama cookiecutter \
-		proselint yamllint nose pytest jedi psutil setproctitle demjson \
-		tqdm pygments pynvim notedown neovim-remote odfpy \
-		python-language-server virtualenvwrapper
-pyenv deactivate
-
 step "Setting up jupyterlab in miniconda3-latest virtualenv tools"
 pyenv virtualenv miniconda3-latest jupyter
+# This virtulenv should be moved to system python but the package that is 
+# stopping this nb_conda_kernels. Once built in kernelspec for jupyter is 
+# completed, the virtualenv may be moved to system python.
+# Note: Important nodejs is required for jupyter now.
 pyenv activate jupyter
 conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
-		  ipykernel nb_conda_kernels nodejs scipy
+		  ipykernel nb_conda_kernels scipy
 conda install -y jupyterlab-git jupyterlab_code_formatter
 jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
 						jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
@@ -363,7 +362,7 @@ conda clean -y --all
 pyenv deactivate
 
 step "Setting up the default python version and tools binary in pyenv"
-pyenv global "$PYTHON_VERSION" jupyter tools conda_tools
+pyenv global "$PYTHON_VERSION" jupyter conda_tools
 
 step "Configuring python modules"
 cd python || exit

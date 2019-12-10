@@ -29,6 +29,9 @@ function present
 # Enable compression in ccache
 export CCACHE_COMPRESS=1
 
+# Add npm binaries to PATH
+[ -d "${HOME}/.npm_packages/bin" ] && export PATH=$HOME/.npm_packages/bin:$PATH
+
 # set PATH so it includes user's private bin if it exists
 priv_bin_path="$HOME/.local/bin"
 if [ -d "${priv_bin_path}" ] ; then
@@ -72,9 +75,6 @@ preexec() {
 }
 trap 'preexec' DEBUG
 
-#Set npm default location
-#npm config set prefix $HOME
-#export PATH=$HOME/node_modules/.bin:$PATH
 
 # cheatsheets location and autocompletion
 export EDITOR=nvim
