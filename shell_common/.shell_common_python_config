@@ -30,9 +30,16 @@ export COOKIECUTTER_CONFIG="$HOME/.config/cookiecutter/cookiecutterrc.secret"
 
 # Intialize pyenv if present
 export PYENV_ROOT="$HOME/.pyenv"
-add_to_path "$PYENV_ROOT/bin"
-command -v pyenv > /dev/null 2>&1 && eval "$(pyenv init -)"
-command -v pyenv-virtualenv-init > /dev/null 2>&1 && eval "$(pyenv virtualenv-init -)"
+pathprepend "$PYENV_ROOT/bin"
+if command -v pyenv > /dev/null 2>&1; then
+	eval "$(pyenv init -)"
+	if [ -d $PYENV_ROOT/plugins/pyenv-virtualenv ]; then
+		eval "$(pyenv virtualenv-init -)"
+	fi
+fi
+pathprepend "$PYENV_ROOT/shims"
+pathprepend "$PYENV_ROOT/plugins/pyenv-virtualenv/shims"
+
 
 # Better integration between pipenv and pyenv
 export PIPENV_PYTHON=="$PYENV_ROOT/shims/python"

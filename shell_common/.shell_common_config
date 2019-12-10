@@ -1,3 +1,76 @@
+# Show Dictionary meaning of a word
+function define
+{
+	sdcv $1 | less -s
+}
+
+# Prepare PC for presentation
+function present
+{
+	echo "Starting Projecteur"
+	projecteur &
+	echo "Starting Presentation"
+	pdfpc $1 $@
+	echo "Killing Projecteur"
+	sleep 1s
+	projecteur -c quit
+}
+
+
+# Better PATH variable management 
+# Taken from http://www.linuxfromscratch.org/blfs/view/6.3/postlfs/profile.html
+# Functions to help us manage paths.  Second argument is the name of the
+# path variable to be modified (default: PATH)
+pathremove () {
+        local NEWPATH
+        local PATHVARIABLE=${2:-PATH}
+		if [ -n "$BASH_VERSION" ]; then
+			local IFS=':'
+			for DIR in ${!PATHVARIABLE}; do
+				if [ "$DIR" != "$1" ] ; then
+					NEWPATH=${NEWPATH:+$NEWPATH:}$DIR
+				fi
+			done
+		elif [ -n "$ZSH_VERSION" ]; then
+			local PATH_CONTENT=${(P)PATHVARIABLE}
+			for DIR in ${(s.:.)PATH_CONTENT}; do
+		        if [ "$DIR" != "$1" ] ; then
+					NEWPATH=${NEWPATH:+$NEWPATH:}$DIR
+				fi
+			done
+		fi
+        export $PATHVARIABLE="$NEWPATH"
+}
+
+pathprepend () {
+	if [ -d $1 ]; then
+        pathremove $1 $2
+        local PATHVARIABLE=${2:-PATH}
+		local PATH_CONTENT
+		if [ -n "$BASH_VERSION" ]; then
+			PATH_CONTENT=${!PATHVARIABLE}
+		elif [ -n "$ZSH_VERSION" ]; then
+			PATH_CONTENT=${(P)PATHVARIABLE}
+		fi
+        export $PATHVARIABLE="$1${PATH_CONTENT:+:${PATH_CONTENT}}"
+	fi
+}
+
+pathappend () {
+	if [ -d $1 ]; then
+        pathremove $1 $2
+        local PATHVARIABLE=${2:-PATH}
+		local PATH_CONTENT
+		if [ -n "$BASH_VERSION" ]; then
+			PATH_CONTENT=${!PATHVARIABLE}
+		elif [ -n "$ZSH_VERSION" ]; then
+			PATH_CONTENT=${(P)PATHVARIABLE}
+		fi
+		export $PATHVARIABLE="${PATH_CONTENT:+${PATH_CONTENT}:}$1"
+	fi
+}
+
+
 # BASE16-Shell Entry : Helps in getting even color scheme in zsh, bash and nvim
 BASE16_SHELL=$HOME/.local/share/shell_common/base16-shell/
 [ -n "$PS1" ] && [ -s "$BASE16_SHELL/profile_helper.sh" ] && eval "$("$BASE16_SHELL/profile_helper.sh")"
@@ -10,42 +83,16 @@ alias tls='tmux -u ls'
 alias tat='tmux -u attach -d -t'
 alias tns='tmux -u new-session -s'
 
-function define
-{
-	sdcv $1 | less -s
-}
-
-function present
-{
-	echo "Starting Projecteur"
-	projecteur &
-	echo "Starting Presentation"
-	pdfpc $1 $@
-	echo "Killing Projecteur"
-	sleep 1s
-	projecteur -c quit
-}
-
-function add_to_path
-{
-	priv_bin_path="$1"
-	if [ -d "${priv_bin_path}" ] ; then
-		if ! printf '%s' ":${PATH-}:" | grep -Fq ":${priv_bin_path-}:"; then
-			PATH="${priv_bin_path-}:${PATH-}"
-		fi
-	fi
-
-}
 
 # Enable compression in ccache
 export CCACHE_COMPRESS=1
 
 # Add npm binaries to PATH
-add_to_path "$HOME/.npm_packages/bin"
+pathprepend "$HOME/.npm_packages/bin"
 
 # set PATH so it includes user's private bin if it exists
-add_to_path "$HOME/.local/bin"
-add_to_path "$HOME/bin"
+pathprepend "$HOME/.local/bin"
+pathprepend "$HOME/bin"
 
 GPG_TTY=$(tty)
 export GPG_TTY
@@ -106,3 +153,6 @@ eval "$(direnv hook $MYSHELL)"
 
 # Some python specific commands
 source ~/.shell_common_python_config
+
+# unset the path related functions
+unset pathprepend pathappend pathremove

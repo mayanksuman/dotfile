@@ -57,6 +57,8 @@ do
 done 2>/dev/null &
 
 action "Initializing and updating submodule(s)"
+step "Installing git"
+sudo -E apt-get update && sudo -E apt-get install -ym git
 git submodule update --init --recursive
 cd 'zsh/.local/share/zsh/prezto' || exit
 git submodule update --init --recursive
@@ -153,8 +155,8 @@ action "Setting up nodejs and npm for javascript/typescript development"
 # for nodejs and javascript/typescript development
 #curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
 sudo -E apt-get install -ym nodejs npm
-mkdir -p "${HOME}/.npm_packages"
-sudo -E chown -R "$USER:$USER" "${HOME}/.npm_packages"
+mkdir -p "$HOME/.npm_packages"
+sudo -E chown -R "$USER:$USER" "$HOME/.npm_packages"
 stow -t ~ -R nodejs
 export PATH=$HOME/.npm_packages/bin:$PATH
 npm install -g typescript javascript-typescript-langserver
@@ -308,22 +310,31 @@ stow -t ~ -R git
 ok
 
 action "Setting up pyenv"
+step "Installing prerequisite"
+sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
+	libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+	libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+ok
+
 step "Setting up conda environment"
 cd ~/.dotfile/python || exit
 stow -t ~ -R conda
 cd - || exit
+ok
 
 step "Installing/updating pyenv"
 if which pyenv > /dev/null; then
 	pyenv update
 else
-	curl https://pyenv.run | bash
-	source $HOME/.shell_common_config
+	curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+	source "$HOME/.shell_common_config"
 fi
+ok
 
 step "Installing python $PYTHON_VERSION and miniconda3-latest in pyenv"
 pyenv install "$PYTHON_VERSION"
 pyenv install miniconda3-latest
+ok
 
 step "Setting up jupyterlab in miniconda3-latest virtualenv tools"
 pyenv virtualenv miniconda3-latest jupyter
@@ -344,6 +355,7 @@ jupyter lab build
 conda clean -y --all
 python -m ipykernel install --user
 pyenv deactivate
+ok
 
 step "Setting up numerical/data science tools in miniconda3-latest"
 pyenv virtualenv miniconda3-latest conda_tools
@@ -352,6 +364,7 @@ conda install -y python==3.7.3;			# Last tested python with Orange3
 conda install -y orange3 glueviz;
 conda clean -y --all
 pyenv deactivate
+ok
 
 step "Setting up general scientific python virtualenv from miniconda3-latest"
 pyenv virtualenv miniconda3-latest num_python
@@ -361,9 +374,11 @@ conda install -y numpy scipy statsmodels pandas xarray \
 		bottleneck seaborn xlwt ipykernel
 conda clean -y --all
 pyenv deactivate
+ok
 
 step "Setting up the default python version and tools binary in pyenv"
 pyenv global "$PYTHON_VERSION" jupyter conda_tools
+ok
 
 step "Configuring python modules"
 cd python || exit
