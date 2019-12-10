@@ -24,3 +24,10 @@ The current setup by default install `python 3.8.0` and `miniconda-latest` versi
 
 By default, the default global versions for `pyenv` is `3.8.0 jupyter conda_tools` (in order; set by command `pyenv global 3.8.0 jupyter conda_tools` in `install.sh`). Hence, the default version of python is `3.8.0` (not a miniconda version) and cli/gui programs from `jupyter` and `conda_tools` can be used in a newly opened terminal.
 
+# Managing virtualenv under pyenv
+
+virtualenv can be made using `pyenv virtualenv <version> <virtualenv_name>` and can be deleted with command `pyenv unistall <virtualenv_name>`. All the virtualens in `pyenv` can be displayed by `pyenv virtualenvs`.
+
+# Some Tips
+
+Under `pipenv`, the project specific environment variable can be saved in `.env` file.
