@@ -276,8 +276,9 @@ nvim +PlugInstall +PlugUpdate +UpdateRemotePlugins +PlugUpgrade +PlugClean +qa
 ok
 
 step "Installing Language Servers"
-## Language Server for Python is already installed
-## Language server for javascript and typescript
+# Nothing to do here
+## Language Server for Python is already installed using $SYSPIP3
+## Language server for javascript and typescript is installed using npm
 ## Language server for PHP is installed by neovim during plugin install
 ok
 
