@@ -26,25 +26,26 @@ function present
 	projecteur -c quit
 }
 
+function add_to_path
+{
+	priv_bin_path="$1"
+	if [ -d "${priv_bin_path}" ] ; then
+		if ! printf '%s' ":${PATH-}:" | grep -Fq ":${priv_bin_path-}:"; then
+			PATH="${priv_bin_path-}:${PATH-}"
+		fi
+	fi
+
+}
+
 # Enable compression in ccache
 export CCACHE_COMPRESS=1
 
 # Add npm binaries to PATH
-[ -d "${HOME}/.npm_packages/bin" ] && export PATH=$HOME/.npm_packages/bin:$PATH
+add_to_path "$HOME/.npm_packages/bin"
 
 # set PATH so it includes user's private bin if it exists
-priv_bin_path="$HOME/.local/bin"
-if [ -d "${priv_bin_path}" ] ; then
-	if ! printf '%s' ":${PATH-}:" | grep -Fq ":${priv_bin_path-}:"; then
-		PATH="${priv_bin_path-}:${PATH-}"
-	fi
-fi
-priv_bin_path="$HOME/bin"
-if [ -d "${priv_bin_path}" ] ; then
-	if ! printf '%s' ":${PATH-}:" | grep -Fq ":${priv_bin_path-}:"; then
-		PATH="${priv_bin_path-}:${PATH-}"
-	fi
-fi
+add_to_path "$HOME/.local/bin"
+add_to_path "$HOME/bin"
 
 GPG_TTY=$(tty)
 export GPG_TTY
