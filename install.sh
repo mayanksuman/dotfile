@@ -77,8 +77,7 @@ ok
 
 step "Downloading and installing the required packages"
 # setting up environment
-sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv \
-	fonts-noto-core fonts-hack
+sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global universal-ctags cmake ccache git
@@ -92,18 +91,22 @@ sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
 	texlive-science texworks texlive-bibtex-extra biber texlive-font-utils \
 	chktex tidy odt2txt dos2unix
+# some utilities 
+sudo -E apt-get install -ym youtube-dl
 # for php composer framework
 sudo -E apt-get install -ym composer
 # for common truetype font
 sudo -E apt-get install -ym ttf-mscorefonts-installer
+# Install plain noto and hack fonts
+sudo -E apt-get install -ym fonts-noto-core fonts-hack
 # for english dictionary
-sudo -E apt install -ym sdcv
-#sudo -E apt install -ym dictd dict-gcide dict-vera dict-jargon dict-elements \
-#	dict-moby-thesaurus dict
+sudo -E apt-get install -ym sdcv
+#sudo -E apt-get install -ym dictd dict-gcide dict-vera dict-jargon \
+#	dict-elements dict-moby-thesaurus dict
 # for docker
-sudo -E apt install -ym docker.io docker-compose
+sudo -E apt-get install -ym docker.io docker-compose
 # for GIS related work
-sudo -E apt install -ym proj-bin libproj-dev gdal-bin libgdal-dev python3-gdal \
+sudo -E apt-get install -ym proj-bin libproj-dev gdal-bin libgdal-dev python3-gdal \
 	libgeos++-dev libgeos-dev
 ok
 
