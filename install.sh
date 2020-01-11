@@ -143,6 +143,10 @@ action "Configuring stow"
 stow -t ~ -R stow
 ok
 
+action "Configuring gdb"
+stow -t ~ -R gdb
+ok
+
 action "Installing fonts"
 mkdir -p ~/.local/share/fonts/
 stow -t ~ -R fonts
