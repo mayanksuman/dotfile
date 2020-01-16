@@ -33,7 +33,3 @@ nmap <Leader>s <Plug>(easymotion-overwin-f2)
 " Move to word
 map  <Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader>w <Plug>(easymotion-overwin-w)
-
-" Search using easymotion
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
