@@ -263,7 +263,6 @@ stow -t ~ -R nvim
 ok
 
 #step "Enabling python support in nvim"
-##pip install --user -U neovim
 #$SYSPIP install --user -U pynvim
 #$SYSPIP3 install --user -U pynvim
 #
