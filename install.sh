@@ -137,8 +137,7 @@ SYSPIP=/usr/bin/pip
 SYSPIP3=/usr/bin/pip3
 $SYSPIP3 install --user -U youtube-dl autopep8 black colorama cookiecutter \
 		proselint yamllint nose pytest jedi psutil setproctitle demjson \
-		pygments odfpy python-language-server
-$SYSPIP3 install --user -U pynvim notedown neovim-remote virtualenvwrapper
+		pygments odfpy python-language-server virtualenvwrapper
 $SYSPIP install --user -U virtualenvwrapper
 ok
 
@@ -265,15 +264,13 @@ step "Setting up new nvim/vim configuration"
 stow -t ~ -R nvim
 ok
 
-#step "Enabling python support in nvim"
-#$SYSPIP install --user -U pynvim
-#$SYSPIP3 install --user -U pynvim
-#
-## Required by ncm2-ultisnips
-#$SYSPIP3 install --user -U notedown
-## Required by vimtex
-#$SYSPIP3 install --user -U neovim-remote
-#ok
+#step "Enabling python support in nvim and its plugins"
+$SYSPIP install --user -U pynvim
+$SYSPIP3 install --user -U pynvim notedown neovim-remote
+
+# step "Enabling node.js support in nvim"
+# npm install -g neovim
+# ok
 
 # step "Enabling ruby support in nvim"
 # gem install --user neovim

@@ -149,6 +149,12 @@ set ttyfast
 set mouse=a    " Mouse in all modes
 set mousehide  " Hide mouse after chars typed
 
+" ------------------------
+" Python Settings
+" ------------------------
+let g:python_host_prog='/usr/bin/python'
+let g:python3_host_prog='/usr/bin/python3'
+
 " Better complete options to speed it up
 set complete=.,w,b,u,U
 
