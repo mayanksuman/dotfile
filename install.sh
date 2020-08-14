@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . ./_scripts/msg.sh
-PYTHON_VERSION=3.8.0;	# default pthon version installed by pyenv
+PYTHON_VERSION=3.8.5;	# default pthon version installed by pyenv
 
 if [ "$(id -u)" = 0 ]; then
 	error "This script should not be run as root. Exitting"
@@ -80,7 +80,7 @@ step "Downloading and installing the required packages"
 sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
-	global universal-ctags cmake ccache git
+	global exuberant-ctags cmake ccache
 # for python (pip3 and pipenv)
 sudo -E apt-get install -ym python3-pip pipenv
 # for python and indic support in libreoffice
@@ -91,7 +91,7 @@ sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
 	texlive-science texworks texlive-bibtex-extra biber texlive-font-utils \
 	chktex tidy odt2txt dos2unix
-# some utilities 
+# some utilities
 sudo -E apt-get install -ym youtube-dl
 # for php composer framework
 sudo -E apt-get install -ym composer
@@ -316,7 +316,7 @@ action "Setting up pyenv"
 step "Installing prerequisite"
 sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
 	libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-	libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+	libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
 ok
 
 step "Setting up conda environment"
@@ -348,13 +348,13 @@ pyenv virtualenv miniconda3-latest jupyter
 pyenv activate jupyter
 conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
 		  ipykernel nb_conda_kernels scipy
-conda install -y jupyterlab-git jupyterlab_code_formatter
-jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
-						jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
-						@ryantam626/jupyterlab_code_formatter;
-pip install jupyterlab_sql
-jupyter serverextension enable jupyterlab_sql --py --sys-prefix
-jupyter lab build
+#conda install -y jupyterlab-git jupyterlab_code_formatter
+#jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
+#                        jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
+#                        @ryantam626/jupyterlab_code_formatter;
+#pip install jupyterlab_sql
+#jupyter serverextension enable jupyterlab_sql --py --sys-prefix
+#jupyter lab build
 conda clean -y --all
 python -m ipykernel install --user
 pyenv deactivate
