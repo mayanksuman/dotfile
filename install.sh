@@ -71,8 +71,8 @@ step "Upgrading the system softwares"
 sudo -E apt-get update && sudo -E apt-get upgrade -ym
 ok
 
-step "Installing download managers"
-sudo -E apt-get install -ym curl aria2
+step "Installing download managers and backup software"
+sudo -E apt-get install -ym curl aria2 rsync
 ok
 
 step "Downloading and installing the required packages"
