@@ -8,8 +8,26 @@ function define
 function present
 {
 	echo "Starting Projecteur"
+	if ! hash projecteur >/dev/null 2>&1; then 
+		echo "projecteur was not found. Installing the latest stable version ..."
+		echo "Provide password if prompted."
+		curl -s https://api.github.com/repos/jahnf/Projecteur/releases/latest \
+		| grep "browser_download_url.*_debian-10-x86_64.deb" \
+		| cut -d '"' -f 4 \
+		| wget -O projecteur.deb -qi -
+		sudo -E apt update
+		sudo -E apt install ./projecteur.deb
+		sudo -E apt install -f
+		sudo rm -rf projecteur
+		echo "projecteur installed."
+	fi
 	projecteur &
 	echo "Starting Presentation"
+	if ! hash pdfpc >/dev/null 2>&1; then
+		echo "pdfpc is not installed. Installing ..."
+		echo "Provide password if prompted."
+		sudo -E apt install pdfpc
+	fi
 	pdfpc $1 $@
 	echo "Killing Projecteur"
 	sleep 1s
