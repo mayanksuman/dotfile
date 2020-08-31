@@ -9,7 +9,7 @@ patch.facecolor: blue
 patch.edgecolor: eeeeee
 patch.antialiased: True
 
-text.usetex : True
+#text.usetex : True
 text.hinting_factor : 10
 mathtext.fontset : cm
 
