@@ -7,7 +7,7 @@ function define
 # Prepare PC for presentation
 function present
 {
-	echo "Starting Projecteur"
+	echo "Checking if Projecteur is installed"
 	if ! hash projecteur >/dev/null 2>&1; then 
 		echo "projecteur was not found. Installing the latest stable version ..."
 		echo "Provide password if prompted."
@@ -16,19 +16,45 @@ function present
 		| cut -d '"' -f 4 \
 		| wget -O projecteur.deb -qi -
 		sudo -E apt update
-		sudo -E apt install ./projecteur.deb
+		sudo -E apt install -y ./projecteur.deb
 		sudo -E apt install -f
 		sudo rm -rf projecteur
 		echo "projecteur installed."
 	fi
-	projecteur &
-	echo "Starting Presentation"
+	echo "Ok"
+
+	echo "Checking if pdfpc is installed"
 	if ! hash pdfpc >/dev/null 2>&1; then
 		echo "pdfpc is not installed. Installing ..."
 		echo "Provide password if prompted."
-		sudo -E apt install pdfpc
+		sudo -E apt install -y pdf-presenter-console
 	fi
-	pdfpc $1 $@
+	echo
+
+	echo "Starting Projecteur"
+	# Check if projecteur is running else start projecteur
+	projecteur_pid=$(ps -efww | grep -w projecteur | grep -v grep |awk '{ print $2 }')
+	if [ ! -z "$projecteur_pid" ]; then
+		echo "Projecteur is already running with PID $projecteur_pid."
+		echo "If you face problem with projecteur. Consider closing it by "
+		echo "projecteur -c quit"
+		echo "and then run this command again."
+	else
+		projecteur &
+		echo "Projecteur started."
+	fi
+	echo
+
+	echo "Starting Presentation"
+	# Check if number of monitors is 1, then start pdfpc in single monitor mode
+	NUM_MONITORS=$(pdfpc -M|grep 'Monitors:'|cut -d : -f 2|sed 's/^ *//g')
+	if [ $NUM_MONITORS -eq 1 ]; then
+		echo "Found only one monitor. Starting pdfpc in single monitor mode."
+		pdfpc $1 -S -s $@
+	else
+		pdfpc $1 $@
+	fi
+	echo
 	echo "Killing Projecteur"
 	sleep 1s
 	projecteur -c quit

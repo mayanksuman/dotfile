@@ -217,8 +217,8 @@ main()
 	exit 0
 }
 
-gpw_data_location=~/.local/share/gpw
-gpw_config_location=~/.config/gpw
+gpw_data_location=~/.local/share/gpw_old
+gpw_config_location=~/.config/gpw_old
 CFG_FILE=$gpw_config_location/gpw.conf.secret
 CUSTOM_CFG_FILE=$gpw_config_location/gpw.custom.conf.secret
 head_prog=head
