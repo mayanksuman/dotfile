@@ -110,7 +110,8 @@ def copy_to_clipboard(data, clipboard_name, wait_seconds):
     if clipboard_name.lower().strip() != 'stdout':
         init_clipboard_function(clipboard_name)
         _to_clipboard(data)
-        print_info(f'The output is available for {wait_seconds} seconds.')
+        print_info(f'The output is available for {wait_seconds} seconds'
+                   ' (or clipboard change).')
         try:
             pyperclip.waitForNewPaste(timeout=wait_seconds)
         except pyperclip.PyperclipTimeoutException:
