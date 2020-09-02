@@ -118,9 +118,10 @@ ok
 
 step "Setting up local install paths"
 mkdir -p ~/.local
-mkdir -p ~/.local/{bin,share,lib,include}
+mkdir -p ~/.local/{bin,programs,share,lib,include}
 sudo -E chown -R "$USER:$USER" ~/.local/lib
 sudo -E chown -R "$USER:$USER" ~/.local/bin
+sudo -E chown -R "$USER:$USER" ~/.local/programs
 sudo -E chown -R "$USER:$USER" ~/.local/include
 sudo -E chown -R "$USER:$USER" ~/.local/share
 ok
