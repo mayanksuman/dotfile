@@ -91,6 +91,8 @@ sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
 	texlive-science texworks texlive-bibtex-extra biber texlive-font-utils \
 	chktex tidy odt2txt dos2unix
+# sandboxing support
+sudo -E apt-get install -ym firejail
 # some utilities
 sudo -E apt-get install -ym youtube-dl
 # for php composer framework
