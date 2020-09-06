@@ -111,7 +111,7 @@ def copy_to_clipboard(data, clipboard_name, wait_seconds):
         init_clipboard_function(clipboard_name)
         _to_clipboard(data)
         print_info(f'The output is available for {wait_seconds} seconds'
-                   ' (or clipboard change).')
+                   ' (or till clipboard changes).')
         try:
             pyperclip.waitForNewPaste(timeout=wait_seconds)
         except pyperclip.PyperclipTimeoutException:
@@ -192,7 +192,7 @@ def set_default_config():
         SITENAME_PREFIX={'_default_': "prefix_website"},
         SITENAME_SUFFIX={'_default_': "website_suffix"},
         ALLOWED_CHARACTERS={'_default_':
-                            'a-zA-Z0-9 !-/:-@[-`{-~'},  # ascii code 32-126
+                            'a-zA-Z0-9 !-/:-@[-_{-~'},  # ascii code 32-126
 
         REQUIRED_MSG={'_default_': "Aa@1"},
         LENGTH={'_default_': 24},
