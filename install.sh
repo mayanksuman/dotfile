@@ -99,8 +99,8 @@ sudo -E apt-get install -ym youtube-dl
 sudo -E apt-get install -ym composer
 # for common truetype font
 sudo -E apt-get install -ym ttf-mscorefonts-installer
-# Install plain noto and hack fonts
-sudo -E apt-get install -ym fonts-noto-core fonts-hack
+# Install fira code font for console
+sudo -E apt-get install -ym fonts-firacode
 # for english dictionary
 sudo -E apt-get install -ym sdcv
 #sudo -E apt-get install -ym dictd dict-gcide dict-vera dict-jargon \
@@ -415,6 +415,6 @@ ok
 info "Installation Complete."
 info "Post Installation manual configuration"
 info "  The theme can be changed by issueing base16_* command in ZSH or BASH."
-info "  The default font for the terminal can be changed to Hack."
+info "  The default font for the terminal can be changed to Fira Code."
 info "You can uninstall all vim package and use neovim entirely."
 info "Use update-alternatives for that."

@@ -1,7 +1,7 @@
 {
     "codeCellConfig": {
-        "fontSize": 15,
-        "fontFamily": "Hack",
+        "fontFamily": 'Fira Code',
+        "fontSize": 14,
         "lineNumbers": true,
         "codeFolding": true}
 }

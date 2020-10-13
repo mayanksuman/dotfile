@@ -1,5 +1,5 @@
 {"editorConfig": {
-      "fontSize": 15,
-       "fontFamily": "Hack",
+        "fontFamily": 'Fira Code',
+        "fontSize": 14,
         "codeFolding": true
 }}
