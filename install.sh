@@ -269,8 +269,13 @@ step "Setting up new nvim/vim configuration"
 stow -t ~ -R nvim
 ok
 
-#step "Enabling python support in nvim and its plugins"
+step "Enabling python support in nvim and its plugins"
 $SYSPIP3 install --user -U pynvim notedown neovim-remote
+ok
+
+step "Enable symbolic math calculation for Latex files"
+sudo -E apt-get install -ym python3-sympy
+ok
 
 # step "Enabling node.js support in nvim"
 # npm install -g neovim
