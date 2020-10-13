@@ -101,10 +101,14 @@ sudo -E apt-get install -ym composer
 sudo -E apt-get install -ym ttf-mscorefonts-installer
 # Install fira code font for console
 sudo -E apt-get install -ym fonts-firacode
+# Install fonts similar to Helvetica fonts
+sudo -E apt-get install -ym fonts-freefont-ttf
 # for english dictionary
 sudo -E apt-get install -ym sdcv
 #sudo -E apt-get install -ym dictd dict-gcide dict-vera dict-jargon \
 #	dict-elements dict-moby-thesaurus dict
+# Add unrar support in archive-manager
+sudo -E apt-get install -ym unrar
 # for docker
 sudo -E apt-get install -ym docker.io docker-compose
 # for GIS related work
