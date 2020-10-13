@@ -47,7 +47,7 @@ This example installs [`vim-move`](https://github.com/matze/vim-move).
 * `tls` list all the tmux sessions.
 
 
-## Included Terminal and Indic fonts
+## Included fonts
 
 * Indic font (Sakal Bharti; License: SIL OFL 1.1) is available at [`C-Dac`](https://cdac.in/index.aspx?id=dl_sakal_bharati_font)
 
