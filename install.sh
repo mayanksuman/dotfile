@@ -140,12 +140,10 @@ step "Installing python programmes for system python"
 #
 # However, these package cannot be imported in python running under pyenv as 
 # pyenv python do not have ~/.local/lib/python3.x in the path.
-SYSPIP=/usr/bin/pip
 SYSPIP3=/usr/bin/pip3
 $SYSPIP3 install --user -U youtube-dl autopep8 black colorama cookiecutter \
 		proselint yamllint nose pytest jedi psutil setproctitle demjson \
 		pygments odfpy python-language-server virtualenvwrapper
-$SYSPIP install --user -U virtualenvwrapper
 ok
 
 action "Configuring stow"
@@ -272,7 +270,6 @@ stow -t ~ -R nvim
 ok
 
 #step "Enabling python support in nvim and its plugins"
-$SYSPIP install --user -U pynvim
 $SYSPIP3 install --user -U pynvim notedown neovim-remote
 
 # step "Enabling node.js support in nvim"
