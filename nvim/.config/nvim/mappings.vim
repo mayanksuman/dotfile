@@ -214,3 +214,5 @@ if G_HAS_NVIM
 	tnoremap <C-l> <C-\><C-n><C-w>l
 endif
 
+" Correct typos and return back to starting position in insert mode
+inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
