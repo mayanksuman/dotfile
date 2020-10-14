@@ -424,7 +424,7 @@ ok
 step "Setting up $DEFAULT_FONT_NAME Nerd Font as default monospace font"
 echo "If text do not feel right, change from tweak tool."
 gsettings set org.gnome.desktop.interface monospace-font-name \
-	"$DEFAULT_FONT_NAME Nerd Font Mono Regular  12"
+	"$DEFAULT_FONT_NAME Nerd Font Regular  12"
 ok
 
 step "Applying base16 brewer theme"
