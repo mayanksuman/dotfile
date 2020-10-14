@@ -73,6 +73,15 @@ action "Removing stow -t ~ Configuration"
 stow -t ~ -D stow
 ok
 
+action "Removing pyenv and associated virtualenvs"
+  rm -rf $HOME/.pyenv
+  step "Deconfiguring python modules"
+  cd python || exit
+  for dir in ./*
+  do
+  	stow -t ~ -D "${dir:2}"
+  done
+  cd - || exit
+ok
 
 info "All configuration successfully uninstalled."
-

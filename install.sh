@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 . ./_scripts/msg.sh
-PYTHON_VERSION=3.8.5;	# default pthon version installed by pyenv
+PYTHON_VERSION=3.8.6;	# default pthon version installed by pyenv
+DEFAULT_FONT_NAME=FiraCode	# Any nerd font; put the file name without .zip part
+# Nerd font release is at https://github.com/ryanoasis/nerd-fonts/releases/latest
 
 if [ "$(id -u)" = 0 ]; then
 	error "This script should not be run as root. Exitting"
@@ -77,7 +79,7 @@ ok
 
 step "Downloading and installing the required packages"
 # setting up environment
-sudo -E apt-get install -ym zsh tmux sed xsel stow neovim direnv
+sudo -E apt-get install -ym zsh tmux sed xsel stow neovim jq
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global exuberant-ctags cmake ccache
@@ -157,6 +159,14 @@ ok
 action "Installing fonts"
 mkdir -p ~/.local/share/fonts/
 stow -t ~ -R fonts
+ok
+step "Downloading $DEFAULT_FONT_NAME Nerd Font and installing it"
+curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest\
+	|jq -r ".assets[] | select(.name | test(\"${DEFAULT_FONT_NAME}\"))"\
+	|jq -r ".browser_download_url"\
+	|wget -O $HOME/sel_font.zip -i - && \
+	unzip $HOME/sel_font.zip -d $HOME/.local/share/fonts/$DEFAULT_FONT_NAME &&\
+	rm -rf $HOME/sel_font.zip
 ok
 step "Updating font cache"
 sudo fc-cache -f -v
@@ -324,8 +334,8 @@ ok
 action "Setting up pyenv"
 step "Installing prerequisite"
 sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
-	libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-	libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
+	libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev \
+	libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl
 ok
 
 step "Setting up conda environment"
@@ -372,7 +382,7 @@ ok
 step "Setting up numerical/data science tools in miniconda3-latest"
 pyenv virtualenv miniconda3-latest conda_tools
 pyenv activate conda_tools
-conda install -y python==3.7.3;			# Last tested python with Orange3
+conda install -y python==3.8.6;	# Last tested python with Orange3
 conda install -y orange3 glueviz;
 conda clean -y --all
 pyenv deactivate
@@ -406,8 +416,15 @@ done
 cd - || exit
 ok
 
+action "Started final configuration changes"
 step "Indexing the cheatsheets/Examples"
 bash -ic "source ~/.shell_common_config;eg -r; exit"
+ok
+
+step "Setting up $DEFAULT_FONT_NAME Nerd Font as default monospace font"
+echo "If text do not feel right, change from tweak tool."
+gsettings set org.gnome.desktop.interface monospace-font-name \
+	"$DEFAULT_FONT_NAME Nerd Font Mono Regular  12"
 ok
 
 step "Applying base16 brewer theme"
@@ -421,8 +438,7 @@ ok
 info "Installation Complete."
 info "Post Installation manual configuration"
 info "  The theme can be changed by issueing base16_* command in ZSH or BASH."
-info "  The default font for the terminal can be changed to Fira Code."
-info "		Ligature support of Fira Code is turned off for gnome-terminal"
-info "		If needed it can be turned on by editing ~/.config/fontconfig/fonts.conf"
+info "	Font ligature support is turned off for gnome-terminal"
+info "	If needed it can be turned on by editing ~/.config/fontconfig/fonts.conf"
 info "You can uninstall all vim package and use neovim entirely."
 info "Use update-alternatives for that."

@@ -192,8 +192,8 @@ elif [ -n "$ZSH_VERSION" ]; then
 fi
 
 # direnv support
-MYSHELL=`ps -hp $$|awk '{print $5}'`
-eval "$(direnv hook $MYSHELL)"
+#MYSHELL=`ps -hp $$|awk '{print $5}'`
+#eval "$(direnv hook $MYSHELL)"
 
 # Some python specific commands
 source ~/.shell_common_python_config

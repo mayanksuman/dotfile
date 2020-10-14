@@ -11,7 +11,7 @@ esac
 
 # Enable Async autosuggest
 ZSH_AUTOSUGGEST_USE_ASYNC=1
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=200
 
 # load prezto
 source "$HOME/.local/share/zsh/prezto/init.zsh"
