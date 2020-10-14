@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-. ./_scripts/msg.sh
 PYTHON_VERSION=3.8.6;	# default pthon version installed by pyenv
 DEFAULT_FONT_NAME=FiraCode	# Any nerd font; put the file name without .zip part
 # Nerd font release is at https://github.com/ryanoasis/nerd-fonts/releases/latest
 
+. ./_scripts/msg.sh
 if [ "$(id -u)" = 0 ]; then
 	error "This script should not be run as root. Exitting"
 	exit 1
