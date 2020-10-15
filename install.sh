@@ -354,12 +354,12 @@ fi
 ok
 
 step "Installing python $PYTHON_VERSION and miniconda3-latest in pyenv"
-pyenv install "$PYTHON_VERSION"
-pyenv install miniconda3-latest
+pyenv install -s "$PYTHON_VERSION"
+pyenv install -s miniconda3-latest
 ok
 
 step "Setting up jupyterlab in miniconda3-latest virtualenv tools"
-pyenv virtualenv miniconda3-latest jupyter
+pyenv virtualenv miniconda3-latest jupyter||info "jupyter virtualenv exist."
 # This virtulenv should be moved to system python but the package that is 
 # stopping this nb_conda_kernels. Once built in kernelspec for jupyter is 
 # completed, the virtualenv may be moved to system python.
@@ -373,14 +373,14 @@ conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
 #                        @ryantam626/jupyterlab_code_formatter;
 #pip install jupyterlab_sql
 #jupyter serverextension enable jupyterlab_sql --py --sys-prefix
-#jupyter lab build
+jupyter lab build
 conda clean -y --all
 python -m ipykernel install --user
 pyenv deactivate
 ok
 
 step "Setting up numerical/data science tools in miniconda3-latest"
-pyenv virtualenv miniconda3-latest conda_tools
+pyenv virtualenv miniconda3-latest conda_tools||info "conda_tools virtualenv exist."
 pyenv activate conda_tools
 conda install -y python==3.8.6;	# Last tested python with Orange3
 conda install -y orange3 glueviz;
@@ -389,7 +389,7 @@ pyenv deactivate
 ok
 
 step "Setting up general scientific python virtualenv from miniconda3-latest"
-pyenv virtualenv miniconda3-latest num_python
+pyenv virtualenv miniconda3-latest num_python||info "num_python virtualenv exist."
 pyenv activate num_python
 conda install -y numpy scipy statsmodels pandas xarray \
 		geopandas matplotlib cartopy h5py netcdf4 dask \
@@ -422,9 +422,22 @@ bash -ic "source ~/.shell_common_config;eg -r; exit"
 ok
 
 step "Setting up $DEFAULT_FONT_NAME Nerd Font as default monospace font"
-echo "If text do not feel right, change from tweak tool."
-gsettings set org.gnome.desktop.interface monospace-font-name \
-	"$DEFAULT_FONT_NAME Nerd Font Regular 12"
+info "If text do not feel right, change from tweak tool."
+name_has_nerd=$(fc-list|grep "$DEFAULT_FONT_NAME"|cut -d ":" -f 2,3|grep "Nerd"|grep "style=Regular"|grep -v "Mono"|wc -l)
+name_has_nf=$(fc-list|grep "$DEFAULT_FONT_NAME"|cut -d ":" -f 2,3|grep "NF"|grep "style=Regular"|grep -v "Mono"|wc -l)
+if [ $name_has_nerd -ne 0 ]; then
+	gsettings set org.gnome.desktop.interface monospace-font-name \
+		"$DEFAULT_FONT_NAME Nerd Font Regular 12"
+else
+	if [ $name_has_nf -ne 0 ]; then
+		gsettings set org.gnome.desktop.interface monospace-font-name \
+			"$DEFAULT_FONT_NAME NF Regular 12"
+	else
+		warning "I cannot find appropiriate font file."
+		warning "Please select the $DEFAULT_FONT_NAME nerd font manually"
+		warning "in gnome-tweak tool."
+	fi
+fi
 ok
 
 step "Applying base16 brewer theme"
