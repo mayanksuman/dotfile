@@ -311,8 +311,8 @@ def setup_no_colorama():
                     'NORMAL',
                     'RESET_ALL',
                     ]
-    _col = namedtuple('_col', col_fields, defaults=('') * len(col_fields))
-    _sty = namedtuple('_sty', style_fields, defaults=('') * len(style_fields))
+    _col = namedtuple('_col', col_fields, defaults=('',) * len(col_fields))
+    _sty = namedtuple('_sty', style_fields, defaults=('',) * len(style_fields))
     _foreground, _background, _style = _col(), _col(), _sty()
 
     return _foreground, _background, _style
