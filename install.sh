@@ -92,7 +92,7 @@ sudo -E apt-get install -ym libreoffice-script-provider-python hunspell-hi \
 sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
 	texlive-science texworks texlive-bibtex-extra biber texlive-font-utils \
-	chktex tidy odt2txt dos2unix cm-super ugrep
+	chktex tidy odt2txt dos2unix cm-super ripgrep
 # sandboxing support
 sudo -E apt-get install -ym firejail
 # some utilities
