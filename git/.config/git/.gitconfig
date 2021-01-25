@@ -133,6 +133,8 @@
 [apply]
     # do not warn about missing whitespace at EOF
     whitespace = nowarn
+[format]
+	signoff = true
 [core]
     excludesfile = ~/.config/git/.gitignore_global
     pager = diff-so-fancy | less --tabs=4 -RFX
