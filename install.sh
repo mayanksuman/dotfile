@@ -391,7 +391,7 @@ ok
 step "Setting up general scientific python virtualenv from miniconda3-latest"
 pyenv virtualenv miniconda3-latest num_python||info "num_python virtualenv exist."
 pyenv activate num_python
-conda install -y numpy scipy statsmodels pandas xarray \
+conda install -y numpy scipy statsmodels pandas xarray sympy\
 		geopandas matplotlib cartopy h5py netcdf4 dask \
 		bottleneck seaborn xlwt ipykernel
 conda clean -y --all
