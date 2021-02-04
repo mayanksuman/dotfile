@@ -3,6 +3,7 @@
     # User Information
     path=~/.config/git/.gituser_info.secret
 [init]
+	defaultBranch = main
 # templatedir = ~/.config/git/.git_template
 [alias]
     # list all aliases
