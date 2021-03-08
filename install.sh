@@ -85,9 +85,12 @@ sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global exuberant-ctags cmake ccache
 # for python (pip3 and pipenv)
 sudo -E apt-get install -ym python3-pip pipenv
-# for python and indic support in libreoffice
-sudo -E apt-get install -ym libreoffice-script-provider-python hunspell-hi \
-	libreoffice-l10n-in
+# for python, indic language and proper english (US) support in libreoffice
+sudo -E apt-get install -ym libreoffice-script-provider-python \
+	libreoffice-l10n-in hunspell-hi libreoffice-l10n-en-gb hunspell-en-gb \
+	hunspell-en-us mythes-en-us libreoffice-lightproof-en
+info "Update the language settings in libreoffice menu"
+info "Tools>Options>Language Settings>Default Languages for Documents"
 # for markdown, latex and other text utilities
 sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
