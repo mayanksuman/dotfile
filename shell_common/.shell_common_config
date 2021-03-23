@@ -1,7 +1,10 @@
 # Show Dictionary meaning of a word
+export STARDICT_DATA_DIR=$HOME/.local/share/stardict
 function define
 {
-	sdcv $1 | less -s
+	sdcv -n --utf8-output --color "$@" 2>&1 | \
+	fold --width=$(tput cols) | \
+	less -FRX
 }
 
 # Prepare PC for presentation
@@ -140,8 +143,7 @@ pathprepend "$HOME/.npm_packages/bin"
 pathprepend "$HOME/.local/bin"
 pathprepend "$HOME/bin"
 
-GPG_TTY=$(tty)
-export GPG_TTY
+export GPG_TTY=$(tty)
 
 # -- Improved X11 forwarding through GNU Screen (or tmux).
 # If not in screen or tmux, update the DISPLAY cache.
