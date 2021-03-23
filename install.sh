@@ -108,10 +108,10 @@ sudo -E apt-get install -ym ttf-mscorefonts-installer
 sudo -E apt-get install -ym fonts-firacode
 # Install fonts similar to Helvetica fonts
 sudo -E apt-get install -ym fonts-freefont-ttf
-# for english dictionary
+# for english console dictionary
+# Associated dictionary files can be downloaded from http://download.huzheng.org/ 
+# or https://web.archive.org/web/20200702000038/http://download.huzheng.org/
 sudo -E apt-get install -ym sdcv
-#sudo -E apt-get install -ym dictd dict-gcide dict-vera dict-jargon \
-#	dict-elements dict-moby-thesaurus dict
 # Add unrar support in archive-manager
 sudo -E apt-get install -ym unrar
 # for docker
