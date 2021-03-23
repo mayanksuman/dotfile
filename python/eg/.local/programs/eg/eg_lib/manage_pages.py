@@ -216,6 +216,7 @@ def edit_custom_page(command, language, platform):
             file_name = create_custom_page_name(command, language, platform)
     editor_cmd.append(file_name)
     subprocess.call(editor_cmd)
+    build_index()
 
 
 def create_custom_page_name(command, language, platform):

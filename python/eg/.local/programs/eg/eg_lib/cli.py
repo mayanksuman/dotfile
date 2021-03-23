@@ -83,7 +83,7 @@ def main():
                         nargs='?',
                         help="command to lookup")
 
-    options,_ = parser.parse_known_args()
+    options, _ = parser.parse_known_args()
 
     if len(sys.argv) < 2:
         # Too few arguments. We can't specify this using argparse alone, so we
@@ -126,7 +126,7 @@ def main():
         if pager_cmd:
             try:
                 if is_squeeze and pager_cmd.startswith('less'):
-                        pager_cmd = pager_cmd.rstrip()+' -s'
+                    pager_cmd = pager_cmd.rstrip()+' -s'
                 pydoc.pipepager(msg, cmd=pager_cmd)
             except KeyboardInterrupt:
                 pass
