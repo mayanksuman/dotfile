@@ -48,7 +48,7 @@ def add_required_msg(data, required_msg):
         if re.search(ch, data) is None:
             _req_msg += ch
 
-    return data[:-len(_req_msg)] + _req_msg
+    return ((data[:-len(_req_msg)] + _req_msg) if _req_msg else data)
 
 
 def _bxor(s1, s2):
@@ -121,7 +121,7 @@ def copy_to_clipboard(data, clipboard_name, wait_seconds):
         if (curr_clipboard_content == data):
             _clear_clipboard()
     else:
-        print_no_style(data)
+        print_default_style(data)
 
 
 def init_clipboard_function(clipboard_name):
