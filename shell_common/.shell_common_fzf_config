@@ -4,7 +4,7 @@ ff(){
 		fzf --preview 'batcat --style=numbers --color=always --line-range :80 {}' 
 	else
 		fzf --preview 'cat {}' 
-			fi
+	fi
 }
 
 
