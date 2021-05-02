@@ -91,11 +91,7 @@ end
 " ---------------
 " Text Format
 " ---------------
-set tabstop=4
-set shiftwidth=4 " Tabs under smart indent
-set softtabstop=4
-set smarttab
-set noexpandtab
+set tabstop=4 shiftwidth=4 softtabstop=4 smarttab expandtab
 set shiftround
 set backspace=indent,eol,start " Delete everything with backspace
 set cindent
