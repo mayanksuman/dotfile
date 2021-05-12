@@ -7,7 +7,6 @@
 let mapleader=','
 let maplocalleader = ' '
 
-
 " ---------------
 " Regular Mappings
 " ---------------
@@ -163,10 +162,6 @@ cnoremap w' w<CR>
 " make Q repeat the last macro instead. *hat tip* http://vimbits.com/bits/263
 nnoremap Q @@
 
-" Removes doc lookup mapping because it's easy to fat finger and never useful.
-nnoremap K k
-vnoremap K k
-
 " Paste and select pasted
 nnoremap <expr> gpp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
@@ -197,8 +192,7 @@ noremap k gk
 cmap w!! w !sudo tee % >/dev/null
 
 " Mapping for NVIM only
-let G_HAS_NVIM=eval("has('nvim')")=='1'
-if G_HAS_NVIM
+if eval("has('nvim')")=='1'
 	" Terminal emulator mapping for nvim
 	" Escape key behavior
 	tnoremap jk <C-\><C-n>

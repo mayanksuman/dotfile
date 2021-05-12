@@ -4,7 +4,6 @@
 
 if has('win32') || has('win64')
 	" Windows
-	source $VIMRUNTIME/mswin.vim
 	set guifont=Consolas:h10
 	set guioptions-=T " Toolbar
 	set guioptions-=m " Menubar
@@ -44,7 +43,6 @@ elseif has('gui_macvim')
 	macmenu &Tools.Make key=<nop>
 	" D-l
 	macmenu &Tools.List\ Errors key=<nop>
-	set visualbell " Keeps the audio bell from sounding in the GUI
 endif
 
 if has('macunix') || has('mac')

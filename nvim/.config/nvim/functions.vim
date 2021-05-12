@@ -2,23 +2,6 @@
 " Functions
 " ----------------------------------------
 
-
-" ---------------
-" Return Cursor Position in previously editted files
-" ---------------
-" http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
-" Restore cursor to file position in previous editing session
-" To disable this, add the following to your .vimrc.before.local file:
-"   let g:ms_vim_no_restore_cursor = 1
-if !exists('g:ms_vim_no_restore_cursor')
-	function! ResCur()
-		if line("'\"") <= line("$")
-			silent! normal! g`"
-			return 1
-		endif
-	endfunction
-endif
-
 " ---------------
 " Quick spelling fix (first item in z= list)
 " ---------------
@@ -37,28 +20,9 @@ command! QuickSpellingFix call QuickSpellingFix()
 nnoremap <silent> <leader>z :QuickSpellingFix<CR>
 
 " ---------------
-" Convert Ruby 1.8 hash rockets to 1.9 JSON style hashes.
-" From: http://git.io/cxmJDw
-" Note: Defaults to the entire file unless in visual mode.
-" ---------------
-command! -bar -range=% NotRocket execute
-			\'<line1>,<line2>s/:\(\w\+\)\s*=>/\1:/e'
-			\ . (&gdefault ? '' : 'g')
-
-" ------------------------------------
-" Convert .should rspec syntax to expect.
-" From: https://coderwall.com/p/o2oyrg
-" ------------------------------------
-command! -bar -range=% Expect execute
-			\'<line1>,<line2>s/\(\S\+\).should\(\s\+\)==\s*\(.\+\)' .
-			\'/expect(\1).to\2eq(\3)/e' .
-			\(&gdefault ? '' : 'g')
-
-" ---------------
 " Strip Trailing White Space
-" ---------------
 " From http://vimbits.com/bits/377
-" Preserves/Saves the state, executes a command, and returns to the saved state
+" ---------------
 function! StripTrailingWhitespace()
 	" Preparation: save last search, and cursor position.
 	let _s=@/
@@ -75,9 +39,7 @@ command! StripTrailingWhitespace :call StripTrailingWhitespace()<CR>
 nnoremap <silent> <leader>stw :silent! StripTrailingWhitespace()<CR>
 
 " ---------------
-" Paste using Paste Mode
-"
-" Keeps indentation in source.
+" Paste using Paste Mode : Keeps indentation in source.
 " ---------------
 function! PasteWithPasteMode()
 	if &paste
@@ -94,37 +56,7 @@ command! PasteWithPasteMode call PasteWithPasteMode()
 nnoremap <silent> <leader>p :PasteWithPasteMode<CR>
 
 " ---------------
-" Write Buffer if Necessary
-"
-" Writes the current buffer if it's needed, unless we're the in QuickFix mode.
-" ---------------
-
-function WriteBufferIfNecessary()
-	if &modified && !&readonly
-		:write
-	endif
-endfunction
-command! WriteBufferIfNecessary call WriteBufferIfNecessary()
-
-function CRWriteIfNecessary()
-	if &filetype == "qf"
-		" Execute a normal enter when in Quickfix list.
-		execute "normal! \<enter>"
-	else
-		WriteBufferIfNecessary
-	endif
-endfunction
-
-" Clear the search buffer when hitting return
-" Idea for MapCR from http://git.io/pt8kjA
-function! MapCR()
-	nnoremap <silent> <enter> :call CRWriteIfNecessary()<CR>
-endfunction
-call MapCR()
-
-" ---------------
-" Make a scratch buffer with all of the leader keybindings.
-"
+" Show all leader keybindings.
 " Adapted from http://ctoomey.com/posts/an-incremental-approach-to-vim/
 " ---------------
 function! ListLeaders()
@@ -146,6 +78,10 @@ endfunction
 
 command! ListLeaders :call ListLeaders()
 
+" ---------------
+" Copy all matched search result (to be called after a search).
+" Adapted from https://vim.fandom.com/wiki/Copy_search_matches
+" ---------------
 function! CopyMatches(reg)
 	let hits = []
 	%s//\=len(add(hits, submatch(0))) ? submatch(0) : ''/ge
@@ -154,6 +90,9 @@ function! CopyMatches(reg)
 endfunction
 command! -register CopyMatches call CopyMatches(<q-reg>)
 
+" ---------------
+" Copy the current line without newline character at the end.
+" ---------------
 function! YankLineWithoutNewline()
 	let l = line(".")
 	let c = col(".")
@@ -164,8 +103,10 @@ endfunction
 
 nnoremap <silent>yl :call YankLineWithoutNewline()<CR>
 
+" ---------------
 " Show the word frequency of the current buffer in a split.
 " from: http://vim.wikia.com/wiki/Word_frequency_statistics_for_a_file
+" ---------------
 function! WordFrequency() range
 	let all = split(join(getline(a:firstline, a:lastline)), '\A\+')
 	let frequencies = {}
@@ -179,40 +120,5 @@ function! WordFrequency() range
 	endfor
 	sort i
 endfunction
+
 command! -range=% WordFrequency <line1>,<line2>call WordFrequency()
-
-" ---------------
-" Sort attributes inside <> in html.
-" E.g.
-" <div
-"   b="1"
-"   a="1"
-"   c="1"
-" />
-"
-" becomes
-"
-" <div
-"   a="1"
-"   b="1"
-"   c="1"
-" />
-" ---------------
-function! SortAttributes()
-	normal vi>kojV
-	:'<,'>sort
-endfunction
-
-command! SortAttributes call SortAttributes()
-nnoremap <silent> <leader>sa :SortAttributes<CR>
-
-" ---------------
-" Sort values inside a curl block
-" ---------------
-function! SortBlock()
-	normal vi}
-	:'<,'>sort
-endfunction
-
-command! SortBlock call SortBlock()
-nnoremap <silent> <leader>sb :SortBlock<CR>
