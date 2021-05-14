@@ -7,7 +7,7 @@ local create_augroups = utils.create_augroups
 
 programming_filetype = 'c,cpp,java,go,php,javascript,puppet,python,rust,' .. 
                        'twig,xml,yml,perl,sql,html,css,vim,markdown,tex,' ..
-                       'coffee,ruby,matlab'
+                       'coffee,ruby,matlab,lua'
 
 
 if has('autocmd') then

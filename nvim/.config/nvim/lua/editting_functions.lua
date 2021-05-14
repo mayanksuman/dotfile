@@ -83,28 +83,18 @@ local function YankLineWithoutNewline()
 	fn.cursor(l, c)
 end
 
---[==[
+
 -- ---------------
--- Show the word frequency of the current buffer in a split.
--- from: http://vim.wikia.com/wiki/Word_frequency_statistics_for_a_file
+-- Copy all matched search result (to be called after a search).
+-- Adapted from https://vim.fandom.com/wiki/Copy_search_matches
 -- ---------------
-local function WordFrequency()
-	local all = fn.split(fn.join(line), [[\A\+]])
-	local frequencies = frequencies or {}
-	for word in all do
-		frequencies[word] = frequencies[word] + 1
-	end
-	cmd([[new
-	setlocal buftype=nofile bufhidden=hide noswapfile tabstop=20]])
-    for key,value in pairs(frequencies) do
-		fn.append('$', key .. "\t" .. value)
-	end
-	cmd('sort i')
-end
-]==]
-
-
-
+cmd([[function! CopyMatches(reg)
+	let hits = []
+	%s//\=len(add(hits, submatch(0))) ? submatch(0) : ''/ge
+	let reg = empty(a:reg) ? '+' : a:reg
+	execute 'let @'.reg.' = join(hits, "\n") . "\n"'
+endfunction
+command! -register CopyMatches call CopyMatches(<q-reg>)]])
 
 
 return {QuickSpellingFix=QuickSpellingFix,
@@ -112,5 +102,4 @@ StripTrailingWhitespace=StripTrailingWhitespace,
 PasteWithPasteMode=PasteWithPasteMode,
 ListLeaders=ListLeaders,
 YankLineWithoutNewline = YankLineWithoutNewline,
--- WordFrequency=WordFrequency,
 }

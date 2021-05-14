@@ -6,6 +6,7 @@ local cmd, set_option, get_option = utils.cmd, utils.set_option, utils.get_optio
 local normal_mode_set_keymap = utils.normal_mode_set_keymap
 local leader_keymap_table = utils.leader_keymap_table
 
+-- Set up commands for lua functions
 cmd("command! QuickSpellingFix " .. 
     "lua require('editting_functions').QuickSpellingFix()")
 normal_mode_set_keymap(leader_keymap_table(
@@ -25,8 +26,6 @@ cmd("command! ListLeaders lua require('editting_functions').ListLeaders()")
 
 normal_mode_set_keymap(
         {yl="lua require('editting_functions').YankLineWithoutNewline()"})
-
--- cmd("command! -range=% WordFrequency luado require('editting_functions').WordFrequency()")
 
 -- Silently execute an external command
 -- No 'Press Any Key to Contiue BS'

@@ -7,7 +7,7 @@ local set_nvim_variable = utils.set_nvim_variable
 local set_keymap = utils.set_keymap
 local normal_mode_set_keymap = utils.normal_mode_set_keymap
 local insert_mode_set_keymap = utils.insert_mode_set_keymap
-local visual_mode_set_keymap = utils.visual_mode_set_keymap
+local visualselect_mode_set_keymap = utils.visualselect_mode_set_keymap
 local commandline_mode_set_keymap = utils.commandline_mode_set_keymap
 local terminal_mode_set_keymap = utils.terminal_mode_set_keymap
 local leader_keymap_table = utils.leader_keymap_table
@@ -44,7 +44,7 @@ insert_mode_set_keymap({['<C-l>']='<C-x><C-l>', -- Make line completion easier.
         JJ='<Esc>',
     })
 
-visual_mode_set_keymap({gj='15gjzz', -- Scroll larger amounts with gj / gk
+visualselect_mode_set_keymap({gj='15gjzz', -- Scroll larger amounts with gj / gk
         gk='15gkzz', -- Scroll larger amounts with gj / gk
         ['<']= '<gv', -- Visual shifting (does not exit Visual mode)
         ['>']= '>gv', -- Visual shifting (does not exit Visual mode)
@@ -56,11 +56,11 @@ visual_mode_set_keymap({gj='15gjzz', -- Scroll larger amounts with gj / gk
 -- ---------------
 -- Easier moving in tabs and windows
 -- The lines conflict with the default digraph mapping of <C-K>
-set_keymap('', {['<c-h>']='<c-w>h',    -- goto left window
-        ['<c-j>']='<c-w>j',     -- goto bottom window
-        ['<c-k>']='<c-w>k',     -- goto upper window
-        ['<c-l>']='<c-w>l',     -- goto right window
-        ['<leader>=']='<C-w>=', --Equal window size
+-- set_keymap('', {['<c-h>']='<c-w>h',    -- goto left window
+--         ['<c-j>']='<c-w>j',     -- goto bottom window
+--         ['<c-k>']='<c-w>k',     -- goto upper window
+--         ['<c-l>']='<c-w>l',})     -- goto right window
+set_keymap('', {['<leader>=']='<C-w>=', --Equal window size
     })
 
 -- Close the current window
@@ -130,7 +130,7 @@ set_keymap('', leader_keymap_table(
 normal_mode_set_keymap(leader_keymap_table({f='gwip'}))
 
 -- git blame support
-visual_mode_set_keymap(leader_keymap_table({
+visualselect_mode_set_keymap(leader_keymap_table({
     b=[[:<C-U>!git blame <C-R>=expand(--%:p--) <CR> \| sed -n <C-R>=line(--'<--) <CR>,<C-R>=line(--'>--) <CR>p <CR>]]
 }), {})
 
@@ -146,33 +146,20 @@ commandline_mode_set_keymap({["w'"] = 'w<CR>'})
 -- make Q repeat the last macro instead. *hat tip* http://vimbits.com/bits/263
 normal_mode_set_keymap({Q='@@'})
 
---[[
-    -- Paste and select pasted
-    vim.api.nvim_set_keymap('n', 'gpp', '`[' . strpart(getregtype(), 0, 1) . '`]', {expr=true, noremap=true, silent=true})
-    nnoremap <expr> gpp '`[' . strpart(getregtype(), 0, 1) . '`]'
-
-    -- Insert date
-    iabbrev ddate <C-R>=strftime(--%Y-%m-%d--)<CR>
-    ]]
-
-
 -- For when you forget to sudo.. Really Write the file.
 commandline_mode_set_keymap({['w!!'] = 'w !sudo tee % > /dev/null'}, {})
 
--- Mapping for NVIM only
-if has('nvim') then
-    -- Terminal emulator mapping for nvim
-    -- Escape key behavior
-    terminal_mode_set_keymap({jk=[[<C-\><C-n>]], 
-                              JK=[[<C-\><C-n>]],
-                              Jk=[[<C-\><C-n>]],
-                              jK=[[<C-\><C-n>]], 
-                       ['<Esc>']=[[<C-\><C-n>]]})
+-- Terminal emulator mapping for nvim
+-- Escape key behavior
+terminal_mode_set_keymap({jk=[[<C-\><C-n>]], 
+                          JK=[[<C-\><C-n>]],
+                          Jk=[[<C-\><C-n>]],
+                          jK=[[<C-\><C-n>]], 
+                   ['<Esc>']=[[<C-\><C-n>]]})
 
-    -- Movement across panes
-    terminal_mode_set_keymap({['<C-h>']=[[<C-\><C-n><C-w>h]],
-                              ['<C-j>']=[[<C-\><C-n><C-w>j]], 
-                              ['<C-k>']=[[<C-\><C-n><C-w>k]], 
-                              ['<C-l>']=[[<C-\><C-n><C-w>l]],
-            }) 
-end
+-- Movement across panes
+terminal_mode_set_keymap({['<C-h>']=[[<C-\><C-n><C-w>h]],
+                          ['<C-j>']=[[<C-\><C-n><C-w>j]], 
+                          ['<C-k>']=[[<C-\><C-n><C-w>k]], 
+                          ['<C-l>']=[[<C-\><C-n><C-w>l]],
+        }) 

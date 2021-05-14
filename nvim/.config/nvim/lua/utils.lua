@@ -64,7 +64,15 @@ local function normal_mode_set_keymap(keymap_table, options)
 end
 
 local function visual_mode_set_keymap(keymap_table, options)
+	set_keymap('x', keymap_table, options)
+end
+
+local function visualselect_mode_set_keymap(keymap_table, options)
 	set_keymap('visual', keymap_table, options)
+end
+
+local function select_mode_set_keymap(keymap_table, options)
+	set_keymap('select', keymap_table, options)
 end
 
 local function insert_mode_set_keymap(keymap_table, options)
@@ -99,17 +107,37 @@ function create_augroups(definitions)
   end
 end
 
+function deepcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+        setmetatable(copy, deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
+
+
 return {api = api, 
         cmd = cmd, 
         fn = fn,
         has = has,
+	get_path_separator= get_path_separator,
         join_path = join_path,
+	deepcopy = deepcopy,
         set_nvim_variable = set_nvim_variable,
         set_option = set_option,
         get_option = get_option,
         set_keymap = set_keymap,
         normal_mode_set_keymap = normal_mode_set_keymap,
         visual_mode_set_keymap = visual_mode_set_keymap,
+        visualselect_mode_set_keymap = visualselect_mode_set_keymap,
+        select_mode_set_keymap = select_mode_set_keymap,
         insert_mode_set_keymap = insert_mode_set_keymap,
         commandline_mode_set_keymap = commandline_mode_set_keymap,
         terminal_mode_set_keymap = terminal_mode_set_keymap,

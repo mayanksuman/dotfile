@@ -57,7 +57,8 @@ set_option('o', 'whichwrap', 'b,s,h,l,<,>,[,]')    -- Backspace and cursor keys 
 set_option('o', 'pastetoggle', '<F12>')            -- pastetoggle (sane indentation on pastes)
 set_option('o', 'autowrite', true)                 -- Writes on make/shell commands
 set_option('o', 'scrolloff', 3)                    -- Keep three lines below the last line when scrolling
-set_option('o', 'switchbuf', 'useopen')           -- Switch to an existing buffer if one exists
+set_option('o', 'switchbuf', 'useopen')            -- Switch to an existing buffer if one exists
+set_option('o', 'viewoptions', "cursor,folds")     -- Only save cursor location and fold in view
 set_option('b', 'fileformat', 'unix')              -- set file format to unix -- for easier git use
 -- Change the current directory to same as opened file
 if fn.argc() ~= 0 and fn.expand('%:p:h') ~= fn.getcwd() then
