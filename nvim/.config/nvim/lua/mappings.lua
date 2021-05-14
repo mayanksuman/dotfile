@@ -23,7 +23,7 @@ set_nvim_variable('b:maplocalleader', ' ')
 -- Usability Mappings
 -- ---------------
 normal_mode_set_keymap({
-        y='y$', -- Make Y behave like other capital commands. Yank from the cursor to the end of the line, consistent with C and D.
+        Y='y$', -- Make Y behave like other capital commands. Yank from the cursor to the end of the line, consistent with C and D.
         n='nzz', -- show forward search result in the middle of screen
         N='Nzz', -- show backward search result in the middle of screen
         go='o<Esc>k', -- Create newlines without entering insert mode
