@@ -18,12 +18,6 @@ if has('autocmd') then
     -- Close Vim if NERDTree is the last buffer
     {'BufEnter', '*', 
         [[if (winnr('$') == 1 && exists('b:NERDTreeType') && b:NERDTreeType == 'primary') | q | endif]]},
-    -- save view on buffer write
-    {'BufWritePost', '*', 
-        [[if expand('%') != '' && &buftype !~ 'nofile'| mkview!| endif]]},    
-    -- load view on buffer read
-    {'BufRead', '*', 
-        [[if expand('%') != '' && &buftype !~ 'nofile'| silent! loadview| endif]]},    
     -- Remove trailing whitespaces and ^M chars
     {'FileType '..programming_filetype..' autocmd BufWritePre', 
         '<buffer>', ':StripTrailingWhitespace'}, 
