@@ -4,6 +4,7 @@
 local utils = require('utils')
 local set_option, has, fn = utils.set_option, utils.has, utils.fn
 local set_nvim_variable = utils.set_nvim_variable
+local join_path = utils.join_path
 
 -- ---------------
 -- Color
@@ -13,14 +14,14 @@ set_option('o', 'termguicolors', true)                       -- True color suppo
 -- -----------------------------
 -- File Locations
 -- -----------------------------
-set_option('o', 'backupdir', runtime_data_location .. 'backup//,.')
-set_option('o', 'directory', runtime_data_location .. 'swap//')
-set_option('o', 'viewdir', runtime_data_location .. 'view//')
+set_option('o', 'backupdir', join_path(runtime_data_location, 'backup//,.'))
+set_option('o', 'directory', join_path(runtime_data_location, 'swap//'))
+set_option('o', 'viewdir', join_path(runtime_data_location, 'view//'))
 set_nvim_variable('g:netrw_home', runtime_data_location)
 set_option('o', 'backup', true)            -- Turn on backups
 -- Persistent Undo
 if has('persistent_undo') then
-  set_option('o', 'undodir', runtime_data_location .. 'undo//')
+  set_option('o', 'undodir', join_path(runtime_data_location, 'undo//'))
   set_option('b', 'undofile', true)
 end
 

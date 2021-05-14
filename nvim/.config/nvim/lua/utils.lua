@@ -1,6 +1,20 @@
 local api, cmd, fn = vim.api, vim.cmd, vim.fn
 local scopes = {o = vim.o, b = vim.bo, w = vim.wo}
 
+local function has(feature)
+	return (fn.has(feature) == 1)
+end
+
+local function get_path_separator()
+  if has('win64') or has('win32') then return '\\' end
+  return '/'
+end
+
+local function join_path(...)
+  local separator = get_path_separator()
+  return table.concat({...}, separator)
+end
+
 local function set_nvim_variable(var_name, value)
     mode = var_name:sub(1,1)
     var_n = var_name:sub(3)
@@ -35,10 +49,6 @@ end
 
 local function get_option(scope, key)
     return scopes[scope][key]
-end
-
-local function has(feature)
-	return (fn.has(feature) == 1)
 end
 
 local function set_keymap(mode, keymap_table, options)
@@ -93,6 +103,7 @@ return {api = api,
         cmd = cmd, 
         fn = fn,
         has = has,
+        join_path = join_path,
         set_nvim_variable = set_nvim_variable,
         set_option = set_option,
         get_option = get_option,
