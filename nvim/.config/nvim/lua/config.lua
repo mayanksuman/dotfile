@@ -17,7 +17,6 @@ set_option('o', 'backupdir', runtime_data_location .. 'backup//,.')
 set_option('o', 'directory', runtime_data_location .. 'swap//')
 set_option('o', 'viewdir', runtime_data_location .. 'view//')
 set_nvim_variable('g:netrw_home', runtime_data_location)
-
 set_option('o', 'backup', true)            -- Turn on backups
 -- Persistent Undo
 if has('persistent_undo') then
@@ -60,8 +59,8 @@ set_option('o', 'scrolloff', 3)                    -- Keep three lines below the
 set_option('o', 'switchbuf', 'useopen')           -- Switch to an existing buffer if one exists
 set_option('b', 'fileformat', 'unix')              -- set file format to unix -- for easier git use
 -- Change the current directory to same as opened file
-if not (fn.argc() ~= 0 and (fn.line2byte('$') == -1)) then
-	vim.cmd('cd %:h')
+if fn.argc() ~= 0 and fn.expand('%:p:h') ~= fn.getcwd() then
+	vim.cmd('cd %:p:h ')
 end
 --set wildmode=list:longest,full -- Command <Tab> completion, list matches, then longest common part, then all. 
 
