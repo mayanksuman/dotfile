@@ -2,6 +2,7 @@ local lspconfig = require('lspconfig')
 local lsp_status = require('lsp-status')
 local saga = require('lspsaga')
 local lspkind = require('lspkind')
+local lspinstall = require('lspinstall')
 local lsp = vim.lsp
 local buf_keymap = vim.api.nvim_buf_set_keymap
 local cmd = vim.cmd
@@ -93,78 +94,34 @@ local function on_attach(client)
   end
 end
 
-local servers = {
+local servers_config = {
   bashls = {},
-  clangd = {
-    cmd = {
-      'clangd', -- '--background-index',
-      '--clang-tidy', '--completion-style=bundled', '--header-insertion=iwyu',
-      '--suggest-missing-includes', '--cross-file-rename'
-    },
-    handlers = lsp_status.extensions.clangd.setup(),
-    init_options = {
-      clangdFileStatus = true,
-      usePlaceholders = true,
-      completeUnimported = true,
-      semanticHighlighting = true
-    }
-  },
-  cssls = {
-    filetypes = {"css", "scss", "less", "sass"},
-    root_dir = lspconfig.util.root_pattern("package.json", ".git")
-  },
-  ghcide = {},
-  html = {},
-  jsonls = {cmd = {'json-languageserver', '--stdio'}},
-  julials = {settings = {julia = {format = {indent = 2}}}},
-  ocamllsp = {},
+  clangd = {capabilities = {}},
   pyls = {settings = {python = {formatting = {provider = 'yapf'}}}},
-  rust_analyzer = {},
-  sumneko_lua = {
-    cmd = {'lua-language-server'},
-    settings = {
-      Lua = {
-        diagnostics = {globals = {'vim'}},
-        runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
-        workspace = {
-          library = {
-            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-            [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true
-          }
-        }
-      }
-    }
-  },
-  texlab = {
-    settings = {
-      latex = {forwardSearch = {executable = 'okular', args = {'--unique', 'file:%p#src:%l%f'}}}
-    },
-    commands = {
-      TexlabForwardSearch = {
-        function()
-          local pos = vim.api.nvim_win_get_cursor(0)
-          local params = {
-            textDocument = {uri = vim.uri_from_bufnr(0)},
-            position = {line = pos[1] - 1, character = pos[2]}
-          }
-          lsp.buf_request(0, 'textDocument/forwardSearch', params,
-                          function(err, _, _, _) if err then error(tostring(err)) end end)
-        end,
-        description = 'Run synctex forward search'
-      }
-    }
-  },
-  tsserver = {},
-  vimls = {}
-}
+  }
+
+lspinstall.setup()
 
 local snippet_capabilities = {
   textDocument = {completion = {completionItem = {snippetSupport = true}}}
 }
 
-for server, config in pairs(servers) do
-  config.on_attach = on_attach
-  config.capabilities = vim.tbl_deep_extend('keep', config.capabilities or {},
-                                            lsp_status.capabilities, snippet_capabilities)
-  lspconfig[server].setup(config)
+local function setup_servers()
+    local installed_servers = lspinstall.installed_servers()
+    installed_servers[#installed_servers+1] = 'pyls'
+    for _, server in pairs(installed_servers) do
+        config = servers_config[server] or {}
+        config.on_attach = on_attach
+        config.capabilities = vim.tbl_deep_extend('keep', config.capabilities or {},
+                                                    lsp_status.capabilities, snippet_capabilities)
+        lspconfig[server].setup(config)
+    end
+end
+
+setup_servers()
+
+-- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
+require'lspinstall'.post_install_hook = function ()
+  setup_servers() -- reload installed servers
+  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
 end

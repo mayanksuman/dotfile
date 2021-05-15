@@ -5,7 +5,7 @@ local deepcopy = utils.deepcopy
 
 -- install packer if it does not exist
 local plugins_root = join_path(fn.stdpath('data'), 'site', 'pack')
-local packer_path = join_path(plugins_root, 'packer', 'opt', 'packer.nvim')
+local packer_path = join_path(plugins_root, 'packer', 'start', 'packer.nvim')
 if fn.empty(fn.glob(packer_path)) > 0 then
   cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. packer_path)
 end
@@ -25,8 +25,8 @@ local function init()
   packer.reset()
 
   -- Main plugings and its configuration
-  -- Packer can manage itself as an optional plugin
-  use{'wbthomason/packer.nvim', opt = true}
+  -- Packer can manage itself
+  use{'wbthomason/packer.nvim'}
 
   -- Base16 colorsheme
   use{'chriskempson/base16-vim', config = [[require('plugin_config.base16-vim')]]}
@@ -48,8 +48,7 @@ local function init()
 
   -- Fast movement like Easymotion (lua)
   use{'phaazon/hop.nvim', as = 'hop',
-        config = "require('hop').setup { keys = 'etovxqpdygfblzhckisuran' }"
-    }
+        config = "require('hop').setup { keys = 'etovxqpdygfblzhckisuran' }"}
 
   -- Async building & commands
   use {'tpope/vim-dispatch', cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
@@ -73,7 +72,8 @@ local function init()
   use{'vim-scripts/restore_view.vim'}
 
   -- Commenting
-  use{'gennaro-tedesco/nvim-commaround'}
+  use{"terrortylor/nvim-comment", as='nvim_comment',
+       config = "require('nvim_comment').setup()"}
 
   -- Wrapping/delimiters
   use {'machakann/vim-sandwich', {'andymass/vim-matchup',
@@ -81,11 +81,18 @@ local function init()
         event = 'BufEnter'}
     }
 
-  use {"folke/which-key.nvim",
-       config = 'require("which-key").setup {}'}
+  -- Excellent tab support (makes the tab concept in vim similar to other
+  -- editors
+  use {'romgrk/barbar.nvim', config=[[require('plugin_config.barbar')]]}
+
+  -- Start Page
+  use{'mhinz/vim-startify', config=[[require('plugin_config.vim-startify')]]}
+
+  -- Shows different keymapping depending on input
+  use {"folke/which-key.nvim", config = [[require("plugin_config.which-key")]]}
 
   -- Turn off Search highlight when not needed
-  use 'romainl/vim-cool'
+  -- use 'romainl/vim-cool'
 
   -- Prettification
   use {'junegunn/vim-easy-align', config = [[require('plugin_config.easy_align')]]}
@@ -101,7 +108,7 @@ local function init()
   use{'preservim/vim-wordchipper'}
 
   -- Search in popups
-  use {'nvim-telescope/telescope.nvim',
+  use{'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
     setup = [[require('plugin_config.telescope_setup')]],
     config = [[require('plugin_config.telescope')]],
@@ -111,7 +118,7 @@ local function init()
   use {'nvim-telescope/telescope-frecency.nvim', requires = 'tami5/sql.nvim'}
 
   -- Undo tree
-  use {'mbbill/undotree', cmd = 'UndotreeToggle',
+  use{'mbbill/undotree', cmd = 'UndotreeToggle',
         config = [[require('plugin_config.undotree')]]
   }
 
@@ -141,9 +148,9 @@ local function init()
   use 'voldikss/vim-floaterm'
 
   -- REPLs
-  use {'hkupty/iron.nvim', setup = [[vim.g.iron_map_defaults = 0]],
-        config = [[require('plugin_config.iron')]],
-        cmd = {'IronRepl', 'IronSend', 'IronReplHere'}
+  use{'hkupty/iron.nvim', setup = [[vim.g.iron_map_defaults = 0]],
+       config = [[require('plugin_config.iron')]],
+       cmd = {'IronRepl', 'IronSend', 'IronReplHere'}
     }
 
   -- Completion and linting
