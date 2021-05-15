@@ -3,22 +3,21 @@ local cmd, fn = utils.cmd, utils.fn
 local join_path = utils.join_path
 local deepcopy = utils.deepcopy
 
+-- install packer if it does not exist
+local plugins_root = join_path(fn.stdpath('data'), 'site', 'pack')
+local packer_path = join_path(plugins_root, 'packer', 'opt', 'packer.nvim')
+if fn.empty(fn.glob(packer_path)) > 0 then
+  cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. packer_path)
+end
+
+
 local packer = nil
 local function init()
-
-  --install packer if it does not exist
-  local package_root = join_path(fn.stdpath('data'), 'site', 'pack')
-  local packer_path = join_path(package_root, 'packer', 'opt', 'packer.nvim')
-  if fn.empty(fn.glob(packer_path)) > 0 then
-    cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. packer_path)
-  end
-
   -- load packer and initialize it
   if packer == nil then
     packer = require('packer')
     packer.init({disable_commands = true,
-                 package_root = package_root,
-                 compile_path = join_path(fn.stdpath('data'), 'packer_plugin', 'packer_compiled.vim'),
+                 package_root = plugins_root,
              })
   end
 
@@ -81,6 +80,9 @@ local function init()
         setup = [[require('plugin_config.matchup')]],
         event = 'BufEnter'}
     }
+
+  use {"folke/which-key.nvim",
+       config = 'require("which-key").setup {}'}
 
   -- Turn off Search highlight when not needed
   use 'romainl/vim-cool'

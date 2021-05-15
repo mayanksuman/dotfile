@@ -3,7 +3,7 @@
 -- ----------------------------------------
 local utils = require('utils')
 local cmd, fn = utils.cmd, utils.fn
-local set_option, get_option = utils.set_option, utils.get_option 
+local set_option, get_option = utils.set_option, utils.get_option
 
 -- ---------------
 -- Quick spelling fix (first item in z= list)
@@ -48,27 +48,6 @@ local function PasteWithPasteMode()
 		cmd('normal p')
 		set_option('o', 'paste', false)
 	end
-end
-
--- ---------------
--- Show all leader keybindings.
--- Adapted from http://ctoomey.com/posts/an-incremental-approach-to-vim/
--- ---------------
-local function ListLeaders()
-    cmd([[silent! redir @b
-	silent! nmap <LEADER>
-	silent! redir END
-	silent! new
-	silent! set buftype=nofile
-	silent! set bufhidden=hide
-	silent! setlocal noswapfile
-	silent! put! b
-	silent! g/^s*$/d
-	silent! %s/^.*,//
-	silent! normal ggVg
-	silent! sort
-	silent! let lines = getline(1,"$")
-	silent! normal <esc>]])
 end
 
 

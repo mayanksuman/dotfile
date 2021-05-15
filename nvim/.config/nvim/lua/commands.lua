@@ -2,27 +2,25 @@
 -- Commands
 -- ----------------------------------------
 local utils = require('utils')
-local cmd, set_option, get_option = utils.cmd, utils.set_option, utils.get_option 
+local cmd, set_option, get_option = utils.cmd, utils.set_option, utils.get_option
 local normal_mode_set_keymap = utils.normal_mode_set_keymap
 local leader_keymap_table = utils.leader_keymap_table
 
 -- Set up commands for lua functions
-cmd("command! QuickSpellingFix " .. 
+cmd("command! QuickSpellingFix " ..
     "lua require('editting_functions').QuickSpellingFix()")
 normal_mode_set_keymap(leader_keymap_table(
                         {z=':QuickSpellingFix'}))
 
-cmd("command! StripTrailingWhitespace " .. 
+cmd("command! StripTrailingWhitespace " ..
     "lua require('editting_functions').StripTrailingWhitespace()")
 normal_mode_set_keymap(leader_keymap_table(
                         {stw=':StripTrailingWhitespace'}))
 
-cmd("command! PasteWithPasteMode " .. 
+cmd("command! PasteWithPasteMode " ..
     "lua require('editting_functions').PasteWithPasteMode()")
 normal_mode_set_keymap(leader_keymap_table(
                         {p=':PasteWithPasteMode'}))
-
-cmd("command! ListLeaders lua require('editting_functions').ListLeaders()")
 
 normal_mode_set_keymap(
         {yl="lua require('editting_functions').YankLineWithoutNewline()"})
