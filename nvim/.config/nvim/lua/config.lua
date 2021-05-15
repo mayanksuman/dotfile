@@ -14,14 +14,10 @@ set_option('o', 'termguicolors', true)                       -- True color suppo
 -- -----------------------------
 -- File Locations
 -- -----------------------------
-set_option('o', 'backupdir', join_path(runtime_data_location, 'backup//,.'))
-set_option('o', 'directory', join_path(runtime_data_location, 'swap//'))
-set_option('o', 'viewdir', join_path(runtime_data_location, 'view//'))
-set_nvim_variable('g:netrw_home', runtime_data_location)
+set_option('o', 'backupdir', join_path(fn.stdpath('data'), 'backup'))
 set_option('o', 'backup', true)            -- Turn on backups
 -- Persistent Undo
 if has('persistent_undo') then
-  set_option('o', 'undodir', join_path(runtime_data_location, 'undo//'))
   set_option('b', 'undofile', true)
 end
 
@@ -50,7 +46,7 @@ set_option('o', 'confirm', true)                   -- Confirm if you exit withou
 if has('clipboard') and has('unnamedplus') then
   set_option('o', 'clipboard', 'unnamed,unnamedplus') -- When possible use + register for copy-paste
 else         -- On mac and Windows, use * register for copy-paste
-  set_option('o', 'clipboard', 'unnamed') 
+  set_option('o', 'clipboard', 'unnamed')
 end
 set_option('o', 'virtualedit', 'onemore')          -- Allow for cursor till the end of line
 set_option('o', 'whichwrap', 'b,s,h,l,<,>,[,]')    -- Backspace and cursor keys wrap too
@@ -64,7 +60,7 @@ set_option('b', 'fileformat', 'unix')              -- set file format to unix --
 if fn.argc() ~= 0 and fn.expand('%:p:h') ~= fn.getcwd() then
 	vim.cmd('cd %:p:h ')
 end
---set wildmode=list:longest,full -- Command <Tab> completion, list matches, then longest common part, then all. 
+--set wildmode=list:longest,full -- Command <Tab> completion, list matches, then longest common part, then all.
 
 -- ---------------
 -- Text Format
@@ -81,9 +77,9 @@ set_option('o', 'shiftround', true)
 -- ---------------
 set_option('o', 'ignorecase', true)  -- case insensitive search
 set_option('o', 'smartcase', true)  -- case sensitive search if search item has captial letters
-set_option('o', 'wildignore', '*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,' .. 
-                       '.git,.sass-cache,*.class,*.scssc,*.cssc,' .. 
-                       'sprockets%*,*.lessc,*/node_modules/*,' .. 
+set_option('o', 'wildignore', '*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,' ..
+                       '.git,.sass-cache,*.class,*.scssc,*.cssc,' ..
+                       'sprockets%*,*.lessc,*/node_modules/*,' ..
 		       'rake-pipeline-*', true)
 
 -- ---------------

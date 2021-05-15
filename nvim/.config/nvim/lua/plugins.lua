@@ -7,7 +7,7 @@ local packer = nil
 local function init()
 
   --install packer if it does not exist
-  local package_root = join_path(runtime_data_location, 'site', 'pack') 
+  local package_root = join_path(fn.stdpath('data'), 'site', 'pack')
   local packer_path = join_path(package_root, 'packer', 'opt', 'packer.nvim')
   if fn.empty(fn.glob(packer_path)) > 0 then
     cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. packer_path)
@@ -16,9 +16,9 @@ local function init()
   -- load packer and initialize it
   if packer == nil then
     packer = require('packer')
-    packer.init({disable_commands = true, 
-                 package_root = package_root, 
-                 compile_path = join_path(config_file_location, 'plugin', 'packer_compiled.vim'),
+    packer.init({disable_commands = true,
+                 package_root = package_root,
+                 compile_path = join_path(fn.stdpath('data'), 'packer_plugin', 'packer_compiled.vim'),
              })
   end
 
@@ -29,11 +29,11 @@ local function init()
   -- Packer can manage itself as an optional plugin
   use{'wbthomason/packer.nvim', opt = true}
 
-  -- Base16 colorsheme 
+  -- Base16 colorsheme
   use{'chriskempson/base16-vim', config = [[require('plugin_config.base16-vim')]]}
 
   -- Quick and easy toggling of quickfix list and the location-list
-  use{'Valloric/ListToggle', config = [[require('plugin_config.ListToggle')]]} 
+  use{'Valloric/ListToggle', config = [[require('plugin_config.ListToggle')]]}
 
   -- Edit directly from Quickfix list
   use{'Olical/vim-enmasse', cmd = 'EnMasse'}
@@ -77,8 +77,8 @@ local function init()
   use{'gennaro-tedesco/nvim-commaround'}
 
   -- Wrapping/delimiters
-  use {'machakann/vim-sandwich', {'andymass/vim-matchup', 
-        setup = [[require('plugin_config.matchup')]], 
+  use {'machakann/vim-sandwich', {'andymass/vim-matchup',
+        setup = [[require('plugin_config.matchup')]],
         event = 'BufEnter'}
     }
 
@@ -113,7 +113,7 @@ local function init()
         config = [[require('plugin_config.undotree')]]
   }
 
-  -- Autocorrection 
+  -- Autocorrection
   use{'jdelkins/vim-correction', ft={'markdown','text','textile', 'git',
                                         'gitcommit', 'plaintex', 'tex', 'latex',
                                         'rst', 'asciidoc', 'textile', 'pandoc'},
@@ -121,20 +121,20 @@ local function init()
 
   -- Git
   use {{'tpope/vim-fugitive', cmd = {'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull'}},
-    {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, 
-      config = "require('gitsigns').setup {}",event = 'BufEnter'}, 
+    {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'},
+      config = "require('gitsigns').setup {}",event = 'BufEnter'},
     {'TimUntersberger/neogit', opt = true}
   }
 
   -- Pretty symbols
-  use{'kyazdani42/nvim-web-devicons', 
+  use{'kyazdani42/nvim-web-devicons',
         config=[[require'nvim-web-devicons'.setup {default = true}]]}
 
   -- Multiple Cursors
   use{'mg979/vim-visual-multi'}
 
   use{'tpope/vim-repeat'}
-  
+
   -- Terminal
   use 'voldikss/vim-floaterm'
 
@@ -145,7 +145,7 @@ local function init()
     }
 
   -- Completion and linting
-  use{'neovim/nvim-lspconfig', 
+  use{'neovim/nvim-lspconfig',
       requires = {
           'onsails/lspkind-nvim', 'nvim-lua/lsp-status.nvim',
           'glepnir/lspsaga.nvim', 'kabouzeid/nvim-lspinstall'},
@@ -154,7 +154,7 @@ local function init()
 
   -- Source code highlighting
   use {'nvim-treesitter/nvim-treesitter',
-    requires = {'nvim-treesitter/nvim-treesitter-refactor', 
+    requires = {'nvim-treesitter/nvim-treesitter-refactor',
                 'nvim-treesitter/nvim-treesitter-textobjects'},
     config = [[require('plugin_config.treesitter')]]
   }
@@ -194,10 +194,10 @@ local function init()
   }
 
   -- better window/pane switching inside tmux
-  use{'christoomey/vim-tmux-navigator'} 
+  use{'christoomey/vim-tmux-navigator'}
 end
 
--- Command for package management 
+-- Command for package management
 cmd("command! PackerInstall packadd packer.nvim | lua require('plugins').install()")
 cmd("command! PackerUpdate packadd packer.nvim | lua require('plugins').update()")
 cmd("command! PackerSync packadd packer.nvim | lua require('plugins').sync()")
