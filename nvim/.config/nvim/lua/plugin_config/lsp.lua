@@ -94,7 +94,7 @@ local function on_attach(client)
   end
 end
 
-local servers_config = {
+local local_servers_config = {
   bashls = {},
   clangd = {capabilities = {}},
   pyls = {settings = {python = {formatting = {provider = 'yapf'}}}},
@@ -108,9 +108,12 @@ local snippet_capabilities = {
 
 local function setup_servers()
     local installed_servers = lspinstall.installed_servers()
+    for server, _ in pairs(local_servers_config) do
+        installed_servers[server] = server
+    end
     installed_servers[#installed_servers+1] = 'pyls'
     for _, server in pairs(installed_servers) do
-        config = servers_config[server] or {}
+        config = local_servers_config[server] or {}
         config.on_attach = on_attach
         config.capabilities = vim.tbl_deep_extend('keep', config.capabilities or {},
                                                     lsp_status.capabilities, snippet_capabilities)
