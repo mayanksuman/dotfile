@@ -12,10 +12,16 @@ local join_path = utils.join_path
 set_option('o', 'termguicolors', true)                       -- True color support
 
 -- -----------------------------
--- File Locations
+-- Backup and Undo behavior
 -- -----------------------------
-set_option('o', 'backupdir', join_path(fn.stdpath('data'), 'backup'))
-set_option('o', 'backup', true)            -- Turn on backups
+local backupdir = join_path(fn.stdpath('data'), 'backup')
+-- nvim do not automatically make backup folder
+if fn.empty(fn.glob(backupdir)) > 0 then
+    fn.mkdir(backupdir, 'p')
+end
+set_option('o', 'backupdir', backupdir)
+set_option('o', 'backup', true)             -- Turn on backups
+set_option('o', 'writebackup', true)        -- Save backup before writing file (failsafe)
 -- Persistent Undo
 if has('persistent_undo') then
   set_option('b', 'undofile', true)
