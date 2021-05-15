@@ -1,5 +1,6 @@
-local utils = require('utils')
-local join_path, set_option = utils.join_path, utils.set_option
+-- if vim.fn.argc() ~= 0 or vim.fn.line2byte('$') ~= -1 or vim.o.insertmode or not vim.o.modifiable then
+--     return
+-- end
 
 -- All hotkeys, not dependant on plugins, are mapped here.
 require('mappings')
