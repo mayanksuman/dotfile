@@ -31,6 +31,9 @@ local function init()
   -- Base16 colorsheme
   use{'chriskempson/base16-vim', config = [[require('plugin_config.base16-vim')]]}
 
+  -- Context sensitive increment and decrement
+  use{'monaqa/dial.nvim'}
+
   -- Quick and easy toggling of quickfix list and the location-list
   use{'Valloric/ListToggle', config = [[require('plugin_config.ListToggle')]]}
 
@@ -109,7 +112,7 @@ local function init()
 
   -- Search in popups
   use{'nvim-telescope/telescope.nvim',
-    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
+    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'nvim-telescope/telescope-fzy-native.nvim'}},
     setup = [[require('plugin_config.telescope_setup')]],
     config = [[require('plugin_config.telescope')]],
     cmd = 'Telescope'
@@ -145,7 +148,7 @@ local function init()
   use{'tpope/vim-repeat'}
 
   -- Terminal
-  use 'voldikss/vim-floaterm'
+  use{"akinsho/nvim-toggleterm.lua"}
 
   -- REPLs
   use{'hkupty/iron.nvim', setup = [[vim.g.iron_map_defaults = 0]],

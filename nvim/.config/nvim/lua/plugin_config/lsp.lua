@@ -109,9 +109,8 @@ local snippet_capabilities = {
 local function setup_servers()
     local installed_servers = lspinstall.installed_servers()
     for server, _ in pairs(local_servers_config) do
-        installed_servers[server] = server
+        installed_servers[#installed_servers+1] = server
     end
-    installed_servers[#installed_servers+1] = 'pyls'
     for _, server in pairs(installed_servers) do
         config = local_servers_config[server] or {}
         config.on_attach = on_attach

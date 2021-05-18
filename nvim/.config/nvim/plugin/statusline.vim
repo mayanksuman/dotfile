@@ -27,3 +27,5 @@ call s:setup_colors()
 
 au VimEnter * ++once lua statusline = require('statusline')
 au VimEnter * ++once lua vim.o.statusline = '%!v:lua.statusline.status()'
+au BufWinEnter,WinEnter,BufEnter,BufDelete,SessionLoadPost,FileChangedShellPost * lua require('statusline').update()
+
