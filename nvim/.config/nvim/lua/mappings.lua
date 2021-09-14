@@ -33,15 +33,16 @@ normal_mode_set_keymap({
         ['*']=':let stay_star_view = winsaveview()<cr>*:call winrestview(stay_star_view)<cr>', -- Don't move on *
     }
     )
+
 -- Wrapped lines goes down/up to next row, rather than next line in file.
 set_keymap('', {j='gj', k='gk'})
 
 insert_mode_set_keymap({['<C-l>']='<C-x><C-l>', -- Make line completion easier.
         ['<C-t>']='<c-g>u<Esc>[s1z=`]a<c-g>u', -- Correct typos and return back to starting position in insert mode
         jj='<Esc>', -- Let's make escape better.
-        jJ='<Esc>',
-        Jj='<Esc>',
-        JJ='<Esc>',
+        jJ='<Esc>', -- Let's make escape better.
+        Jj='<Esc>', -- Let's make escape better.
+        JJ='<Esc>', -- Let's make escape better.
     })
 
 visualselect_mode_set_keymap({gj='15gjzz', -- Scroll larger amounts with gj / gk
@@ -52,16 +53,9 @@ visualselect_mode_set_keymap({gj='15gjzz', -- Scroll larger amounts with gj / gk
     })
 
 -- ---------------
--- Window Movement
+-- Window Management
 -- ---------------
--- Easier moving in tabs and windows
--- The lines conflict with the default digraph mapping of <C-K>
--- set_keymap('', {['<c-h>']='<c-w>h',    -- goto left window
---         ['<c-j>']='<c-w>j',     -- goto bottom window
---         ['<c-k>']='<c-w>k',     -- goto upper window
---         ['<c-l>']='<c-w>l',})     -- goto right window
-set_keymap('', {['<leader>=']='<C-w>=', --Equal window size
-    })
+set_keymap('', {['<leader>=']='<C-w>='})  --Equal window size
 
 -- Close the current window
 normal_mode_set_keymap({['<m-w>']=':close<CR>'})
@@ -103,8 +97,8 @@ set_keymap('', leader_keymap_table({fc=[[/\v^[<\|=>]{7}( .*\|$)<CR>]]}), {})
 
 -- Some helpers to edit mode
 -- http://vimcasts.org/e/14
-commandline_mode_set_keymap({['%%']="<C-R>=fnameescape(expand('%:h')).'/'<CR>"}, 
-                {noremap=true})
+commandline_mode_set_keymap({['%%']="<C-R>=fnameescape(expand('%:h')).'/'<CR>"},
+                            {noremap=true})  -- Get the parent directory in command line
 set_keymap('', leader_keymap_table({ew = ':e %%',   -- edit parent directory
                                     es = ':sp %%',  -- edit parent directory in horizontal split
                                     ev = ':vsp %%', -- edit parent directory in vertical split
@@ -123,7 +117,7 @@ normal_mode_set_keymap(leader_keymap_table({
 -- Easy diff merging (git merge)
 set_keymap('', leader_keymap_table(
                     {gdc=[[:diffget //2\|diffupdate<CR>]],   --accept the diff from current branch
-                    gdm=[[:diffget //3\|diffupdate<CR>]],    --accept the diff from merging branch
+                     gdm=[[:diffget //3\|diffupdate<CR>]],    --accept the diff from merging branch
             }), {})
 
 -- Easier formatting
@@ -132,34 +126,31 @@ normal_mode_set_keymap(leader_keymap_table({f='gwip'}))
 -- git blame support
 visualselect_mode_set_keymap(leader_keymap_table({
     b=[[:<C-U>!git blame <C-R>=expand(--%:p--) <CR> \| sed -n <C-R>=line(--'<--) <CR>,<C-R>=line(--'>--) <CR>p <CR>]]
-}), {})
+    }),
+{})
 
 -- ---------------
 -- -- Typo Fixes
 -- -- ---------------
-
 set_keymap('', {['<F1>']='<Esc>'})
 insert_mode_set_keymap({['<F1>']='<Esc>'})
 commandline_mode_set_keymap({["w'"] = 'w<CR>'})
-                    
--- Disable the ever-annoying Ex mode shortcut key.
--- make Q repeat the last macro instead. *hat tip* http://vimbits.com/bits/263
-normal_mode_set_keymap({Q='@@'})
 
 -- For when you forget to sudo.. Really Write the file.
 commandline_mode_set_keymap({['w!!'] = 'w !sudo tee % > /dev/null'}, {})
 
 -- Terminal emulator mapping for nvim
 -- Escape key behavior
-terminal_mode_set_keymap({jk=[[<C-\><C-n>]], 
-                          JK=[[<C-\><C-n>]],
-                          Jk=[[<C-\><C-n>]],
-                          jK=[[<C-\><C-n>]], 
-                   ['<Esc>']=[[<C-\><C-n>]]})
+terminal_mode_set_keymap({jj=[[<C-\><C-n>]],
+                          JJ=[[<C-\><C-n>]],
+                          Jj=[[<C-\><C-n>]],
+                          jJ=[[<C-\><C-n>]],
+                          ['<Esc>']=[[<C-\><C-n>]]})
 
 -- Movement across panes
 terminal_mode_set_keymap({['<C-h>']=[[<C-\><C-n><C-w>h]],
-                          ['<C-j>']=[[<C-\><C-n><C-w>j]], 
-                          ['<C-k>']=[[<C-\><C-n><C-w>k]], 
+                          ['<C-j>']=[[<C-\><C-n><C-w>j]],
+                          ['<C-k>']=[[<C-\><C-n><C-w>k]],
                           ['<C-l>']=[[<C-\><C-n><C-w>l]],
-        }) 
+                         }
+)

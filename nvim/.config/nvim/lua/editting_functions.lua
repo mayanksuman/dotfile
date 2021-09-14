@@ -77,8 +77,8 @@ command! -register CopyMatches call CopyMatches(<q-reg>)]])
 
 
 return {QuickSpellingFix=QuickSpellingFix,
-StripTrailingWhitespace=StripTrailingWhitespace,
-PasteWithPasteMode=PasteWithPasteMode,
-ListLeaders=ListLeaders,
-YankLineWithoutNewline = YankLineWithoutNewline,
+        StripTrailingWhitespace=StripTrailingWhitespace,
+        PasteWithPasteMode=PasteWithPasteMode,
+        ListLeaders=ListLeaders,
+        YankLineWithoutNewline = YankLineWithoutNewline,
 }

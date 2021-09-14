@@ -123,13 +123,13 @@ function deepcopy(orig)
 end
 
 
-return {api = api, 
-        cmd = cmd, 
+return {api = api,
+        cmd = cmd,
         fn = fn,
         has = has,
-	get_path_separator= get_path_separator,
+	    get_path_separator= get_path_separator,
         join_path = join_path,
-	deepcopy = deepcopy,
+	    deepcopy = deepcopy,
         set_nvim_variable = set_nvim_variable,
         set_option = set_option,
         get_option = get_option,

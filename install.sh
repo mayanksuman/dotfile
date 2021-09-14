@@ -189,7 +189,7 @@ ok
 action "Configuring Bash"
 stow -t ~ -R shell_common
 # Check for source line; if it does not exist then add it in ~/.bashrc
-comm_shell_line='[ -z "$PS1" ] && echo "" || source "$HOME/.shell_common_config"'
+comm_shell_line='[ -n "$PS1" ] && source "$HOME/.shell_common_config"'
 if ! grep -qsFx "$comm_shell_line" ~/.bashrc ; then
 	echo "$comm_shell_line">>~/.bashrc
 fi

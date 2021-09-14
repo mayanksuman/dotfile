@@ -13,9 +13,15 @@ esac
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=200
 
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+
 # load prezto
 source "$HOME/.local/share/zsh/prezto/init.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source "$HOME/.shell_common_config"
+[ -n "$PS1" ] && source "$HOME/.shell_common_config"
+# source "$HOME/.shell_common_config"
+if [ -e /home/mayank/.nix-profile/etc/profile.d/nix.sh ]; then . /home/mayank/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
