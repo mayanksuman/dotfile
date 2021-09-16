@@ -282,6 +282,10 @@ step "Setting up new nvim/vim configuration"
 stow -t ~ -R nvim
 ok
 
+step "Setting up pplatex"
+stow -t ~ -R pplatex
+ok
+
 step "Enabling python support in nvim and its plugins"
 $SYSPIP3 install --user -U pynvim notedown neovim-remote
 ok
@@ -342,7 +346,7 @@ sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
 ok
 
 step "Setting up conda environment"
-cd ~/.dotfile/python || exit
+cd python || exit
 stow -t ~ -R conda
 cd - || exit
 ok

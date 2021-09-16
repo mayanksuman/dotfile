@@ -1,30 +1,35 @@
 #!/usr/bin/env bash
 
 source ./_scripts/msg.sh
+if [ "$(id -u)" = 0 ]; then
+	error "This script should not be run as root. Exitting"
+	exit 1
+fi
 
 info "Uninstalling dotfiles"
-info "Please note that only configuration will be removed not the installed softwares."
+info "Please note that only configuration will be removed not the installed softwares by package manager."
+
+info "  You need to be a sudo user for uninstalling configuration."
+info "  Please give your password if demanded."
+sudo -v
+# Keep-alive: update existing sudo time stamp until the script has finished
+while true; 
+do
+	sudo -n true; sleep 60; kill -0 "$$" || exit; 
+done 2>/dev/null &
+
+action "Removing gdb configuration"
+stow -t ~ -D gdb
+ok
 
 action "Removing Fonts."
 stow -t ~ -D fonts
+step "Updating font cache"
+sudo fc-cache -f -v
 ok
 
-action "Removing cheatsheets/examples."
-stow -t ~ -D eg
-ok
-
-action "Removing git configuration"
-stow -t ~ -D git
-info "Looking for an old git config..."
-  if [ -f ~/.gitconfig.old ] || [ -h ~/.gitconfig.old ]; then
-    echo -e "${YELLOW}Found ~/.gitconfig.old.${NORMAL} ${GREEN}Restoring up to ~/.gitconfig${NORMAL}";
-    mv ~/.gitconfig.old ~/.gitconfig;
-  fi
-
-  if [ -f ~/.gitignore_global.old ] || [ -h ~/.gitignore_global.old ]; then
-    echo -e "${YELLOW}Found ~/.gitignore_global.old.${NORMAL} ${GREEN}Restoring up to ~/.gitignore_global${NORMAL}";
-    mv ~/.gitignore_global.old ~/.gitignore_global;
-  fi
+action "Removing nodejs configuration."
+stow -t ~ -D nodejs
 ok
 
 action "Removing BASH configuration"
@@ -69,8 +74,22 @@ info "Looking for an old vim config..."
     mv ~/.vimrc.old ~/.vimrc;
   fi
 
-action "Removing stow -t ~ Configuration"
-stow -t ~ -D stow
+action "Removing pplatex binaries"
+stow -t ~ -D pplatex
+ok
+
+action "Removing git configuration"
+stow -t ~ -D git
+info "Looking for an old git config..."
+  if [ -f ~/.gitconfig.old ] || [ -h ~/.gitconfig.old ]; then
+    echo -e "${YELLOW}Found ~/.gitconfig.old.${NORMAL} ${GREEN}Restoring up to ~/.gitconfig${NORMAL}";
+    mv ~/.gitconfig.old ~/.gitconfig;
+  fi
+
+  if [ -f ~/.gitignore_global.old ] || [ -h ~/.gitignore_global.old ]; then
+    echo -e "${YELLOW}Found ~/.gitignore_global.old.${NORMAL} ${GREEN}Restoring up to ~/.gitignore_global${NORMAL}";
+    mv ~/.gitignore_global.old ~/.gitignore_global;
+  fi
 ok
 
 action "Removing pyenv and associated virtualenvs"
@@ -82,6 +101,10 @@ action "Removing pyenv and associated virtualenvs"
   	stow -t ~ -D "${dir:2}"
   done
   cd - || exit
+ok
+
+action "Removing stow -t ~ Configuration"
+stow -t ~ -D stow
 ok
 
 info "All configuration successfully uninstalled."
