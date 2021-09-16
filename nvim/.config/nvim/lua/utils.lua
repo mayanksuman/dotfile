@@ -2,7 +2,7 @@ local api, cmd, fn = vim.api, vim.cmd, vim.fn
 local scopes = {o = vim.o, b = vim.bo, w = vim.wo}
 
 local function has(feature)
-	return (fn.has(feature) == 1)
+    return (fn.has(feature) == 1)
 end
 
 local function get_path_separator()
@@ -52,39 +52,39 @@ local function get_option(scope, key)
 end
 
 local function set_keymap(mode, keymap_table, options)
-	options = options or {noremap = true, silent = true}
-	m = mode:lower():sub(1,1)
-	for key, val in pairs(keymap_table) do
-		api.nvim_set_keymap(m, key, val, options)
-	end
+    options = options or {noremap = true, silent = true}
+    m = mode:lower():sub(1,1)
+    for key, val in pairs(keymap_table) do
+        api.nvim_set_keymap(m, key, val, options)
+    end
 end
 
 local function normal_mode_set_keymap(keymap_table, options)
-	set_keymap('normal', keymap_table, options)
+    set_keymap('normal', keymap_table, options)
 end
 
 local function visual_mode_set_keymap(keymap_table, options)
-	set_keymap('x', keymap_table, options)
+    set_keymap('x', keymap_table, options)
 end
 
 local function visualselect_mode_set_keymap(keymap_table, options)
-	set_keymap('visual', keymap_table, options)
+    set_keymap('visual', keymap_table, options)
 end
 
 local function select_mode_set_keymap(keymap_table, options)
-	set_keymap('select', keymap_table, options)
+    set_keymap('select', keymap_table, options)
 end
 
 local function insert_mode_set_keymap(keymap_table, options)
-	set_keymap('insert', keymap_table, options)
+    set_keymap('insert', keymap_table, options)
 end
 
 local function commandline_mode_set_keymap(keymap_table, options)
-	set_keymap('command', keymap_table, options)
+    set_keymap('command', keymap_table, options)
 end
 
 local function terminal_mode_set_keymap(keymap_table, options)
-	set_keymap('terminal', keymap_table, options)
+    set_keymap('terminal', keymap_table, options)
 end
 
 local function leader_keymap_table(key_table)
@@ -127,9 +127,9 @@ return {api = api,
         cmd = cmd,
         fn = fn,
         has = has,
-	    get_path_separator= get_path_separator,
+        get_path_separator= get_path_separator,
         join_path = join_path,
-	    deepcopy = deepcopy,
+        deepcopy = deepcopy,
         set_nvim_variable = set_nvim_variable,
         set_option = set_option,
         get_option = get_option,

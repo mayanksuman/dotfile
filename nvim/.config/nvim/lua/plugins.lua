@@ -16,9 +16,9 @@ local function init()
     if packer == nil then
         packer = require('packer')
         packer.init({disable_commands = true,
-        package_root = plugins_root,
-    })
-end
+                     package_root = plugins_root,
+                    })
+    end
 
 local use = packer.use
 packer.reset()
@@ -42,7 +42,7 @@ use{'Olical/vim-enmasse', cmd = 'EnMasse'}
 -- Put the text under cursor in focus: good for presenting
 use{'junegunn/limelight.vim', cmd = 'Limelight'}
 
--- Show Marks in signcolumn
+-- Show user-set marks in the file in signcolumn
 use{'kshenoy/vim-signature', config = [[require('plugin_config.signature')]]}
 
 use{'godlygeek/tabular'}            -- align based on character
@@ -50,7 +50,7 @@ use{'godlygeek/tabular'}            -- align based on character
 
 -- Fast movement like Easymotion (in lua)
 use{'phaazon/hop.nvim', as = 'hop',
-config = "require('hop').setup { keys = 'etovxqpdygfblzhckisuran' }"}
+    config = "require('hop').setup { keys = 'etovxqpdygfblzhckisuran' }"}
 
 -- Async building & commands
 use {'tpope/vim-dispatch', cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
@@ -59,7 +59,7 @@ use {'tpope/vim-dispatch', cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
 use{'preservim/tagbar', config=[[require('plugin_config.tagbar')]]}
 
 -- Indentation tracking
-use{'lukas-reineke/indent-blankline.nvim', branch = 'lua',
+use{'lukas-reineke/indent-blankline.nvim',
     setup = [[require('plugin_config.indentline')]]}
 
 -- For fast editing of html and css files
@@ -76,30 +76,31 @@ use{"terrortylor/nvim-comment", as='nvim_comment',
     config = "require('nvim_comment').setup()"}
 
 -- Wrapping/delimiters
-use {'machakann/vim-sandwich',
+use{'machakann/vim-sandwich',
     {'andymass/vim-matchup', setup = [[require('plugin_config.matchup')]],
     event = 'BufEnter'}
 }
 
--- Excellent tab support (makes the tab concept in vim similar to other
--- editors
-use {'romgrk/barbar.nvim', config=[[require('plugin_config.barbar')]]}
+-- Buffer tab support (makes the tab concept in vim similar to other editors)
+use{'akinsho/bufferline.nvim', requires = 'kyazdani42/nvim-web-devicons',
+    config=[[require("plugin_config.bufferline")]]
+}
 
 -- Start Page
 use{'mhinz/vim-startify', config=[[require('plugin_config.vim-startify')]]}
 
 -- Shows different keymapping depending on input
-use {"folke/which-key.nvim", config = [[require("plugin_config.which-key")]]}
+use{"folke/which-key.nvim", config = [[require("plugin_config.which-key")]]}
 
 -- Turn off Search highlight when not needed
 -- use 'romainl/vim-cool'
 
 -- Prettification
-use {'junegunn/vim-easy-align', config = [[require('plugin_config.easy_align')]]}
-use {'mhartington/formatter.nvim', config = [[require('plugin_config.format')]]}
+use{'junegunn/vim-easy-align', config = [[require('plugin_config.easy_align')]]}
+use{'mhartington/formatter.nvim', config = [[require('plugin_config.format')]]}
 
 -- Text objects
-use 'wellle/targets.vim'
+use{'wellle/targets.vim'}
 
 -- Uncover usage problems in your writing
 use{'preservim/vim-wordy'}
@@ -107,7 +108,7 @@ use{'preservim/vim-wordy'}
 -- better editing commands in insert mode
 use{'preservim/vim-wordchipper'}
 
--- Search in popups
+-- popup windows for search and other things
 use{'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'nvim-telescope/telescope-fzy-native.nvim'}},
     setup = [[require('plugin_config.telescope_setup')]],
@@ -118,8 +119,10 @@ use{'nvim-telescope/telescope.nvim',
 use{'nvim-telescope/telescope-frecency.nvim', requires = 'tami5/sql.nvim'}
 
 -- Note taking system based on neuron Zettelkasten concept
-use{"oberblastmeister/neuron.nvim", requires={'nvim-lua/plenary.nvim',
-'nvim-lua/popup.nvim', 'nvim-telescope/telescope.nvim'}}
+use{"oberblastmeister/neuron.nvim",
+    requires={'nvim-lua/plenary.nvim', 'nvim-lua/popup.nvim',
+              'nvim-telescope/telescope.nvim'}
+}
 
 -- Undo tree
 use{'mbbill/undotree', cmd = 'UndotreeToggle',
@@ -133,7 +136,7 @@ use{'jdelkins/vim-correction', ft={'markdown','text','textile', 'git',
     requires='tpope/vim-abolish'
 }
 
--- Git
+-- Git support
 use {{'tpope/vim-fugitive', cmd = {'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull'}},
     {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'},
     config = "require('gitsigns').setup {}",event = 'BufEnter'},
@@ -144,6 +147,9 @@ use {{'tpope/vim-fugitive', cmd = {'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull'}
 use{'kyazdani42/nvim-web-devicons',
     config=[[require'nvim-web-devicons'.setup {default = true}]]
 }
+
+-- Directory tree at the side
+use{'kyazdani42/nvim-tree.lua', config=[[require('plugin_config.nvim-tree')]]}
 
 -- Multiple Cursors
 use{'mg979/vim-visual-multi'}
@@ -160,28 +166,49 @@ use{'hkupty/iron.nvim', setup = [[vim.g.iron_map_defaults = 0]],
     cmd = {'IronRepl', 'IronSend', 'IronReplHere'}
 }
 
--- Completion and linting
+-- LSP and linting support
 use{'neovim/nvim-lspconfig',
-requires = {
-    'onsails/lspkind-nvim', 'nvim-lua/lsp-status.nvim',
-    'glepnir/lspsaga.nvim', 'kabouzeid/nvim-lspinstall'},
+    requires = {'onsails/lspkind-nvim', 'nvim-lua/lsp-status.nvim', -- helps in getting info from LSP for statusbar
+                'glepnir/lspsaga.nvim', 'kabouzeid/nvim-lspinstall'},
     config = [[require('plugin_config.lsp')]]
 }
 
 -- Source code highlighting
 use {'nvim-treesitter/nvim-treesitter',
-    requires = {'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects'},
+    requires = {'nvim-treesitter/nvim-treesitter-refactor',
+                'nvim-treesitter/nvim-treesitter-textobjects'},
     config = [[require('plugin_config.treesitter')]]
 }
 
 -- Rainbow braket and other matches in source code
-use{'p00f/nvim-ts-rainbow', requires={'nvim-treesitter/nvim-treesitter'}}
+use{'p00f/nvim-ts-rainbow', requires={'nvim-treesitter/nvim-treesitter'},
+    config = [[require('plugin_config.nvim-ts-rainbow')]]
+}
 
 -- Just for tracking progess until this is ready for use
 use {'mfussenegger/nvim-lint', opt = true}
 
 -- completion and snippets
-use {'hrsh7th/nvim-compe', config = [[require('plugin_config.compe')]], event = 'InsertEnter *'}
+use {
+    "hrsh7th/nvim-cmp",
+    requires = {
+        {'hrsh7th/cmp-nvim-lsp'},    -- Source nvim LSP
+        {'hrsh7th/cmp-buffer'},      -- Source the current buffer
+        {'hrsh7th/cmp-path'},        -- Source for filesystem paths
+        {'hrsh7th/cmp-nvim-lua'},    -- Source for vim lua functions
+        {'hrsh7th/cmp-calc'},        -- Source for math calculation
+        {'hrsh7th/cmp-emoji'},       -- Source for emoji
+        {'L3MON4D3/LuaSnip'},        -- Snippets plugin
+        {'saadparwaiz1/cmp_luasnip'},-- Source for snippets (from LuaSnip)
+        {'tzachar/cmp-tabnine',      -- TabNine support for faster code writing
+        run = './install.sh',
+        },
+        --{'ray-x/lsp_signature.nvim'}, -- Show function signature when you type from LSP
+        {'onsails/lspkind-nvim'},       -- For symbols in completion drop-down menu
+    },
+    config = [[require('plugin_config.compe')]],
+}
+-- use {'hrsh7th/nvim-compe', config = [[require('plugin_config.compe')]], event = 'InsertEnter *'}
 -- use {'hrsh7th/vim-vsnip', config = [[require('plugin_config.vsnip')]], event = 'InsertEnter *'}
 -- use {'rafamadriz/friendly-snippets'}
 
@@ -190,24 +217,25 @@ use {'hrsh7th/nvim-compe', config = [[require('plugin_config.compe')]], event = 
 -- requires = 'honza/vim-snippets'}
 
 -- Debugger
-use {'mfussenegger/nvim-dap', opt = true}
-use {'puremourning/vimspector',
+use{'mfussenegger/nvim-dap', opt = true}
+use{'puremourning/vimspector',
     setup = [[vim.g.vimspector_enable_mappings = 'HUMAN']],
     disable = true
 }
 
 -- Path navigation
-use 'justinmk/vim-dirvish'
+use{'justinmk/vim-dirvish'}
 
 -- LaTeX
-use {'lervag/vimtex', ft={'tex', 'latex'},
-config = [[require('plugin_config.vimtex')]]}
+use{'lervag/vimtex', ft={'tex', 'latex'},
+    config = [[require('plugin_config.vimtex')]]
+}
 
 -- Meson
-use 'igankevich/mesonic'
+use{'igankevich/mesonic'}
 
 -- Highlight colors for hexadecimal color code
-use {'norcalli/nvim-colorizer.lua',
+use{'norcalli/nvim-colorizer.lua',
     ft = {'css','less','sass','scss','html','javascript','python','stylus'},
     config = [[require('colorizer').setup {'css','less','sass','scss','html','javascript','python','stylus'}]]
 }

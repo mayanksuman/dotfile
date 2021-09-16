@@ -4,7 +4,6 @@ g.indent_blankline_use_treesitter = true
 g.indent_blankline_show_current_context = true
 g.indentLine_faster = 1
 g.indentLine_fileTypeExclude = {'tex', 'markdown', 'txt', 'startify', 'packer', 'help'}
-g.indentLine_color_term = 239
 g.indentLine_bgcolor_term = 202
 g.indent_blankline_show_first_indent_level = false
 g.indent_blankline_show_trailing_blankline_indent = false

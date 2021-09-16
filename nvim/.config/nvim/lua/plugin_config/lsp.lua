@@ -3,32 +3,9 @@ local lsp_status = require('lsp-status')
 local saga = require('lspsaga')
 local lspkind = require('lspkind')
 local lspinstall = require('lspinstall')
-local lsp = vim.lsp
+local cmp_nvim_lsp = require('cmp_nvim_lsp')
+local lsp, cmd = vim.lsp, vim.cmd
 local buf_keymap = vim.api.nvim_buf_set_keymap
-local cmd = vim.cmd
-
-local kind_symbols = {
-  Text = '',
-  Method = 'Ƒ',
-  Function = 'ƒ',
-  Constructor = '',
-  Variable = '',
-  Class = '',
-  Interface = 'ﰮ',
-  Module = '',
-  Property = '',
-  Unit = '',
-  Value = '',
-  Enum = '了',
-  Keyword = '',
-  Snippet = '﬌',
-  Color = '',
-  File = '',
-  Folder = '',
-  EnumMember = '',
-  Constant = '',
-  Struct = ''
-}
 
 local sign_define = vim.fn.sign_define
 sign_define('LspDiagnosticsSignError', {text = '', numhl = 'RedSign'})
@@ -36,7 +13,7 @@ sign_define('LspDiagnosticsSignWarning', {text = '', numhl = 'YellowSign'})
 sign_define('LspDiagnosticsSignInformation', {text = '', numhl = 'WhiteSign'})
 sign_define('LspDiagnosticsSignHint', {text = '', numhl = 'BlueSign'})
 lsp_status.config {
-  kind_labels = kind_symbols,
+  kind_labels = lspkind.presets.default,
   select_symbol = function(cursor_pos, symbol)
     if symbol.valueRange then
       local value_range = {
@@ -51,7 +28,6 @@ lsp_status.config {
 }
 
 lsp_status.register_progress()
-lspkind.init {symbol_map = kind_symbols}
 lsp.handlers['textDocument/publishDiagnostics'] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
   virtual_text = false,
   signs = true,
@@ -95,16 +71,16 @@ local function on_attach(client)
 end
 
 local local_servers_config = {
-  bashls = {},
-  clangd = {capabilities = {}},
-  pyls = {settings = {python = {formatting = {provider = 'yapf'}}}},
+  --bashls = {},
+  --clangd = {capabilities = {}},
+  --pyls = {settings = {python = {formatting = {provider = 'yapf'}}}},
   }
 
 lspinstall.setup()
 
-local snippet_capabilities = {
-  textDocument = {completion = {completionItem = {snippetSupport = true}}}
-}
+--local snippet_capabilities = {
+--  textDocument = {completion = {completionItem = {snippetSupport = true}}}
+--}
 
 local function setup_servers()
     local installed_servers = lspinstall.installed_servers()
@@ -112,10 +88,13 @@ local function setup_servers()
         installed_servers[#installed_servers+1] = server
     end
     for _, server in pairs(installed_servers) do
-        config = local_servers_config[server] or {}
+        local config = local_servers_config[server] or {}
         config.on_attach = on_attach
-        config.capabilities = vim.tbl_deep_extend('keep', config.capabilities or {},
-                                                    lsp_status.capabilities, snippet_capabilities)
+        --local capabilities = vim.tbl_deep_extend('keep', config.capabilities or {},
+        --                                         lsp_status.capabilities, snippet_capabilities)
+        local capabilities = vim.tbl_deep_extend('keep', config.capabilities or {},
+                                         vim.lsp.protocol.make_client_capabilities())
+        config.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
         lspconfig[server].setup(config)
     end
 end
@@ -125,5 +104,5 @@ setup_servers()
 -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
 require'lspinstall'.post_install_hook = function ()
   setup_servers() -- reload installed servers
-  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
+  cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
 end

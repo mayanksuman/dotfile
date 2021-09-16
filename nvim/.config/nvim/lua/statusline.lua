@@ -1,12 +1,12 @@
 local has_lsp_status, lsp_status = pcall(require, 'lsp-status')
 local has_icons, devicons = pcall(require, 'nvim-web-devicons')
 
--- vim.cmd [[augroup statusline_updates]]
--- vim.cmd [[au!]]
--- vim.cmd [[au VimEnter * ++once lua statusline = require('statusline')]]
--- vim.cmd [[au VimEnter * ++once lua vim.o.statusline = '%!v:lua.statusline.status()']]
--- vim.cmd [[au BufWinEnter,WinEnter,BufEnter,BufDelete,SessionLoadPost,FileChangedShellPost * lua require('statusline').update()]]
--- vim.cmd [[augroup END]]
+vim.cmd [[augroup statusline_updates]]
+vim.cmd [[au!]]
+vim.cmd [[au VimEnter * ++once lua statusline = require('statusline')]]
+vim.cmd [[au VimEnter * ++once lua vim.o.statusline = '%!v:lua.statusline.status()']]
+vim.cmd [[au BufWinEnter,WinEnter,BufEnter,BufDelete,SessionLoadPost,FileChangedShellPost * lua require('statusline').update()]]
+vim.cmd [[augroup END]]
 
 local mode_fn = vim.fn.mode
 local win_getid = vim.fn.win_getid
@@ -123,7 +123,7 @@ local function get_paste() return vim.o.paste and 'PASTE ' or '' end
 
 local function get_readonly_space()
   return ((vim.o.paste and vim.bo.readonly) and ' ' or '') and '%r' ..
-           (vim.bo.readonly and ' ' or '')
+          (vim.bo.readonly and ' ' or '')
 end
 
 local statusline_format =

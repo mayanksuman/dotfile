@@ -7,7 +7,7 @@ g.startify_skiplist = {'COMMIT_EDITMSG', fn.expand('$VIMRUNTIME') ..'/doc',
                         'bundle/.*/doc',}
 g.startify_files_number = 15
 g.startify_custom_indices = {'a', 's', 'd', 'g', 'l'}
-g.startify_change_to_dir = 0
+g.startify_change_to_dir = 1
 
 cmd([[hi StartifyBracket ctermfg=240
 hi StartifyFooter  ctermfg=111

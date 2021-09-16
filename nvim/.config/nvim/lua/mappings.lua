@@ -112,7 +112,7 @@ normal_mode_set_keymap(leader_keymap_table({
                                         yP =':let @*=expand(--%:p--)<CR>',      -- absolute path  (/something/src/foo.txt)
                                         yf =':let @*=expand(--%:t--)<CR>',      -- filename  (foo.txt)
                                         yd =':let @*=expand(--%:p:h--)<CR>',    -- directory name  (/something/src)
-                                    }))
+                                        }))
 
 -- Easy diff merging (git merge)
 set_keymap('', leader_keymap_table(

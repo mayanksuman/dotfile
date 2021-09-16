@@ -95,13 +95,13 @@ info "Tools>Options>Language Settings>Default Languages for Documents"
 sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
 	texlive-science texworks texlive-bibtex-extra biber texlive-font-utils \
-	chktex tidy odt2txt dos2unix cm-super ripgrep
+	zathura chktex tidy odt2txt dos2unix cm-super ripgrep
 # sandboxing support
 sudo -E apt-get install -ym firejail
 # some utilities
 sudo -E apt-get install -ym youtube-dl
 # for php composer framework
-sudo -E apt-get install -ym composer
+#sudo -E apt-get install -ym composer
 # for common truetype font
 sudo -E apt-get install -ym ttf-mscorefonts-installer
 # Install fira code font for console
@@ -299,7 +299,7 @@ ok
 # ok
 
 step "Installing vim plugins"
-nvim +PlugInstall +PlugUpdate +UpdateRemotePlugins +PlugUpgrade +PlugClean +qa
+nvim +PackerInstall +PackerClean +PackerUpdate +UpdateRemotePlugins +PackerCompile +qa
 ok
 
 step "Installing Language Servers"

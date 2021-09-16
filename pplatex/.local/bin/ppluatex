@@ -1,0 +1,44 @@
+#!/bin/bash
+
+base=$(basename $0)
+basedir=$(dirname $0)
+config=~/.${base}.conf
+
+## Configuration ##
+
+# TODO determine the command based on $base
+COMMAND=lualatex
+
+if [ -x $basedir/pplatex ]; then
+    PPLATEX=$basedir/pplatex
+else
+    PPLATEX=pplatex
+fi
+
+PPLATEX_ARGS=
+
+if [ -f $config ]; then
+    source $config
+fi
+
+## End of configuration ##
+
+args=
+hasdash=false
+while [ ! -z "$1" ]; do
+    if [ "$1" == "--" ]; then
+	hasdash=true
+    elif [ "$1" == "-h" -o "$1" == "--help" -o "$1" == "-V" -o "$1" == "--version" ]; then
+	# we pass these options to pplatex instead of latex
+	hasdash=true
+    fi
+    args="$args $1"
+    shift
+done
+
+if [ "$hasdash" != "true" ]; then
+    args="-- $args"
+fi
+
+$PPLATEX -c $COMMAND $PPLATEX_ARGS $args
+exit $?
