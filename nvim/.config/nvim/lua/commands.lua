@@ -2,7 +2,7 @@
 -- Commands
 -- ----------------------------------------
 local utils = require('utils')
-local cmd, set_option, get_option = utils.cmd, utils.set_option, utils.get_option
+local cmd = utils.cmd
 local normal_mode_set_keymap = utils.normal_mode_set_keymap
 local leader_keymap_table = utils.leader_keymap_table
 

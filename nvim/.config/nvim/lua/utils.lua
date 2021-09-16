@@ -5,9 +5,24 @@ local function has(feature)
     return (fn.has(feature) == 1)
 end
 
+-- path management functions
 local function get_path_separator()
   if has('win64') or has('win32') then return '\\' end
   return '/'
+end
+
+local function script_path()
+   local str = debug.getinfo(2, "S").source:sub(2)
+   return str:match("(.*" .. get_path_separator() .. ")")
+end
+
+local function get_parent_dir(path)
+    local separator = get_path_separator()
+    local pattern = "^(.+)" .. separator
+    -- if path has separator at end, remove it
+    path = path:gsub(separator .. '*$', '')
+    local parent_dir = path:match(pattern) .. separator
+    return parent_dir
 end
 
 local function join_path(...)
@@ -15,42 +30,7 @@ local function join_path(...)
   return table.concat({...}, separator)
 end
 
-local function set_nvim_variable(var_name, value)
-    mode = var_name:sub(1,1)
-    var_n = var_name:sub(3)
-    if mode == 'g' then
-        api.nvim_set_var(var_n, value)
-    elseif mode =='b' then
-        api.nvim_buf_set_var(0, var_n, value)
-    elseif mode =='w' then
-        api.nvim_win_set_var(0, var_n, value)
-    elseif mode =='t' then
-        api.nvim_tabpage_set_var(0, var_n, value)
-    elseif mode =='v' then
-        api.nvim_set_vvar(var_n, value)
-    end
-end
-
-local function set_option(scope, key, value, add)
-  add = add or false
-  if add then
-    if type(scopes[scope][key]) == 'string' then
-      scopes[scope][key] = scopes[scope][key] .. value
-      if scope ~= 'o' then scopes['o'][key] = scopes['o'][key] .. value end
-    elseif type(scopes[scope][key]) == 'number' then
-      scopes[scope][key] = scopes[scope][key] + value
-      if scope ~= 'o' then scopes['o'][key] = scopes['o'][key] + value end
-    end
-  else
-    scopes[scope][key] = value
-    if scope ~= 'o' then scopes['o'][key] = value end
-  end
-end
-
-local function get_option(scope, key)
-    return scopes[scope][key]
-end
-
+-- key mapping functions
 local function set_keymap(mode, keymap_table, options)
     options = options or {noremap = true, silent = true}
     m = mode:lower():sub(1,1)
@@ -95,6 +75,7 @@ local function leader_keymap_table(key_table)
   return leader_key_table
 end
 
+-- autocmd function
 function create_augroups(definitions)
   for group_name, definition in pairs(definitions) do
     cmd('augroup ' .. group_name)
@@ -107,6 +88,7 @@ function create_augroups(definitions)
   end
 end
 
+-- a generic deepcopy function
 function deepcopy(orig)
     local orig_type = type(orig)
     local copy
@@ -127,12 +109,10 @@ return {api = api,
         cmd = cmd,
         fn = fn,
         has = has,
-        get_path_separator= get_path_separator,
+        get_path_separator = get_path_separator,
+        script_path = script_path,
+        get_parent_dir = get_parent_dir,
         join_path = join_path,
-        deepcopy = deepcopy,
-        set_nvim_variable = set_nvim_variable,
-        set_option = set_option,
-        get_option = get_option,
         set_keymap = set_keymap,
         normal_mode_set_keymap = normal_mode_set_keymap,
         visual_mode_set_keymap = visual_mode_set_keymap,
@@ -143,4 +123,5 @@ return {api = api,
         terminal_mode_set_keymap = terminal_mode_set_keymap,
         leader_keymap_table = leader_keymap_table,
         create_augroups = create_augroups,
+        deepcopy = deepcopy,
     }

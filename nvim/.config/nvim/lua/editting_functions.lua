@@ -3,19 +3,18 @@
 -- ----------------------------------------
 local utils = require('utils')
 local cmd, fn = utils.cmd, utils.fn
-local set_option, get_option = utils.set_option, utils.get_option
 
 -- ---------------
 -- Quick spelling fix (first item in z= list)
 -- ---------------
 local function QuickSpellingFix()
-    if get_option('w', 'spell') then
+    if vim.opt.spell:get() then
         cmd('normal 1z=')
     else
         -- Enable spelling mode and do the correction
-        set_option('w', 'spell', true)
+        vim.opt.spell = true
         cmd('normal 1z=')
-        set_option('w', 'spell', false)
+        vim.opt.spell = false
     end
 end
 
@@ -40,13 +39,13 @@ end
 -- Paste using Paste Mode : Keeps indentation in source.
 -- ---------------
 local function PasteWithPasteMode()
-    if get_option('o', 'paste') then
+    if vim.opt.paste:get() then
         cmd('normal p')
     else
         -- Enable paste mode and paste the text, then disable paste mode.
-        set_option('o', 'paste', true)
+        vim.opt.paste = true
         cmd('normal p')
-        set_option('o', 'paste', false)
+        vim.opt.paste = false
     end
 end
 

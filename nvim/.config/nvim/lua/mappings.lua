@@ -3,7 +3,6 @@
 -- ----------------------------------------
 local utils = require('utils')
 local has, fn = utils.has, utils.fn
-local set_nvim_variable = utils.set_nvim_variable
 local set_keymap = utils.set_keymap
 local normal_mode_set_keymap = utils.normal_mode_set_keymap
 local insert_mode_set_keymap = utils.insert_mode_set_keymap
@@ -14,10 +13,10 @@ local leader_keymap_table = utils.leader_keymap_table
 
 -- Set leader to ,
 -- Note: This line MUST come before any <leader> mappings
-set_nvim_variable('g:mapleader', ',')
-set_nvim_variable('b:mapleader', ',')
-set_nvim_variable('g:maplocalleader', ' ')
-set_nvim_variable('b:maplocalleader', ' ')
+vim.g.mapleader = ','
+vim.b.mapleader = ','
+vim.g.maplocalleader = ' '
+vim.b.maplocalleader = ' '
 
 -- ---------------
 -- Usability Mappings
