@@ -1,6 +1,15 @@
 local api, cmd, fn = vim.api, vim.cmd, vim.fn
 local scopes = {o = vim.o, b = vim.bo, w = vim.wo}
 
+local programming_filetypes = {'c', 'cpp', 'java', 'go', 'php', 'javascript',
+                               'puppet', 'python', 'rust', 'twig', 'xml',
+                               'yml', 'perl', 'sql', 'html', 'css', 'vim',
+                               'markdown', 'tex', 'coffee', 'ruby', 'matlab',
+                               'lua', 'cmake'}
+local text_filetypes = {'markdown','text','textile', 'git', 'gitcommit',
+                        'plaintex', 'tex', 'latex', 'rst', 'asciidoc',
+                        'html', 'textile', 'pandoc'}
+
 local function has(feature)
     return (fn.has(feature) == 1)
 end
@@ -109,6 +118,8 @@ return {api = api,
         cmd = cmd,
         fn = fn,
         has = has,
+        programming_filetypes = programming_filetypes,
+        text_filetypes = text_filetypes,
         get_path_separator = get_path_separator,
         script_path = script_path,
         get_parent_dir = get_parent_dir,

@@ -3,7 +3,7 @@ local lsp_status = require('lsp-status')
 local saga = require('lspsaga')
 local lspkind = require('lspkind')
 local lspinstall = require('lspinstall')
-local cmp_nvim_lsp = require('cmp_nvim_lsp')
+--local cmp_nvim_lsp = require('cmp_nvim_lsp')
 local lsp, cmd = vim.lsp, vim.cmd
 local buf_keymap = vim.api.nvim_buf_set_keymap
 
@@ -94,7 +94,7 @@ local function setup_servers()
         --                                         lsp_status.capabilities, snippet_capabilities)
         local capabilities = vim.tbl_deep_extend('keep', config.capabilities or {},
                                          vim.lsp.protocol.make_client_capabilities())
-        config.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+        --config.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
         lspconfig[server].setup(config)
     end
 end

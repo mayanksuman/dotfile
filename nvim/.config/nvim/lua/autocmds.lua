@@ -3,12 +3,8 @@
 -- ----------------------------------------
 local utils = require('utils')
 local has = utils.has
+local programming_filetypes = table.concat(utils.programming_filetypes, ',')
 local create_augroups = utils.create_augroups
-
-programming_filetype = 'c,cpp,java,go,php,javascript,puppet,python,rust,' ..
-                       'twig,xml,yml,perl,sql,html,css,vim,markdown,tex,' ..
-                       'coffee,ruby,matlab,lua'
-
 
 if has('autocmd') then
     local autocmds = {
@@ -19,7 +15,7 @@ if has('autocmd') then
             {'BufEnter', '*',
             [[if (winnr('$') == 1 && exists('b:NERDTreeType') && b:NERDTreeType == 'primary') | q | endif]]},
             -- Remove trailing whitespaces and ^M chars
-            {'FileType '..programming_filetype..' autocmd BufWritePre',
+            {'FileType ' .. programming_filetypes .. ' autocmd BufWritePre',
             '<buffer>', ':StripTrailingWhitespace'},
 
             {'BufWritePost', '*', 'silent! :syntax sync fromstart<cr>:redraw!<cr>'},
