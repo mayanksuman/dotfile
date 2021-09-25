@@ -10,6 +10,8 @@ if [ "$(id -u)" = 0 ]; then
 	exit 1
 fi
 
+USERGROUP=$(id -gn)
+
 is_config_file_present(){
 	argAry1=("${!1}")
 	for item in ${argAry1[*]}
@@ -58,9 +60,24 @@ do
 	sudo -n true; sleep 60; kill -0 "$$" || exit; 
 done 2>/dev/null &
 
+step "Setting up local install paths"
+mkdir -p ~/.local
+sudo -E chown -R "$USER:$USERGROUP" ~/.local
+chmod g+s ~/.local
+mkdir -p ~/.local/{bin,programs,share,lib,include}
+ok
+
+action "Installing and configuring stow"
+sudo -E apt-get update && sudo apt-get install -ym stow
+stow -t ~ -R stow
+ok
+
 action "Initializing and updating submodule(s)"
 step "Installing git"
-sudo -E apt-get update && sudo -E apt-get install -ym git
+sudo -E apt-get install -ym git
+step "Configuring git"
+stow -t ~ -R git
+step "Updating git submodules"
 git submodule update --init --recursive
 cd 'zsh/.local/share/zsh/prezto' || exit
 git submodule update --init --recursive
@@ -79,7 +96,7 @@ ok
 
 step "Downloading and installing the required packages"
 # setting up environment
-sudo -E apt-get install -ym zsh tmux sed xsel stow neovim jq
+sudo -E apt-get install -ym zsh tmux sed xsel neovim jq
 # for C/C++ development
 sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
 	global exuberant-ctags cmake ccache
@@ -89,8 +106,6 @@ sudo -E apt-get install -ym python3-pip pipenv
 sudo -E apt-get install -ym libreoffice-script-provider-python \
 	libreoffice-l10n-in hunspell-hi libreoffice-l10n-en-gb hunspell-en-gb \
 	hunspell-en-us mythes-en-us libreoffice-lightproof-en
-info "Update the language settings in libreoffice menu"
-info "Tools>Options>Language Settings>Default Languages for Documents"
 # for markdown, latex and other text utilities
 sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
 	texlive-latex-extra texlive-formats-extra texlive-publishers \
@@ -127,16 +142,6 @@ sudo -E apt-get autoclean -ym
 sudo -E apt-get clean -ym
 ok
 
-step "Setting up local install paths"
-mkdir -p ~/.local
-mkdir -p ~/.local/{bin,programs,share,lib,include}
-sudo -E chown -R "$USER:$USER" ~/.local/lib
-sudo -E chown -R "$USER:$USER" ~/.local/bin
-sudo -E chown -R "$USER:$USER" ~/.local/programs
-sudo -E chown -R "$USER:$USER" ~/.local/include
-sudo -E chown -R "$USER:$USER" ~/.local/share
-ok
-
 step "Installing python programmes for system python"
 # Note: This file also setup pyenv. The idea is package that provide cli/gui 
 # entry points and are needed by user software like neovim is installed 
@@ -149,10 +154,6 @@ SYSPIP3=/usr/bin/pip3
 $SYSPIP3 install --user -U youtube-dl autopep8 black colorama cookiecutter \
 		proselint yamllint nose pytest jedi psutil setproctitle demjson \
 		pygments odfpy python-language-server virtualenvwrapper
-ok
-
-action "Configuring stow"
-stow -t ~ -R stow
 ok
 
 action "Configuring gdb"
@@ -330,10 +331,6 @@ fi
 ok
 info "nvim/vim configuration is complete"
 
-action "Configuring git"
-stow -t ~ -R git
-ok
-
 action "Setting up pyenv"
 step "Installing prerequisite"
 sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
@@ -452,9 +449,12 @@ ccache --max-size 32G
 ok
 
 info "Installation Complete."
+info ""
 info "Post Installation manual configuration"
 info "  The theme can be changed by issueing base16_* command in ZSH or BASH."
-info "	Font ligature support is turned off for gnome-terminal"
-info "	If needed it can be turned on by editing ~/.config/fontconfig/fonts.conf"
-info "You can uninstall all vim package and use neovim entirely."
-info "Use update-alternatives for that."
+info "	1. Font ligature support is turned off for gnome-terminal"
+info "	   If needed it can be turned on by editing ~/.config/fontconfig/fonts.conf"
+info "  2. Update the language settings in libreoffice menu"
+info "     Tools>Options>Language Settings>Default Languages for Documents"
+info "  3. You can uninstall all vim package and use neovim entirely."
+info "     Use update-alternatives for that."
