@@ -5,6 +5,7 @@ DEFAULT_FONT_NAME=FiraCode	# Any nerd font; put the file name without .zip part
 # Nerd font release is at https://github.com/ryanoasis/nerd-fonts/releases/latest
 
 . ./_scripts/msg.sh
+
 if [ "$(id -u)" = 0 ]; then
 	error "This script should not be run as root. Exitting"
 	exit 1
@@ -181,7 +182,8 @@ action "Setting up nodejs and npm for javascript/typescript development"
 #curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
 sudo -E apt-get install -ym nodejs npm
 mkdir -p "$HOME/.npm_packages"
-sudo -E chown -R "$USER:$USER" "$HOME/.npm_packages"
+sudo -E chown -R "$USER:$USERGROUP" "$HOME/.npm_packages"
+chmod g+s "$HOME/.npm_packages"
 stow -t ~ -R nodejs
 export PATH=$HOME/.npm_packages/bin:$PATH
 npm install -g typescript javascript-typescript-langserver
@@ -404,11 +406,12 @@ ok
 
 step "Configuring python modules"
 cd python || exit
+mkdir -p ~/.config/jupyter
+sudo -E chown -R "$USER:$USER" ~/.config/jupyter
+chmod g+s ~/.config/jupyter
 mkdir -p ~/.config/jupyter/lab/
-sudo -E chown -R "$USER:$USER" ~/.config/jupyter/lab
 # For installing Cheatsheets/Examples
 mkdir -p ~/.local/share/eg
-sudo -E chown -R "$USER:$USER" ~/.local/share/eg
 for dir in ./*
 do
 	stow -t ~ -R "${dir:2}"
@@ -422,7 +425,7 @@ bash -ic "source ~/.shell_common_config;eg -r; exit"
 ok
 
 step "Setting up $DEFAULT_FONT_NAME Nerd Font as default monospace font"
-info "If text do not feel right, change from tweak tool."
+info "If font do not feel right, change it from tweak tool."
 name_has_nerd=$(fc-list|grep "$DEFAULT_FONT_NAME"|cut -d ":" -f 2,3|grep "Nerd"|grep "style=Regular"|grep -v "Mono"|wc -l)
 name_has_nf=$(fc-list|grep "$DEFAULT_FONT_NAME"|cut -d ":" -f 2,3|grep "NF"|grep "style=Regular"|grep -v "Mono"|wc -l)
 if [ $name_has_nerd -ne 0 ]; then
