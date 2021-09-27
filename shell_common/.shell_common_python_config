@@ -30,30 +30,32 @@ export COOKIECUTTER_CONFIG="$HOME/.config/cookiecutter/cookiecutterrc.secret"
 
 # Intialize pyenv if present
 export PYENV_ROOT="$HOME/.pyenv"
-pathprepend "$PYENV_ROOT/bin"
-if command -v pyenv > /dev/null 2>&1; then
-	# pyenv is supported in zsh through prezto; manually enabling for bash only.
-	if [ -n "$BASH_VERSION" ]; then
-		eval "$(pyenv init -)"
-    	if [ -d $PYENV_ROOT/plugins/pyenv-virtualenv ]; then
-    	    eval "$(pyenv virtualenv-init -)"
+if [ -d "$PYENV_ROOT" ]; then
+    pathprepend "$PYENV_ROOT/bin"
+    if command -v pyenv > /dev/null 2>&1; then
+    	# pyenv is supported in zsh through prezto; manually enabling for bash only.
+    #if [ -n "$BASH_VERSION" ]; then
+    		eval "$(pyenv init -)"
+        	if [ -d $PYENV_ROOT/plugins/pyenv-virtualenv ]; then
+        	    eval "$(pyenv virtualenv-init -)"
+        	fi
+    #	fi
+    	pathprepend "$PYENV_ROOT/shims"
+    	pathprepend "$PYENV_ROOT/plugins/pyenv-virtualenv/shims"
+    
+    	# Some pyenv alias
+    	alias pa='pyenv activate'
+    	alias pd='pyenv deactivate'
+    	alias pl='pyenv local'
+    	alias pg='pyenv global'
+    	alias pi='pyenv install'
+    	alias pv='pyenv virtualenv'
+    
+    	# Better integration between pipenv and pyenv
+    	if [ -f $PYENV_ROOT/shims/python ] || [ -h $PYENV_ROOT/shims/python ]; then
+    		export PIPENV_PYTHON=="$PYENV_ROOT/shims/python"
     	fi
-	fi
-	pathprepend "$PYENV_ROOT/shims"
-	pathprepend "$PYENV_ROOT/plugins/pyenv-virtualenv/shims"
-
-	# Some pyenv alias
-	alias pa='pyenv activate'
-	alias pd='pyenv deactivate'
-	alias pl='pyenv local'
-	alias pg='pyenv global'
-	alias pi='pyenv install'
-	alias pv='pyenv virtualenv'
-
-	# Better integration between pipenv and pyenv
-	if [ -f $PYENV_ROOT/shims/python ] || [ -h $PYENV_ROOT/shims/python ]; then
-		export PIPENV_PYTHON=="$PYENV_ROOT/shims/python"
-	fi
+    fi
 fi
 
 # Some alias for ipython
