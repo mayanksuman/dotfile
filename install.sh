@@ -368,7 +368,8 @@ pyenv virtualenv miniconda3-latest jupyter||info "jupyter virtualenv exist."
 # stopping this nb_conda_kernels. Once built in kernelspec for jupyter is 
 # completed, the virtualenv may be moved to system python.
 # Note: Important nodejs is required for jupyter now.
-pyenv activate jupyter
+pyenv activate miniconda3-latest
+conda activate jupyter
 conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
 		  ipykernel nb_conda_kernels scipy
 #conda install -y jupyterlab-git jupyterlab_code_formatter
@@ -380,26 +381,28 @@ conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
 jupyter lab build
 conda clean -y --all
 python -m ipykernel install --user
-pyenv deactivate
+conda deactivate
 ok
 
 step "Setting up numerical/data science tools in miniconda3-latest"
 pyenv virtualenv miniconda3-latest conda_tools||info "conda_tools virtualenv exist."
-pyenv activate conda_tools
+pyenv activate miniconda3-latest
+conda activate conda_tools
 conda install -y python==3.8.6;	# Last tested python with Orange3
 conda install -y orange3 glueviz;
 conda clean -y --all
-pyenv deactivate
+conda deactivate
 ok
 
 step "Setting up general scientific python virtualenv from miniconda3-latest"
 pyenv virtualenv miniconda3-latest num_python||info "num_python virtualenv exist."
-pyenv activate num_python
+pyenv activate miniconda3-latest
+conda activate num_python
 conda install -y numpy scipy statsmodels pandas xarray sympy\
 		geopandas matplotlib cartopy h5py netcdf4 dask \
 		bottleneck seaborn xlwt ipykernel
 conda clean -y --all
-pyenv deactivate
+conda deactivate
 ok
 
 step "Setting up the default python version and tools binary in pyenv"

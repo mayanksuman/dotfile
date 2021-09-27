@@ -15,7 +15,6 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=200
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
 
 # load prezto
 source "$HOME/.local/share/zsh/prezto/init.zsh"
