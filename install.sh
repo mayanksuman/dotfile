@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-PYTHON_VERSION=3.8.6;	# default pthon version installed by pyenv
+PYTHON_VERSION=3.8.6	# default pthon version installed by pyenv
+SUDOENABLED=true        # enable or disable sudo support: please note installing software is only supported in sudo enabled mode
 DEFAULT_FONT_NAME=FiraCode	# Any nerd font; put the file name without .zip part
 # Nerd font release is at https://github.com/ryanoasis/nerd-fonts/releases/latest
+
 
 . ./_scripts/msg.sh
 
@@ -52,30 +54,50 @@ else
 fi
 ok
 
-info "  You need to be a sudo user for installing softwares."
-info "  Please give your password if demanded."
-sudo -v
-# Keep-alive: update existing sudo time stamp until the script has finished
-while true; 
-do
-	sudo -n true; sleep 60; kill -0 "$$" || exit; 
-done 2>/dev/null &
+if [ "$SUDOENABLED" = true ]; then
+    info "  You need to be a sudo user for installing softwares."
+    info "  Please give your password if demanded."
+    sudo -v
+    # Keep-alive: update existing sudo time stamp until the script has finished
+    while true; 
+    do
+        sudo -n true; sleep 60; kill -0 "$$" || exit; 
+    done 2>/dev/null &
+fi
 
 step "Setting up local install paths"
 mkdir -p ~/.local
-sudo -E chown -R "$USER:$USERGROUP" ~/.local
+if [ "$SUDOENABLED" = true ]; then
+    sudo -E chown -R "$USER:$USERGROUP" ~/.local
+else
+    chown -R "$USER:$USERGROUP" ~/.local
+fi
 chmod g+s ~/.local
 mkdir -p ~/.local/{bin,programs,share,lib,include}
 ok
 
 action "Installing and configuring stow"
-sudo -E apt-get update && sudo apt-get install -ym stow
+if [ "$SUDOENABLED" = true ]; then
+    sudo -E apt-get update && sudo apt-get install -ym stow
+else
+    if [ which stow > /dev/null ]; then
+    else
+    # TODO: build stow
+    fi
+fi
 stow -t ~ -R stow
 ok
 
 action "Initializing and updating submodule(s)"
 step "Installing git"
-sudo -E apt-get install -ym git
+if [ "$SUDOENABLED" = true ]; then
+    sudo -E apt-get install -ym git
+else
+    if [ which git > /dev/null ]; then
+    else
+    # TODO: build git
+    fi
+fi
 step "Configuring git"
 stow -t ~ -R git
 step "Updating git submodules"
@@ -86,64 +108,68 @@ cd - || exit
 git submodule foreach git pull origin master
 ok
 
-action "Installing required packages"
-step "Upgrading the system softwares"
-sudo -E apt-get update && sudo -E apt-get upgrade -ym
-ok
+if [ "$SUDOENABLED" = true ]; then
+    action "Installing required system packages"
+    step "Upgrading the system softwares"
+    sudo -E apt-get update && sudo -E apt-get upgrade -ym
+    ok
 
-step "Installing download managers and backup software"
-sudo -E apt-get install -ym curl aria2 rsync
-ok
+    step "Installing download managers and backup software"
+    sudo -E apt-get install -ym curl aria2 rsync wget
+    ok
 
-step "Downloading and installing the required packages"
-# setting up environment
-sudo -E apt-get install -ym zsh tmux sed xsel neovim jq
-# for C/C++ development
-sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
-	global exuberant-ctags cmake ccache
-# for python (pip3 and pipenv)
-sudo -E apt-get install -ym python3-pip pipenv
-# for python, indic language and proper english (US) support in libreoffice
-sudo -E apt-get install -ym libreoffice-script-provider-python \
-	libreoffice-l10n-in hunspell-hi libreoffice-l10n-en-gb hunspell-en-gb \
-	hunspell-en-us mythes-en-us libreoffice-lightproof-en
-# for markdown, latex and other text utilities
-sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
-	texlive-latex-extra texlive-formats-extra texlive-publishers \
-	texlive-science texworks texlive-bibtex-extra biber texlive-font-utils \
-	chktex tidy odt2txt dos2unix cm-super ripgrep
-# sandboxing support
-sudo -E apt-get install -ym firejail
-# some utilities
-sudo -E apt-get install -ym youtube-dl
-# for php composer framework
-sudo -E apt-get install -ym composer
-# for common truetype font
-sudo -E apt-get install -ym ttf-mscorefonts-installer
-# Install fira code font for console
-sudo -E apt-get install -ym fonts-firacode
-# Install fonts similar to Helvetica fonts
-sudo -E apt-get install -ym fonts-freefont-ttf
-# for english console dictionary
-# Associated dictionary files can be downloaded from http://download.huzheng.org/ 
-# or https://web.archive.org/web/20200702000038/http://download.huzheng.org/
-sudo -E apt-get install -ym sdcv
-# Add unrar support in archive-manager
-sudo -E apt-get install -ym unrar
-# for docker
-sudo -E apt-get install -ym docker.io docker-compose
-# for GIS related work
-sudo -E apt-get install -ym proj-bin libproj-dev gdal-bin libgdal-dev python3-gdal \
-	libgeos++-dev libgeos-dev
-ok
+    step "Downloading and installing the required packages"
+    # setting up environment
+    sudo -E apt-get install -ym zsh tmux sed xsel neovim jq
+    # for C/C++ development
+    sudo -E apt-get install -ym build-essential clang clang-tools clang-tidy \
+        global exuberant-ctags cmake ccache
+    # for python (pip3 and pipenv)
+    sudo -E apt-get install -ym python3-pip pipenv
+    # for python, indic language and proper english (US) support in libreoffice
+    sudo -E apt-get install -ym libreoffice-script-provider-python \
+        libreoffice-l10n-in hunspell-hi libreoffice-l10n-en-gb hunspell-en-gb \
+        hunspell-en-us mythes-en-us libreoffice-lightproof-en
+    # for markdown, latex and other text utilities
+    sudo -E apt-get install -ym pandoc markdown texlive dvipng texlive-luatex \
+        texlive-latex-extra texlive-formats-extra texlive-publishers \
+        texlive-science texworks texlive-bibtex-extra biber texlive-font-utils \
+        chktex tidy odt2txt dos2unix cm-super ripgrep
+    # Enable symbolic math calculation for Latex files (in vim session)
+    sudo -E apt-get install -ym python3-sympy
+    # sandboxing support
+    sudo -E apt-get install -ym firejail
+    # some utilities
+    sudo -E apt-get install -ym youtube-dl
+    # for php composer framework
+    sudo -E apt-get install -ym composer
+    # for common truetype font
+    sudo -E apt-get install -ym ttf-mscorefonts-installer
+    # Install fira code font for console
+    sudo -E apt-get install -ym fonts-firacode
+    # Install fonts similar to Helvetica fonts
+    sudo -E apt-get install -ym fonts-freefont-ttf
+    # for english console dictionary
+    # Associated dictionary files can be downloaded from http://download.huzheng.org/ 
+    # or https://web.archive.org/web/20200702000038/http://download.huzheng.org/
+    sudo -E apt-get install -ym sdcv
+    # Add unrar support in archive-manager
+    sudo -E apt-get install -ym unrar
+    # for docker
+    sudo -E apt-get install -ym docker.io docker-compose
+    # for GIS related work
+    sudo -E apt-get install -ym proj-bin libproj-dev gdal-bin libgdal-dev python3-gdal \
+                        libgeos++-dev libgeos-dev
+    ok
 
-step "Removing unnecessary packages"
-sudo -E apt-get autoremove -ym
-sudo -E apt-get autoclean -ym
-sudo -E apt-get clean -ym
-ok
+    step "Removing unnecessary packages"
+    sudo -E apt-get autoremove -ym
+    sudo -E apt-get autoclean -ym
+    sudo -E apt-get clean -ym
+    ok
+fi
 
-step "Installing python programmes for system python"
+action "Installing python packages for system python"
 # Note: This file also setup pyenv. The idea is package that provide cli/gui 
 # entry points and are needed by user software like neovim is installed 
 # outside pyenv, so they are available no matter which pyenv environment 
@@ -161,32 +187,42 @@ action "Configuring gdb"
 stow -t ~ -R gdb
 ok
 
-action "Installing fonts"
-mkdir -p ~/.local/share/fonts/
-stow -t ~ -R fonts
-ok
-step "Downloading $DEFAULT_FONT_NAME Nerd Font and installing it"
-curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest\
-	|jq -r ".assets[] | select(.name | test(\"${DEFAULT_FONT_NAME}\"))"\
-	|jq -r ".browser_download_url"\
-	|wget -O $HOME/.sel_font.zip -i - && \
-	unzip $HOME/.sel_font.zip -d $HOME/.local/share/fonts/$DEFAULT_FONT_NAME &&\
-	rm -rf $HOME/.sel_font.zip
-ok
-step "Updating font cache"
-sudo fc-cache -f -v
-ok
+if [ "$SUDOENABLED" = true ]; then
+    action "Installing fonts"
+    mkdir -p ~/.local/share/fonts/
+    stow -t ~ -R fonts
+    ok
+    step "Downloading $DEFAULT_FONT_NAME Nerd Font and installing it"
+    curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest\
+    	|jq -r ".assets[] | select(.name | test(\"${DEFAULT_FONT_NAME}\"))"\
+    	|jq -r ".browser_download_url"\
+    	|wget -O $HOME/.sel_font.zip -i - && \
+    	unzip $HOME/.sel_font.zip -d $HOME/.local/share/fonts/$DEFAULT_FONT_NAME &&\
+    	rm -rf $HOME/.sel_font.zip
+    ok
+    step "Updating font cache"
+    sudo fc-cache -f -v
+    ok
+fi
 
 action "Setting up nodejs and npm for javascript/typescript development"
 # for nodejs and javascript/typescript development
 #curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-sudo -E apt-get install -ym nodejs npm
+if [ "$SUDOENABLED" = true ]; then
+    sudo -E apt-get install -ym nodejs npm
+else
+    # TODO: Build nodejs and npm
+fi
 mkdir -p "$HOME/.npm_packages"
-sudo -E chown -R "$USER:$USERGROUP" "$HOME/.npm_packages"
+if [ "$SUDOENABLED" = true ]; then
+    sudo -E chown -R "$USER:$USERGROUP" "$HOME/.npm_packages"
+else
+    chown -R "$USER:$USERGROUP" "$HOME/.npm_packages"
+fi
 chmod g+s "$HOME/.npm_packages"
 stow -t ~ -R nodejs
 export PATH=$HOME/.npm_packages/bin:$PATH
-npm install -g typescript javascript-typescript-langserver
+npm install typescript javascript-typescript-langserver
 ok
 
 action "Configuring Bash"
@@ -205,7 +241,7 @@ step "Setting up ZSH as default shell"
 TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
 if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
 	# check for chsh and change the shell
-	if hash chsh >/dev/null 2>&1; then
+	if [ hash chsh >/dev/null 2>&1 ] && [ which zsh > /dev/null ]; then
 		info "Please enter your password if asked."
 		chsh -s "$(grep /zsh$ /etc/shells | tail -1)"
 		ok
@@ -289,10 +325,6 @@ step "Enabling python support in nvim and its plugins"
 $SYSPIP3 install --user -U pynvim notedown neovim-remote
 ok
 
-step "Enable symbolic math calculation for Latex files"
-sudo -E apt-get install -ym python3-sympy
-ok
-
 # step "Enabling node.js support in nvim"
 # npm install -g neovim
 # ok
@@ -315,8 +347,7 @@ ok
 step "Fixing spell check in vim if any"
 read -p "Do you face any problem for grammar check in vim?(Y/N) " -n 1 -r
 echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	if [ "$(ls -A ~/.local/share/nvim/plugged/vim-grammarous/misc)" ]; then
 		echo "If you are facing problem with spell check in vim"
 		echo "Delete the old languagetools"
@@ -335,10 +366,14 @@ info "nvim/vim configuration is complete"
 
 action "Setting up pyenv"
 step "Installing prerequisite"
-sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
-	libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev \
-	libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl
-ok
+if [ "$SUDOENABLED" = true ]; then
+    sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
+    	libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev tk-dev \
+    	libncursesw5-dev xz-utils libffi-dev liblzma-dev python3-openssl
+    ok
+else
+    info "prerequisite packages for pyenv cannot be installed without sudo support."
+fi
 
 step "Setting up conda environment"
 cd ~/.dotfile/python || exit
@@ -407,7 +442,11 @@ ok
 step "Configuring python modules"
 cd python || exit
 mkdir -p ~/.config/jupyter
-sudo -E chown -R "$USER:$USER" ~/.config/jupyter
+if [ "$SUDOENABLED" = true ]; then
+    sudo -E chown -R "$USER:$USERGROUP" ~/.config/jupyter
+else
+    chown -R "$USER:$USERGROUP" ~/.config/jupyter
+fi
 chmod g+s ~/.config/jupyter
 mkdir -p ~/.config/jupyter/lab/
 # For installing Cheatsheets/Examples
@@ -424,24 +463,26 @@ step "Indexing the cheatsheets/Examples"
 bash -ic "source ~/.shell_common_config;eg -r; exit"
 ok
 
-step "Setting up $DEFAULT_FONT_NAME Nerd Font as default monospace font"
-info "If font do not feel right, change it from tweak tool."
-name_has_nerd=$(fc-list|grep "$DEFAULT_FONT_NAME"|cut -d ":" -f 2,3|grep "Nerd"|grep "style=Regular"|grep -v "Mono"|wc -l)
-name_has_nf=$(fc-list|grep "$DEFAULT_FONT_NAME"|cut -d ":" -f 2,3|grep "NF"|grep "style=Regular"|grep -v "Mono"|wc -l)
-if [ $name_has_nerd -ne 0 ]; then
-	gsettings set org.gnome.desktop.interface monospace-font-name \
-		"$DEFAULT_FONT_NAME Nerd Font Regular 12"
-else
-	if [ $name_has_nf -ne 0 ]; then
-		gsettings set org.gnome.desktop.interface monospace-font-name \
-			"$DEFAULT_FONT_NAME NF Regular 12"
-	else
-		warning "I cannot find appropiriate font file."
-		warning "Please select the $DEFAULT_FONT_NAME nerd font manually"
-		warning "in gnome-tweak tool."
-	fi
+if [ which gsettings > /dev/null ]; then
+    step "Setting up $DEFAULT_FONT_NAME Nerd Font as default monospace font"
+    info "If font do not feel right, change it from tweak tool."
+    name_has_nerd=$(fc-list|grep "$DEFAULT_FONT_NAME"|cut -d ":" -f 2,3|grep "Nerd"|grep "style=Regular"|grep -v "Mono"|wc -l)
+    name_has_nf=$(fc-list|grep "$DEFAULT_FONT_NAME"|cut -d ":" -f 2,3|grep "NF"|grep "style=Regular"|grep -v "Mono"|wc -l)
+    if [ $name_has_nerd -ne 0 ]; then
+    	gsettings set org.gnome.desktop.interface monospace-font-name \
+    		"$DEFAULT_FONT_NAME Nerd Font Regular 12"
+    else
+    	if [ $name_has_nf -ne 0 ]; then
+    		gsettings set org.gnome.desktop.interface monospace-font-name \
+    			"$DEFAULT_FONT_NAME NF Regular 12"
+    	else
+    		warning "I cannot find appropiriate font file."
+    		warning "Please select the $DEFAULT_FONT_NAME nerd font manually"
+    		warning "in gnome-tweak tool."
+    	fi
+    fi
+    ok
 fi
-ok
 
 step "Applying base16 brewer theme"
 bash -ic "source ~/.shell_common_config;base16_brewer < /dev/null; exit"
