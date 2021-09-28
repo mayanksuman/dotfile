@@ -362,32 +362,35 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     step "Installing/updating miniconda3"
-    curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh --output ~/miniconda3.sh
-    mkdir -p ~/.miniconda3
-    bash ~/miniconda3.sh -b -u -p ~/.miniconda3
-    rm -f ~/miniconda3.sh
+    #curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh --output ~/miniconda3.sh
+    #mkdir -p ~/.miniconda3
+    #bash ~/miniconda3.sh -b -u -p ~/.miniconda3
+    #rm -f ~/miniconda3.sh
     source "$HOME/.shell_common_config"
     ok
 
+	step "Setting up general jupyterlab virtualenv in miniconda3"
     conda activate 
-    conda create --name jupyter 
+    conda create -y --name jupyter||info "jupyter virtualenv exist."
     conda activate jupyter
     conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
-          ipykernel nb_conda_kernels scipy
+          ipykernel nb_conda_kernels scipy ipyparallel
     jupyter lab build 
     conda deactivate
-    
-    step "Setting up numerical/data science tools in miniconda3-latest"
+    ok
+
+    step "Setting up numerical/data science tools in miniconda3"
     conda activate 
-    conda create --name conda_tools||info "conda_tools virtualenv exist."
+    conda create -y --name conda_tools||info "conda_tools virtualenv exist."
     conda activate conda_tools
     conda install -y python==3.8.6;	# Last tested python with Orange3
     conda install -y orange3 glueviz;
     conda deactivate
+	ok
 
-    step "Setting up general scientific python virtualenv from miniconda3-latest"
+    step "Setting up general scientific python virtualenv in miniconda3"
     conda activate
-    conda create --name num_python||info "num_python virtualenv exist."
+    conda create -y --name num_python||info "num_python virtualenv exist."
     conda activate num_python
     conda install -y numpy scipy statsmodels pandas xarray sympy\
     		geopandas matplotlib cartopy h5py netcdf4 dask \
@@ -395,7 +398,6 @@ then
     conda clean -y --all
     conda deactivate
     ok
-
 fi 
 
 read -p "Do you want to setup pyenv?(Y/N) " -n 1 -r
@@ -430,7 +432,7 @@ then
     # Note: Important nodejs is required for jupyter now.
     pyenv activate jupyter
     conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
-    		  ipykernel nb_conda_kernels scipy
+    		  ipykernel nb_conda_kernels scipy ipyparallel
     #conda install -y jupyterlab-git jupyterlab_code_formatter
     #jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
     #                        jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
