@@ -170,7 +170,7 @@ curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest\
 	|jq -r ".assets[] | select(.name | test(\"${DEFAULT_FONT_NAME}\"))"\
 	|jq -r ".browser_download_url"\
 	|wget -O $HOME/.sel_font.zip -i - && \
-	unzip $HOME/.sel_font.zip -d $HOME/.local/share/fonts/$DEFAULT_FONT_NAME &&\
+	unzip $HOME/.sel_font.zip -o -d $HOME/.local/share/fonts/$DEFAULT_FONT_NAME &&\
 	rm -rf $HOME/.sel_font.zip
 ok
 step "Updating font cache"
