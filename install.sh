@@ -333,78 +333,13 @@ fi
 ok
 info "nvim/vim configuration is complete"
 
-action "Setting up pyenv"
-step "Installing prerequisite"
-sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
-	libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev \
-	libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl
-ok
+
+action "Setting up local python install (miniconda3/pyenv)"
 
 step "Setting up conda environment"
 cd ~/.dotfile/python || exit
 stow -t ~ -R conda
 cd - || exit
-ok
-
-step "Installing/updating pyenv"
-if which pyenv > /dev/null; then
-	pyenv update
-else
-	curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-	source "$HOME/.shell_common_config"
-fi
-ok
-
-step "Installing python $PYTHON_VERSION and miniconda3-latest in pyenv"
-pyenv install -s "$PYTHON_VERSION"
-pyenv install -s miniconda3-latest
-ok
-
-step "Setting up jupyterlab in miniconda3-latest virtualenv tools"
-pyenv virtualenv miniconda3-latest jupyter||info "jupyter virtualenv exist."
-# This virtulenv should be moved to system python but the package that is 
-# stopping this nb_conda_kernels. Once built in kernelspec for jupyter is 
-# completed, the virtualenv may be moved to system python.
-# Note: Important nodejs is required for jupyter now.
-pyenv activate miniconda3-latest
-conda activate jupyter
-conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
-		  ipykernel nb_conda_kernels scipy
-#conda install -y jupyterlab-git jupyterlab_code_formatter
-#jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
-#                        jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
-#                        @ryantam626/jupyterlab_code_formatter;
-#pip install jupyterlab_sql
-#jupyter serverextension enable jupyterlab_sql --py --sys-prefix
-jupyter lab build
-conda clean -y --all
-python -m ipykernel install --user
-conda deactivate
-ok
-
-step "Setting up numerical/data science tools in miniconda3-latest"
-pyenv virtualenv miniconda3-latest conda_tools||info "conda_tools virtualenv exist."
-pyenv activate miniconda3-latest
-conda activate conda_tools
-conda install -y python==3.8.6;	# Last tested python with Orange3
-conda install -y orange3 glueviz;
-conda clean -y --all
-conda deactivate
-ok
-
-step "Setting up general scientific python virtualenv from miniconda3-latest"
-pyenv virtualenv miniconda3-latest num_python||info "num_python virtualenv exist."
-pyenv activate miniconda3-latest
-conda activate num_python
-conda install -y numpy scipy statsmodels pandas xarray sympy\
-		geopandas matplotlib cartopy h5py netcdf4 dask \
-		bottleneck seaborn xlwt ipykernel
-conda clean -y --all
-conda deactivate
-ok
-
-step "Setting up the default python version and tools binary in pyenv"
-pyenv global "$PYTHON_VERSION" jupyter conda_tools
 ok
 
 step "Configuring python modules"
@@ -421,6 +356,116 @@ do
 done
 cd - || exit
 ok
+
+read -p "Do you want to setup miniconda3?(Y/N) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    step "Installing/updating miniconda3"
+    curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh --output ~/miniconda3.sh
+    mkdir -p ~/.miniconda3
+    bash ~/miniconda3.sh -b -u -p ~/.miniconda3
+    rm -f ~/miniconda3.sh
+    source "$HOME/.shell_common_config"
+    ok
+
+    conda activate 
+    conda create --name jupyter 
+    conda activate jupyter
+    conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
+          ipykernel nb_conda_kernels scipy
+    jupyter lab build 
+    conda deactivate
+    
+    step "Setting up numerical/data science tools in miniconda3-latest"
+    conda activate 
+    conda create --name conda_tools||info "conda_tools virtualenv exist."
+    conda activate conda_tools
+    conda install -y python==3.8.6;	# Last tested python with Orange3
+    conda install -y orange3 glueviz;
+    conda deactivate
+
+    step "Setting up general scientific python virtualenv from miniconda3-latest"
+    conda activate
+    conda create --name num_python||info "num_python virtualenv exist."
+    conda activate num_python
+    conda install -y numpy scipy statsmodels pandas xarray sympy\
+    		geopandas matplotlib cartopy h5py netcdf4 dask \
+    		bottleneck seaborn xlwt ipykernel
+    conda clean -y --all
+    conda deactivate
+    ok
+
+fi 
+
+read -p "Do you want to setup pyenv?(Y/N) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    step "Installing prerequisite"
+    sudo -E apt-get install -ym make build-essential libssl-dev zlib1g-dev \
+    	libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev \
+    	libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl
+    ok
+    
+    step "Installing/updating pyenv"
+    if which pyenv > /dev/null; then
+    	pyenv update
+    else
+    	curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+    fi
+    source "$HOME/.shell_common_config"
+    ok
+    
+    step "Installing python $PYTHON_VERSION and miniconda3-latest in pyenv"
+    pyenv install -s "$PYTHON_VERSION"
+    pyenv install -s miniconda3-latest
+    ok
+    
+    step "Setting up jupyterlab in miniconda3-latest virtualenv tools"
+    pyenv virtualenv miniconda3-latest jupyter||info "jupyter virtualenv exist."
+    # This virtulenv should be moved to system python but the package that is 
+    # stopping this nb_conda_kernels. Once built in kernelspec for jupyter is 
+    # completed, the virtualenv may be moved to system python.
+    # Note: Important nodejs is required for jupyter now.
+    pyenv activate jupyter
+    conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
+    		  ipykernel nb_conda_kernels scipy
+    #conda install -y jupyterlab-git jupyterlab_code_formatter
+    #jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
+    #                        jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
+    #                        @ryantam626/jupyterlab_code_formatter;
+    #pip install jupyterlab_sql
+    #jupyter serverextension enable jupyterlab_sql --py --sys-prefix
+    jupyter lab build
+    conda clean -y --all
+    python -m ipykernel install --user
+    pyenv deactivate
+    ok
+    
+    step "Setting up numerical/data science tools in miniconda3-latest"
+    pyenv virtualenv miniconda3-latest conda_tools||info "conda_tools virtualenv exist."
+    pyenv activate conda_tools
+    conda install -y python==3.8.6;	# Last tested python with Orange3
+    conda install -y orange3 glueviz;
+    conda clean -y --all
+    pyenv deactivate
+    ok
+    
+    step "Setting up general scientific python virtualenv from miniconda3-latest"
+    pyenv virtualenv miniconda3-latest num_python||info "num_python virtualenv exist."
+    pyenv activate num_python
+    conda install -y numpy scipy statsmodels pandas xarray sympy\
+    		geopandas matplotlib cartopy h5py netcdf4 dask \
+    		bottleneck seaborn xlwt ipykernel
+    conda clean -y --all
+    pyenv deactivate
+    ok
+    
+    step "Setting up the default python version and tools binary in pyenv"
+    pyenv global "$PYTHON_VERSION" jupyter conda_tools
+    ok
+fi
 
 action "Started final configuration changes"
 step "Indexing the cheatsheets/Examples"
