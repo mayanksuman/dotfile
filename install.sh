@@ -432,7 +432,8 @@ then
     # Note: Important nodejs is required for jupyter now.
     pyenv activate jupyter
     conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
-    		  ipykernel nb_conda_kernels scipy ipyparallel
+    		  ipykernel nb_conda_kernels scipy ipyparallel jedi==0.17.2 
+	conda install nodejs
     #conda install -y jupyterlab-git jupyterlab_code_formatter
     #jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
     #                        jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
@@ -459,7 +460,16 @@ then
     pyenv activate num_python
     conda install -y numpy scipy statsmodels pandas xarray sympy\
     		geopandas matplotlib cartopy h5py netcdf4 dask \
-    		bottleneck seaborn xlwt ipykernel
+    		bottleneck seaborn xlwt ipykernel 
+	#conda install esmpy h5py fluiddyn dask taudem tempest-extremes cdo "mpi=*=mpich"
+	#conda install compilers  
+	#conda install jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
+	#	ipykernel nb_conda_kernels ipyparallel jedi==0.17.2 
+	#conda install nodejs
+	#conda install numpy scipy matplotlib pandas xarray statsmodels sympy \
+	#	bottleneck seaborn xlwt
+	#conda install satpy fiona geopandas cartopy xesmf nc-time-axis
+	#jupyter lab build
     conda clean -y --all
     pyenv deactivate
     ok
