@@ -199,7 +199,7 @@ if [ -x "$(command -v R)" ]; then
 fi
 
 # fzf helper functions
-source ~/.shell_common_fzf_config
+#source ~/.shell_common_fzf_config
 
 # Some python specific commands
 source ~/.shell_common_python_config
