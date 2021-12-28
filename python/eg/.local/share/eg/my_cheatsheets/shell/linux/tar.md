@@ -9,6 +9,10 @@
 	- `J` : Working with xzzipped archive (.tar.xz)
 	- `v` : Verbose output
 
+`tar` can be used with multiple compression algorithms, such as `gzip`, `bzip2`,
+`xz`, `lzop`, `lzma`, `lzip`, `zstd` etc. Corresponding flags are `--` appended
+to compression algorithm, such as `--lzma` for `lzma`.
+
 ## Examples
 
 - Extract[x] source.tar file[f]
