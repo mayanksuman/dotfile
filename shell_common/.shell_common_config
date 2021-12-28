@@ -204,5 +204,20 @@ fi
 # Some python specific commands
 source ~/.shell_common_python_config
 
+# Source custom config files, if present 
+if [[ -f "${HOME}/.shell_custom_config" ]]; then
+	source "${HOME}/.shell_custom_config"
+fi 
+if [[ -f "${HOME}/.bash_custom_config" ]]; then
+	if [ -n "$BASH_VERSION" ]; then
+		source "${HOME}/.bash_custom_config"
+	fi
+fi 
+if [[ -f "${HOME}/.zsh_custom_config" ]]; then
+	if [ -n "$ZSH_VERSION" ]; then
+		source "${HOME}/.zsh_custom_config"
+	fi
+fi
+
 # unset the path related functions
 unset pathprepend pathappend pathremove
