@@ -21,4 +21,6 @@ source "$HOME/.local/share/zsh/prezto/init.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source "$HOME/.shell_common_config"
+[ -n "$PS1" ] && source "$HOME/.shell_common_config"
+# source "$HOME/.shell_common_config"
+if [ -e /home/mayank/.nix-profile/etc/profile.d/nix.sh ]; then . /home/mayank/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

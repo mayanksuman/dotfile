@@ -153,8 +153,8 @@ if [ "$SUDOENABLED" = true ]; then
     # Associated dictionary files can be downloaded from http://download.huzheng.org/ 
     # or https://web.archive.org/web/20200702000038/http://download.huzheng.org/
     sudo -E apt-get install -ym sdcv
-    # Add unrar support in archive-manager
-    sudo -E apt-get install -ym unrar
+    # Add 7zip and rar support in archive-manager
+    sudo -E apt-get install -ym p7zip-full  p7zip-rar
     # for docker
     sudo -E apt-get install -ym docker.io docker-compose
     # for GIS related work
@@ -230,7 +230,7 @@ ok
 action "Configuring Bash"
 stow -t ~ -R shell_common
 # Check for source line; if it does not exist then add it in ~/.bashrc
-comm_shell_line='[ -z "$PS1" ] && echo "" || source "$HOME/.shell_common_config"'
+comm_shell_line='[ -n "$PS1" ] && source "$HOME/.shell_common_config"'
 if ! grep -qsFx "$comm_shell_line" ~/.bashrc ; then
 	echo "$comm_shell_line">>~/.bashrc
 fi
@@ -323,6 +323,10 @@ step "Setting up new nvim/vim configuration"
 stow -t ~ -R nvim
 ok
 
+step "Setting up pplatex"
+stow -t ~ -R pplatex
+ok
+
 step "Enabling python support in nvim and its plugins"
 $SYSPIP3 install --user -U pynvim notedown neovim-remote
 ok
@@ -336,7 +340,7 @@ ok
 # ok
 
 step "Installing vim plugins"
-nvim +PlugInstall +PlugUpdate +UpdateRemotePlugins +PlugUpgrade +PlugClean +qa
+nvim +PackerInstall +PackerClean +PackerUpdate +UpdateRemotePlugins +PackerCompile +qa
 ok
 
 step "Installing Language Servers"
@@ -369,9 +373,70 @@ info "nvim/vim configuration is complete"
 action "Setting up local python install (miniconda3/pyenv)"
 
 step "Setting up conda environment"
-cd ~/.dotfile/python || exit
+cd python || exit
 stow -t ~ -R conda
 cd - || exit
+ok
+
+step "Installing/updating pyenv"
+if which pyenv > /dev/null; then
+	pyenv update
+else
+	curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+	source "$HOME/.shell_common_config"
+fi
+ok
+
+step "Installing python $PYTHON_VERSION and miniconda3-latest in pyenv"
+pyenv install -s "$PYTHON_VERSION"
+pyenv install -s miniconda3-latest
+ok
+
+step "Setting up jupyterlab in miniconda3-latest virtualenv tools"
+pyenv virtualenv miniconda3-latest jupyter||info "jupyter virtualenv exist."
+# This virtulenv should be moved to system python but the package that is 
+# stopping this nb_conda_kernels. Once built in kernelspec for jupyter is 
+# completed, the virtualenv may be moved to system python.
+# Note: Important nodejs is required for jupyter now.
+pyenv activate miniconda3-latest
+conda activate jupyter
+conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet ipympl \
+		  ipykernel nb_conda_kernels scipy
+#conda install -y jupyterlab-git jupyterlab_code_formatter
+#jupyter-labextension install @jupyterlab/toc @jupyterlab/geojson-extension \
+#                        jupyterlab-spreadsheet @krassowski/jupyterlab_go_to_definition \
+#                        @ryantam626/jupyterlab_code_formatter;
+#pip install jupyterlab_sql
+#jupyter serverextension enable jupyterlab_sql --py --sys-prefix
+jupyter lab build
+conda clean -y --all
+python -m ipykernel install --user
+conda deactivate
+ok
+
+step "Setting up numerical/data science tools in miniconda3-latest"
+pyenv virtualenv miniconda3-latest conda_tools||info "conda_tools virtualenv exist."
+pyenv activate miniconda3-latest
+conda activate conda_tools
+conda install -y python==3.8.6;	# Last tested python with Orange3
+conda install -y orange3 glueviz;
+conda clean -y --all
+conda deactivate
+ok
+
+step "Setting up general scientific python virtualenv from miniconda3-latest"
+pyenv virtualenv miniconda3-latest num_python||info "num_python virtualenv exist."
+pyenv activate miniconda3-latest
+conda activate num_python
+conda install -y numpy scipy statsmodels pandas xarray sympy\
+		geopandas matplotlib cartopy h5py netcdf4 dask \
+		bottleneck seaborn xlwt ipykernel
+conda clean -y --all
+conda deactivate
+ok
+
+step "Setting up the default python version and tools binary in pyenv"
+pyenv global "$PYTHON_VERSION" jupyter conda_tools
 ok
 
 step "Configuring python modules"
