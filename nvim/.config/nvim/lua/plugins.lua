@@ -8,7 +8,7 @@ local text_filetypes = utils.text_filetypes
 local plugins_root = join_path(fn.stdpath('data'), 'site', 'pack')
 local packer_path = join_path(plugins_root, 'packer', 'start', 'packer.nvim')
 if fn.empty(fn.glob(packer_path)) > 0 then
-    cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. packer_path)
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', packer_path})
 end
 
 local packer = nil
@@ -18,6 +18,11 @@ local function init()
         packer = require('packer')
         packer.init({disable_commands = true,
                      package_root = plugins_root,
+                     depth = 1,
+                     clone_timeout = 600,
+                     luarocks = {
+    			python_cmd = '/usr/bin/python3' -- Set the python command to use for running hererocks
+  		     },
                     })
     end
 
