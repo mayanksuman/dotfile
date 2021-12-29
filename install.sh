@@ -127,8 +127,8 @@ sudo -E apt-get install -ym fonts-freefont-ttf
 # Associated dictionary files can be downloaded from http://download.huzheng.org/ 
 # or https://web.archive.org/web/20200702000038/http://download.huzheng.org/
 sudo -E apt-get install -ym sdcv
-# Add unrar support in archive-manager
-sudo -E apt-get install -ym unrar
+# Add 7zip and rar support in archive-manager
+sudo -E apt-get install -ym p7zip-full  p7zip-rar
 # for docker
 sudo -E apt-get install -ym docker.io docker-compose
 # for GIS related work

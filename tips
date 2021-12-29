@@ -5,7 +5,7 @@ eg command
 
 - For generating randomized password use `gpw` command
 	The random salt is at /.local/share/gpw/salt.secret. 
-	The salt.secret is randomly generated data.
+	The salt.secret is randomly generated data. ('head -c 4kB /dev/urandom > salt.secret;sync')
 	Salt file if lost, you will lose all of your passwords.
 
 	Other global randomization is done at ~/.config/gpw/gpw.conf.secret.
