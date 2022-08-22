@@ -1,0 +1,8 @@
+nvim_remove_data: no
+
+nvim_config_path: "{{ user_home_folder }}/.config/nvim"
+nvim_data_path: "{{ user_home_folder }}/.local/share/nvim"
+
+vim_config_path: "{{ user_home_folder }}/.vimrc"
+
+install_tree_sitter: yes

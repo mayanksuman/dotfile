@@ -1,0 +1,20 @@
+- include_tasks: config_uninstall.yaml
+
+- name: Check if tmux configuration exists
+  ansible.builtin.stat: path="{{ tmux_config_path }}"
+  register: tmux_conf_stat
+
+- name: Back up existing tmux configuration
+  ansible.builtin.command: "mv {{ tmux_conf_stat.stat.path }} {{ tmux_conf_stat.stat.path + '.old' }}"
+  args:
+    creates: "{{ tmux_conf_stat.stat.path + '.old' }}"
+  when: tmux_conf_stat.stat.exists
+
+- name: Stow tmux configuration
+  stow: 
+    package: payload
+    dir: "{{ role_path }}"
+    target: "{{ user_home_folder }}"
+    state: present
+  ignore_errors: true
+

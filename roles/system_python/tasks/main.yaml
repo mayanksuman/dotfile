@@ -1,0 +1,31 @@
+- import_tasks: create_local_dirs.yaml
+
+- name: "{{ dotfile_action|capitalize }} configuration for python packages"
+  ansible.builtin.include_tasks: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "config_{{ dotfile_action|lower }}.yaml"
+      paths:
+        - 'tasks'
+  ignore_errors: true 
+
+    
+- name: Install python packages used by other utils
+  ansible.builtin.pip:
+    executable: /usr/bin/pip3
+    name: "{{ python_packages }}"
+    extra_args: --user -U 
+    state: present
+  when: python_packages
+
+
+- name: Check if eg command is installed
+  ansible.builtin.shell: command -v eg &>/dev/null
+  register: eg_command
+
+
+- name: Indexing the cheatsheets/Examples for eg
+  ansible.builtin.shell: 'bash -ic "source ~/.shell_common_config;eg -r; exit"' 
+  ignore_errors: true
+  when: eg_command.rc == 0

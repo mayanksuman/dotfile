@@ -1,0 +1,32 @@
+- name: Get all subdirectories of payload folder
+  find:
+    paths: "{{ role_path }}/payload"
+    recurse: no 
+    file_type: directory
+  register: find_directory_result
+
+
+- name: Stow configuration for python libraries
+  stow:
+    package: "{{ item.path | basename }}"
+    dir: "{{ role_path }}/payload"
+    target: "{{ user_home_folder }}"
+    state: latest 
+  loop: "{{ find_directory_result.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  register: python_library_stowed
+  ignore_errors: true
+  when: (find_directory_result.files | length > 0)
+
+
+- name: Update cookiecutter user details 
+  ansible.builtin.template:
+    src: cookiecutterrc.secret.j2
+    dest: '{{ role_path }}/payload/cookiecutter/.config/cookiecutter/cookiecutterrc.secret'
+    owner: '{{ user_name }}'
+    group: '{{ user_group }}'
+    mode: '0600'
+    follow: yes
+    force: no
+  when: python_library_stowed is succeeded

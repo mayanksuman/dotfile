@@ -1,0 +1,18 @@
+- name: Make ~/.config/jupyter with appropriate permission (without sudo)
+  ansible.builtin.file:
+    path: "{{ user_home_folder }}/.config/jupyter"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
+    mode: '0755'
+
+- name: Create sub directories for jupyter-lab and eg
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
+    mode: '0755'
+  loop:
+    - '{{ user_home_folder }}/.config/jupyter/lab'
+    - '{{ user_home_folder }}/.local/share/eg'

@@ -1,0 +1,174 @@
+- name: Backup existing miniforge (in case user asked for fresh installation).
+  ansible.builtin.shell: '[ -d "{{ miniforge_dir }}" ] && mv -f "{{ miniforge_dir }}" "{{ miniforge_backup_dir }}"'
+  args:
+    warn: false
+    executable: /bin/bash
+  ignore_errors: true
+  when: install_fresh_miniforge
+  
+- name: Check if miniforge is installed.
+  stat:
+    path: "{{ miniforge_dir }}"
+  register: miniforge_stat
+    
+- name: Download and install miniforge if it is not installed.
+  when: miniforge_stat.stat.exists == false
+  block:
+    - name: Generating an unique name for miniforge intaller.
+      set_fact:
+        miniforge_unique_installer_name: "miniforge_{{ lookup('password', '/dev/null chars=ascii,digits length=12') }}.sh"
+
+    - name: Download latest miniforge installer for Linux.
+      ansible.builtin.shell:
+        wget -O /tmp/{{ miniforge_unique_installer_name }} \
+        https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh
+      args:
+        warn: false
+        executable: /bin/bash
+      ignore_errors: true
+      register: miniforge_download_linux
+      when: >
+        ( ansible_facts['os_family']|lower == 'debian' or 
+        ansible_facts['os_family']|lower == 'redhat' )
+        
+    - name: Download latest miniforge installer for MacOS.
+      ansible.builtin.shell:
+        wget -O /tmp/{{ miniforge_unique_installer_name }} \
+        https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-$(uname -m).sh
+      args:
+        warn: false
+        executable: /bin/bash
+      ignore_errors: true
+      register: miniforge_download_mac
+      when: ansible_facts['os_family']|lower == 'darwin'
+   
+    - name: Installing miniforge.
+      ansible.builtin.shell: |
+        mkdir -p {{ miniforge_dir }}
+        bash /tmp/{{ miniforge_unique_installer_name }} -b -u -p {{ miniforge_dir }}
+        rm -f /tmp/{{ miniforge_unique_installer_name }}
+        source {{ user_home_folder }}/.shell_common_config > /dev/null
+        conda update --all
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+      when: miniforge_download_linux is succeeded or miniforge_download_mac is succeeded
+      register: miniforge_installed
+
+
+- name: Setting up general jupyterlab virtualenv.
+  when: miniforge_stat.stat.exists or miniforge_installed is succeeded
+  block:
+    - name: Check if jupyterlab virtualenv exist.
+      ansible.builtin.shell: 
+        source {{ user_home_folder }}/.shell_common_config > /dev/null &&
+        { conda env list | cut -f 1 -d ' ' | grep 'jupyter'; } >/dev/null 2>&1
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+      register: jl_venv_stat
+      
+    - name: Creating general jupyterlab virtualenv if it do not exist.
+      ansible.builtin.shell: |
+        source {{ user_home_folder }}/.shell_common_config
+        conda create -y --name jupyter
+      args:
+        executable: /bin/bash
+      register: jl_vnev_created
+      when: jl_venv_stat.rc != 0
+
+    - name: Installing packages in newly created general jupyterlab virtualenv.
+      ansible.builtin.shell: |
+        source {{ user_home_folder }}/.shell_common_config
+        conda activate jupyter
+        conda install -y jupyter jupyterlab ipython ipywidgets ipyleaflet \
+            ipympl ipykernel nb_conda_kernels scipy ipyparallel
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+      register: jl_venv_pkg_install
+      when: jl_vnev_created is succeeded and jl_venv_stat.rc != 0
+
+    - name: Building jupyter lab assets.
+      ansible.builtin.shell: |
+        source {{ user_home_folder }}/.shell_common_config
+        conda activate jupyter
+        jupyter lab build 
+      args:
+        executable: /bin/bash
+      ignore_errors: true  
+      when: jl_venv_stat.rc == 0 or jl_venv_pkg_install is succeeded
+  
+- name: Setting up data science tools.
+  when: miniforge_stat.stat.exists or miniforge_installed is succeeded
+  block:
+    - name: Check if virtualenv for data science tools exist.
+      ansible.builtin.shell: 
+        source {{ user_home_folder }}/.shell_common_config > /dev/null &&
+        { conda env list | cut -f 1 -d ' ' | grep 'ds_tools'; } >/dev/null 2>&1
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+      register: ds_tools_venv_stat
+      
+    - name: Creating and setting up virtualenv for data science tools if it do not exist.
+      ansible.builtin.shell: |
+        source {{ user_home_folder }}/.shell_common_config
+        conda create -y --name ds_tools 
+        conda activate ds_tools
+        conda install -y orange3 glueviz 
+      args:
+        executable: /bin/bash
+      ignore_errors: true  
+      register: ds_tools_vnev_created
+      when: ds_tools_venv_stat.rc != 0
+  
+- name: Setting up general scientific python virtualenv.
+  when: miniforge_stat.stat.exists or miniforge_installed is succeeded
+  block:
+    - name: Check if general scientific python virtualenv exist.
+      ansible.builtin.shell: 
+        source {{ user_home_folder }}/.shell_common_config > /dev/null &&
+        { conda env list | cut -f 1 -d ' ' | grep 'num_python'; } >/dev/null 2>&1
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+      register: num_python_venv_stat
+      
+    - name: Creating general scientific python virtualenv if it do not exist.
+      ansible.builtin.shell: |
+        source {{ user_home_folder }}/.shell_common_config
+        conda create -y --name num_python
+      args:
+        executable: /bin/bash
+      ignore_errors: true  
+      register: num_python_vnev_created
+      when: num_python_venv_stat.rc != 0 
+
+    - name: Installing libraries in newly created scientific python virtualenv.
+      ansible.builtin.shell: |
+        source {{ user_home_folder }}/.shell_common_config
+        conda activate num_python 
+        conda install -y numpy scipy statsmodels pandas xarray sympy \
+        		geopandas matplotlib cartopy h5py netcdf4 dask \
+        		bottleneck seaborn xlwt ipykernel
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+      when: num_python_venv_stat.rc != 0  and num_python_vnev_created is succeeded
+      
+- name: Cleaning up conda.
+  ansible.builtin.shell: |
+    source {{ user_home_folder }}/.shell_common_config
+    conda clean -y --all
+  args:
+    executable: /bin/bash
+  when: miniforge_stat.stat.exists or miniforge_installed is succeeded
+
+- name: Remove the miniforge backup (in case user asked for fresh installation).
+  ansible.builtin.shell: '[ -d "{{ miniforge_backup_dir }}" ] && rm -rf "{{ miniforge_backup_dir }}"'
+  args:
+    warn: false
+    executable: /bin/bash
+  ignore_errors: true
+  when: install_fresh_miniforge

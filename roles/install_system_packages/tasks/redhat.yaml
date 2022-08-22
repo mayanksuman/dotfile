@@ -1,0 +1,129 @@
+- name: Upgrade installed packages to their latest version
+  ansible.builtin.yum:
+    name: '*'
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  when: package_upgrade
+  ignore_errors: true
+
+- name: Get installed package list
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Get list of all packages known to yum
+    ansible.builtin.yum:
+      list: available
+    register: repo_packages
+
+- name: Install additional packages
+  ansible.builtin.yum:
+    name: "{{ packages | intersection(repo_packages) }}"
+    update_cache: yes
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  async: 900
+  poll: 10
+  when: packages | intersection(repo_packages)
+
+- name: List packages absent in repos
+  fail:
+    msg: "Packages {{ packages | difference(repo_packages) }} are not found in repos (check yum sources)."
+  ignore_errors: yes
+  when: packages | difference(repo_packages)
+
+- name: Check if GUI is running (using systemd)
+  command: systemctl get-default
+  register: systemctl_gui_output
+
+- name: Installing GUI packages
+  ansible.builtin.yum:
+    name: "{{ packages_gui | intersection(repo_packages) }}"
+    update_cache: yes
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  async: 900
+  poll: 10
+  when: >
+    (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
+    packages_gui | intersection(repo_packages)
+
+- name: List GUI packages absent in repos
+  fail:
+    msg: "Packages {{ packages_gui | difference(repo_packages) }} are not found in repos (check yum sources)."
+  ignore_errors: yes
+  when: >
+    (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
+    packages_gui | difference(repo_packages)
+
+- name: Install additional libreoffice packages if libreoffice is installed
+  ansible.builtin.yum:
+    name: "{{ packages_libreoffice | intersection(repo_packages) }}"
+    update_cache: yes
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  async: 900
+  poll: 10
+  when: >
+    'libreoffice-writer' in ansible_facts.packages and
+    packages_libreoffice | intersection(repo_packages)
+
+- name: List additional libreoffice packages absent in repos
+  fail:
+    msg: "Packages {{ packages_libreoffice | difference(repo_packages) }} are not found in repos (check yum sources)."
+  ignore_errors: yes
+  when: >
+    'libreoffice-writer' in ansible_facts.packages and
+    packages_libreoffice | difference(repo_packages)
+
+- name: Installing packages for music production
+  ansible.builtin.yum:
+    name: "{{ packages_music | intersection(repo_packages) }}"
+    update_cache: yes
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  async: 900
+  poll: 10
+  when: >
+    (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
+    packages_music | intersect(repo_packages)
+
+- name: List music production packages absent in repos
+  fail:
+    msg: "Packages {{ packages_music | difference(repo_packages) }} are not found in repos (check yum sources)."
+  ignore_errors: yes
+  when: >
+    (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
+    packages_music | difference(repo_packages)
+
+- name: Remove packages (yum purge)
+  ansible.builtin.yum:
+    name: "{{ remove_packages | intersection(repo_packages) }}"
+    update_cache: yes
+    state: absent
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  when: remove_packages | intersection(repo_packages)
+
+- name: yum autoremove
+  ansible.builtin.yum:
+    autoremove: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true

@@ -1,0 +1,17 @@
+- name: Ensure stow is available on the host
+  block:
+    - name: Check if stow command is available
+      shell: command -v stow &> /dev/null
+      register: stow_command_exist
+
+    - name: Stop configuration if stow command do not exist
+      fail:
+        msg: "Stopping configuration as stow command is not found."
+      when: stow_command_exist.rc != 0
+
+- name: Setup stow configuration
+  stow:
+    package: payload
+    dir: "{{ role_path }}"
+    target: "{{ user_home_folder }}"
+    state: latest

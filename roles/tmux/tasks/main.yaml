@@ -1,0 +1,38 @@
+- name: Ensure tmux is available on the host
+  block:
+    - name: Check if tmux command is available
+      shell: command -v tmux &> /dev/null
+      register: tmux_command_exist
+
+    - name: Stop configuration if tmux command do not exist
+      fail:
+        msg: "Stopping configuration as tmux command is not found."
+      when: tmux_command_exist.rc != 0
+
+- name: "{{ dotfile_action|capitalize }} tmux configuration"
+  ansible.builtin.include_tasks: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "config_{{ dotfile_action|lower }}.yaml"
+      paths:
+        - 'tasks'
+  ignore_errors: true
+
+- name: Install/update tmux plugin manager (tpm)
+  ansible.builtin.git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ tpm_install_path }}"
+    recursive: yes
+    update: yes
+    depth: 1
+  environment:
+    GIT_TERMINAL_PROMPT: 0
+  ignore_errors: true
+
+
+- name: Install/update tmux plugins
+  ansible.builtin.shell: 'tmux start-server && tmux new-session -d -s install_session && bash -i "{{ tpm_install_script_path }}" && tmux kill-session -t install_session'
+  ignore_errors: true
+
+

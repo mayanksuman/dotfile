@@ -1,0 +1,157 @@
+- name: Upgrade installed packages to their latest version
+  ansible.builtin.apt: update_cache=yes upgrade=yes
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  when: package_upgrade
+
+- name: Get list of all packages known to apt (through apt-cache)
+  block:
+    - name: Run apt-cache in shell for getting all packages name in repos
+      ansible.builtin.shell: apt-cache pkgnames
+      register: repo_packages_shell
+
+    - name: Save the list of repo packages on the hosts
+      set_fact:
+        repo_packages: "{{ repo_packages_shell.stdout }}"
+      when: repo_packages_shell.rc == 0
+
+- name: Get installed package list
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Install additional packages
+  ansible.builtin.apt:
+    name: "{{ packages | intersect(repo_packages) }}"
+    update_cache: yes
+    cache_valid_time: 3600
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  async: 900
+  poll: 10
+  when: packages | intersect(repo_packages)
+
+- name: List packages absent in repos
+  fail:
+    msg: "Packages {{ packages | difference(repo_packages) }} are not found in repos (check apt sources)."
+  ignore_errors: yes
+  when: packages | difference(repo_packages)
+
+- name: Check if GUI is running (using systemd)
+  command: systemctl get-default
+  register: systemctl_gui_output
+
+- name: Installing GUI packages
+  ansible.builtin.apt:
+    name: "{{ packages_gui | intersect(repo_packages) }}"
+    update_cache: yes
+    cache_valid_time: 3600
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  async: 900
+  poll: 10
+  when: >
+    (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
+    packages_gui | intersect(repo_packages)
+
+- name: List GUI packages absent in repos
+  fail:
+    msg: "Packages {{ packages_gui | difference(repo_packages) }} are not found in repos (check apt sources)."
+  ignore_errors: yes
+  when: >
+    (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
+    packages_gui | difference(repo_packages)
+
+- name: Install additional libreoffice packages if libreoffice is installed
+  ansible.builtin.apt:
+    name: "{{ packages_libreoffice | intersect(repo_packages) }}"
+    update_cache: yes
+    cache_valid_time: 3600
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  async: 900
+  poll: 10
+  when: >
+    'libreoffice-writer' in ansible_facts.packages and
+    packages_libreoffice | intersect(repo_packages)
+
+- name: List additional libreoffice packages absent in repos
+  fail:
+    msg: "Packages {{ packages_libreoffice | difference(repo_packages) }} are not found in repos (check apt sources)."
+  ignore_errors: yes
+  when: >
+    'libreoffice-writer' in ansible_facts.packages and
+    packages_libreoffice | difference(repo_packages)
+
+- name: Installing packages for music production
+  ansible.builtin.apt:
+    name: "{{ packages_music | intersect(repo_packages) }}"
+    update_cache: yes
+    cache_valid_time: 3600
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  async: 900
+  poll: 10
+  when: >
+    (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
+    packages_music | intersect(repo_packages)
+
+- name: List music production packages absent in repos
+  fail:
+    msg: "Packages {{ packages_music | difference(repo_packages) }} are not found in repos (check apt sources)."
+  ignore_errors: yes
+  when: >
+    (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
+    packages_music | difference(repo_packages)
+
+- name: Remove packages (apt purge)
+  ansible.builtin.apt:
+    name: "{{ remove_packages | intersect(repo_packages) }}"
+    update_cache: yes
+    cache_valid_time: 3600
+    purge: yes
+    state: absent
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  when: remove_packages | intersect(repo_packages)
+
+- name: apt autoremove
+  ansible.builtin.apt:
+    autoremove: yes
+    purge: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+
+- name: apt autoclean
+  ansible.builtin.apt:
+    autoclean: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+
+- name: apt clean
+  ansible.builtin.command: apt clean -ym
+  become: yes
+  become_user: root
+  become_method: sudo
+  args:
+    warn: no
+  ignore_errors: true

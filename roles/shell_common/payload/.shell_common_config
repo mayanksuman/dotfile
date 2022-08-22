@@ -1,0 +1,254 @@
+# Show Dictionary meaning of a word
+export STARDICT_DATA_DIR=$HOME/.local/share/stardict
+function define
+{
+	sdcv -n --utf8-output --color "$@" 2>&1 | \
+	fold --width=$(tput cols) | \
+	less -FRX
+}
+
+# credit: http://nparikh.org/notes/zshrc.txt
+# Usage: extract <file>
+# Description: extracts archived files / mounts disk images
+# Note: .dmg/hdiutil is Mac OS X-specific.
+extract () {
+    if [ -f $1 ]; then
+        case $1 in
+            *.tar.bz2)  tar -jxvf $@                        ;;
+            *.tar.xz)   tar -Jxvf $@                        ;;
+            *.tar.gz)   tar -zxvf $@                        ;;
+            *.bz2)      bunzip2 $@                          ;;
+            *.dmg)      hdiutil mount $@                    ;;
+            *.gz)       gunzip -d -N $@                     ;;
+            *.tar)      tar -xvf $@                         ;;
+            *.tbz2)     tar -jxvf $@                        ;;
+            *.tgz)      tar -zxvf $@                        ;;
+            *.zip)      7z x $@                             ;;
+            *.ZIP)      7z x $@                             ;;
+            *.rar)      7z x $@                             ;;
+            *.RAR)      7z x $@                             ;;
+            *.7z)       7z x $@                             ;;
+            *.pax)      cat $@ | pax -r                     ;;
+            *.pax.Z)    uncompress $@ --stdout | pax -r     ;;
+            *.Z)        uncompress $@                       ;;
+            *)          echo "'$1' cannot be extracted/mounted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Prepare PC for presentation
+function present
+{
+	echo "Checking if Projecteur is installed"
+	if ! hash projecteur >/dev/null 2>&1; then 
+		echo "projecteur was not found. Installing the latest stable version ..."
+		echo "Provide password if prompted."
+		curl -s https://api.github.com/repos/jahnf/Projecteur/releases/latest \
+		| grep "browser_download_url.*_debian-10-x86_64.deb" \
+		| cut -d '"' -f 4 \
+		| wget -O projecteur.deb -qi -
+		sudo -E apt update
+		sudo -E apt install -y ./projecteur.deb
+		sudo -E apt install -f
+		sudo rm -rf projecteur
+		echo "projecteur installed."
+	fi
+	echo "Ok"
+
+	echo "Checking if pdfpc is installed"
+	if ! hash pdfpc >/dev/null 2>&1; then
+		echo "pdfpc is not installed. Installing ..."
+		echo "Provide password if prompted."
+		sudo -E apt install -y pdf-presenter-console
+	fi
+	echo
+
+	echo "Starting Projecteur"
+	# Check if projecteur is running else start projecteur
+	projecteur_pid=$(ps -efww | grep -w projecteur | grep -v grep |awk '{ print $2 }')
+	if [ ! -z "$projecteur_pid" ]; then
+		echo "Projecteur is already running with PID $projecteur_pid."
+		echo "If you face problem with projecteur. Consider closing it by "
+		echo "projecteur -c quit"
+		echo "and then run this command again."
+	else
+		projecteur &
+		echo "Projecteur started."
+	fi
+	echo
+
+	echo "Starting Presentation"
+	# Check if number of monitors is 1, then start pdfpc in single monitor mode
+	NUM_MONITORS=$(pdfpc -M|grep 'Monitors:'|cut -d : -f 2|sed 's/^ *//g')
+	if [ $NUM_MONITORS -eq 1 ]; then
+		echo "Found only one monitor. Starting pdfpc in single monitor mode."
+		pdfpc $1 -S -s $@
+	else
+		pdfpc $1 $@
+	fi
+	echo
+	echo "Killing Projecteur"
+	sleep 1s
+	projecteur -c quit
+}
+
+
+# Better PATH variable management 
+# Taken from http://www.linuxfromscratch.org/blfs/view/6.3/postlfs/profile.html
+# Functions to help us manage paths.  Second argument is the name of the
+# path variable to be modified (default: PATH)
+pathremove () {
+        local NEWPATH
+        local PATHVARIABLE=${2:-PATH}
+		if [ -n "$BASH_VERSION" ]; then
+			local IFS=':'
+			for DIR in ${!PATHVARIABLE}; do
+				if [ "$DIR" != "$1" ] ; then
+					NEWPATH=${NEWPATH:+$NEWPATH:}$DIR
+				fi
+			done
+		elif [ -n "$ZSH_VERSION" ]; then
+			local PATH_CONTENT=${(P)PATHVARIABLE}
+			for DIR in ${(s.:.)PATH_CONTENT}; do
+		        if [ "$DIR" != "$1" ] ; then
+					NEWPATH=${NEWPATH:+$NEWPATH:}$DIR
+				fi
+			done
+		fi
+        export $PATHVARIABLE="$NEWPATH"
+}
+
+pathprepend () {
+	if [ -d $1 ]; then
+        pathremove $1 $2
+        local PATHVARIABLE=${2:-PATH}
+		local PATH_CONTENT
+		if [ -n "$BASH_VERSION" ]; then
+			PATH_CONTENT=${!PATHVARIABLE}
+		elif [ -n "$ZSH_VERSION" ]; then
+			PATH_CONTENT=${(P)PATHVARIABLE}
+		fi
+        export $PATHVARIABLE="$1${PATH_CONTENT:+:${PATH_CONTENT}}"
+	fi
+}
+
+pathappend () {
+	if [ -d $1 ]; then
+        pathremove $1 $2
+        local PATHVARIABLE=${2:-PATH}
+		local PATH_CONTENT
+		if [ -n "$BASH_VERSION" ]; then
+			PATH_CONTENT=${!PATHVARIABLE}
+		elif [ -n "$ZSH_VERSION" ]; then
+			PATH_CONTENT=${(P)PATHVARIABLE}
+		fi
+		export $PATHVARIABLE="${PATH_CONTENT:+${PATH_CONTENT}:}$1"
+	fi
+}
+
+
+# BASE16-Shell Entry : Helps in getting even color scheme in zsh, bash and nvim
+BASE16_SHELL=$HOME/.local/share/base16-shell
+[ -n "$PS1" ] && [ -s "${BASE16_SHELL}/profile_helper.sh" ] && eval "$("${BASE16_SHELL}/profile_helper.sh")"
+
+# unicode support in tmux
+alias tmux='tmux -u'
+# tmux aliases
+alias ta='tmux -u attach -d'
+alias tls='tmux -u ls'
+alias tat='tmux -u attach -d -t'
+alias tns='tmux -u new-session -s'
+
+# run through NVIDIA gpu
+alias prime-run="__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only"
+
+# Enable compression in ccache
+export CCACHE_COMPRESS=1
+
+# Add npm binaries to PATH
+pathprepend "$HOME/.npm_packages/bin"
+
+# set PATH so it includes user's private bin if it exists
+pathprepend "$HOME/.local/bin"
+pathprepend "$HOME/bin"
+
+export GPG_TTY=$(tty)
+
+# -- Improved X11 forwarding through GNU Screen (or tmux).
+# If not in screen or tmux, update the DISPLAY cache.
+# If we are, update the value of DISPLAY to be that in the cache.
+function update-x11-forwarding
+{
+    if [ -z "$STY" ] && [ -z "$TMUX" ]; then
+        echo "$DISPLAY" > "$HOME/.display.txt"
+    else
+		DISPLAY="$(cat $HOME/.display.txt)"
+        export DISPLAY
+    fi
+}
+
+# This is run before every command.
+preexec() {
+    # Don't cause a preexec for PROMPT_COMMAND.
+    # Beware!  This fails if PROMPT_COMMAND is a string containing more than one command.
+    [ "$BASH_COMMAND" = "$PROMPT_COMMAND" ] && return 
+
+    update-x11-forwarding
+
+    # Debugging.
+    #echo DISPLAY = $DISPLAY, display.txt = `cat ~/.display.txt`, STY = $STY, TMUX = $TMUX  
+}
+trap 'preexec' DEBUG
+
+# cheatsheets location and autocompletion
+export EDITOR=nvim
+if [ -n "$BASH_VERSION" ]; then
+  function _eg_autocomplete {
+    cheatsheets="$(eg -l | cut -d' ' -f1)"
+    COMPREPLY=()
+    if [ $COMP_CWORD = 1 ]; then
+	COMPREPLY=(`compgen -W "$cheatsheets" -- $2`)
+    fi
+  }
+  complete -F _eg_autocomplete eg
+elif [ -n "$ZSH_VERSION" ]; then
+  function _eg_autocomplete {
+    local cheatsheets
+    cheatsheets="$(eg -l | cut -d' ' -f1)"
+    reply=( "${(ps:\n:)cheatsheets}" )
+  }
+  compctl -K _eg_autocomplete eg
+fi
+
+# R library custom location
+if [ -x "$(command -v R)" ]; then
+	Rver=$(R --version| grep -Eo 'R version [0-9.]+ \([0-9]{4}-[0-9]{2}-[0-9]{2}\)'|cut -d " " -f 3|cut -d '.' -f 1,2)
+	R_LIBS_USER=${R_LIBS_USER-"~/.local/lib/R/$Rver/"}
+	unset Rver
+fi
+
+# fzf helper functions
+#source ~/.shell_common_fzf_config
+
+# Some python specific commands
+source ~/.shell_common_python_config
+
+# Source custom config files, if present 
+if [[ -f "${HOME}/.shell_custom_config" ]]; then
+	source "${HOME}/.shell_custom_config"
+fi 
+if [[ -f "${HOME}/.bash_custom_config" ]]; then
+	if [ -n "$BASH_VERSION" ]; then
+		source "${HOME}/.bash_custom_config"
+	fi
+fi 
+if [[ -f "${HOME}/.zsh_custom_config" ]]; then
+	if [ -n "$ZSH_VERSION" ]; then
+		source "${HOME}/.zsh_custom_config"
+	fi
+fi
+
+# unset the path related functions
+unset pathprepend pathappend pathremove

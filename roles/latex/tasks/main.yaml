@@ -1,0 +1,36 @@
+# install pplatex if install_pplatex is true and we are on debian or redhat
+- name: Install pplatex on linux
+  block:
+  - name: check if pplatex > 1 Month old
+    ansible.builtin.find:
+      paths: "{{ user_home_folder }}/.local/bin"
+      file_type: file
+      age_stamp: mtime
+      recurse: no
+      patterns: pplatex
+      age: 30d
+    register: pplatex_age
+    
+    
+  - name: "Download pplatex if > 1 Month old"
+    vars:
+      tmp_pplatex_path: '{{ user_home_folder }}/.tmp_pplatex'
+    ansible.builtin.shell: |
+      mkdir -p {{ tmp_pplatex_path }} && curl -s https://api.github.com/repos/stefanhepp/pplatex/releases/latest\
+      |jq -r ".assets[] | select(.name | test(\"linux\"))" \
+      |jq -r ".browser_download_url"\
+      |wget -O {{ tmp_pplatex_path }}/asset.tar.gz -i - && \
+      tar fxz {{ tmp_pplatex_path }}/asset.tar.gz -C {{ tmp_pplatex_path }} && \
+      cp -r {{ tmp_pplatex_path }}/pplatex*/bin ~/.local/ &&\
+      rm -rf {{ tmp_pplatex_path }} &&\
+      echo pplatex installed successfully.
+    args:
+      warn: false
+    ignore_errors: true
+    register: local_font_install
+    when: (pplatex_age.files | length > 0)
+
+  when: >
+    ( ansible_facts['os_family']|lower == 'debian' or 
+      ansible_facts['os_family']|lower == 'redhat' ) and
+    install_pplatex

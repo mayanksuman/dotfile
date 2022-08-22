@@ -1,0 +1,2 @@
+figure.figsize : 7.1, 4.3	#(width, height) in inches : Width taken from Nature recommendation 
+								# Height is calculated by using golden ratio

@@ -1,0 +1,74 @@
+- name: Ensure git is available on the host
+  block:
+    - name: Check if git command is available
+      shell: command -v git &> /dev/null 
+      register: git_command_exist 
+      
+    - name: Stop configuration if git command do not exist 
+      fail:
+        msg: "Stopping configuration as git command is not found."
+      when: git_command_exist.rc != 0 
+    
+- name: "{{ dotfile_action|capitalize }} git configuration"
+  ansible.builtin.include_tasks: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "config_{{ dotfile_action|lower }}.yaml"
+      paths:
+        - 'tasks'
+  ignore_errors: true 
+
+- name: Update third party git repos (diff-so-fancy and gitignore)
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+    recursive: yes
+    update: yes
+    depth: 1
+  environment:
+    GIT_TERMINAL_PROMPT: 0
+  loop:
+    - { name: diff_so_fancy, 
+        repo: https://github.com/so-fancy/diff-so-fancy,
+        dest: '{{ user_home_folder }}/.local/share/diff-so-fancy'
+      }
+    - { name: gitignore, 
+        repo: https://github.com/github/gitignore,
+        dest: '{{ user_home_folder }}/.local/share/gitignore',
+      }
+  loop_control:
+    label: "{{ item.name }}"
+  register: third_party_repo
+  ignore_errors: true
+  
+- name: Download third party utils (git-quick-stats and diffconflicts)
+  ansible.builtin.get_url:
+    url: '{{ item.url }}'
+    dest: '{{ item.dest }}'
+    mode: '{{ item.mode }}'
+  loop:
+    - { name: git-quick-stats,
+        url: https://raw.githubusercontent.com/arzzen/git-quick-stats/master/git-quick-stats,
+        dest: '{{ user_home_folder }}/.local/bin/git-quick-stats',
+        mode: '0755'}
+    - { name: git-quick-stats man page, 
+        url: https://raw.githubusercontent.com/arzzen/git-quick-stats/master/git-quick-stats.1,
+        dest: '{{ user_home_folder }}/.local/man/man1/git-quick-stats.1',
+        mode: '0644'}
+    - { name: diffconflicts,
+        url: https://raw.githubusercontent.com/whiteinge/dotfiles/master/bin/diffconflicts,
+        dest: '{{ user_home_folder }}/.local/bin/diffconflicts',
+        mode: '0755'}
+  loop_control:
+    label: "{{ item.name }}"
+  ignore_errors: true 
+
+- name: Link diff-so-fancy executable in ~/.local/bin
+  ansible.builtin.file:
+    src: '{{ user_home_folder }}/.local/share/diff-so-fancy/diff-so-fancy'
+    dest: '{{ user_home_folder }}/.local/bin/diff-so-fancy'
+    owner: '{{ user_name }}'
+    group: '{{ user_group }}'
+    state: link
+  when: third_party_repo is succeeded

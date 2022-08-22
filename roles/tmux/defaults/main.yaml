@@ -1,0 +1,4 @@
+tmux_config_path: "{{ user_home_folder }}/.tmux.conf"
+
+tpm_install_path: "{{ user_home_folder }}/.local/share/tmux/plugins/tpm"
+tpm_install_script_path: "{{ tpm_install_path }}/scripts/install_plugins.sh"

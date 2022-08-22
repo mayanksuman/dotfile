@@ -1,0 +1,35 @@
+- name: Ensure neovim is available on the host
+  block:
+    - name: Check if nvim command is available
+      shell: command -v nvim &> /dev/null
+      register: nvim_command_exist
+
+    - name: Stop configuration if nvim command do not exist
+      fail:
+        msg: "Stopping configuration as nvim command is not found."
+      when: nvim_command_exist.rc != 0
+
+- name: Enable python support in neovim and its plugins
+  pip:
+    executable: /usr/bin/pip3
+    name:
+      - pynvim
+      - notedown
+      - neovim-remote
+    extra_args: --user -U
+    state: present
+
+- name: Install tree-sitter
+  ansible.builtin.include_tasks: install_tree_sitter.yaml
+  when: dotfile_action|lower == 'install'
+
+
+- name: "{{ dotfile_action|capitalize }} neovim/vim configuration"
+  ansible.builtin.include_tasks: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "config_{{ dotfile_action|lower }}.yaml"
+      paths:
+        - 'tasks'
+  ignore_errors: true

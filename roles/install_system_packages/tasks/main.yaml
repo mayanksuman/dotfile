@@ -1,0 +1,26 @@
+# Search vars folder for file having list of packages to be installed. The
+# filename should be lowercase and based on either OS distribution or OS family. 
+# OS distribution is given preference.
+- name: Load package list to install based on the OS
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_facts['distribution']|lower }}.yaml"
+        - "{{ ansible_facts['os_family']|lower }}.yaml"
+      paths:
+        - 'vars'
+  register: package_list_file
+
+
+# package_list_file.ansible_included_var_files is having one file if the last
+# task (package_list_file) is successful. The tasks folder should have a file 
+# having same name. This file contains the tasks for installing the list 
+# of package. 
+- name: Import tasks for installing package list based on the OS
+  include_tasks: "{{ package_list_file_path | basename }}"
+  loop: "{{ package_list_file.ansible_included_var_files }}"
+  loop_control:
+    label: "{{ package_list_file_path | basename }}"
+    loop_var: package_list_file_path
+  when: package_list_file is succeeded

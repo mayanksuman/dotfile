@@ -1,0 +1,7 @@
+- name: Unstow zsh configuration
+  stow: 
+    package: payload
+    dir: "{{ role_path }}"
+    target: "{{ user_home_folder }}"
+    state: absent
+  ignore_errors: true

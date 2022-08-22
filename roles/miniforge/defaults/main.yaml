@@ -1,0 +1,5 @@
+install_fresh_miniforge: no
+
+miniforge_dir: "{{ user_home_folder }}/.miniforge"
+
+miniforge_backup_dir: "{{ user_home_folder }}/.miniforge.backup"

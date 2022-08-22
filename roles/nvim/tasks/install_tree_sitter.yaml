@@ -1,0 +1,53 @@
+# install tree-sitter if install_tree_sitter is true and we are on debian or redhat
+- name: Install tree-sitter
+  block:
+  - name: check if tree-sitter > 1 Month old
+    ansible.builtin.find:
+      paths: "{{ user_home_folder }}/.local/bin"
+      file_type: file
+      age_stamp: mtime
+      recurse: no
+      patterns: tree-sitter
+      age: 30d
+    register: ts_age
+
+  - name: "Download tree-sitter if > 1 Month old (on linux)"
+    vars:
+      tmp_ts_path: '{{ user_home_folder }}/.tmp_ts'
+    ansible.builtin.shell: |
+      mkdir -p {{ tmp_ts_path }} && curl -s https://api.github.com/repos/tree-sitter/tree-sitter/releases/latest\
+      |jq -r ".assets[] | select(.name | test(\"linux\"))" \
+      |jq -r ".browser_download_url"\
+      |wget -O {{ tmp_ts_path }}/asset.gz -i - && \
+      gunzip -d -N {{ tmp_ts_path }}/asset.gz && \
+      mv -f {{ tmp_ts_path }}/tree-sitter ~/.local/bin/ &&\
+      rm -rf {{ tmp_ts_path }} &&\
+      echo tree-sitter installed successfully.
+    args:
+      warn: false
+      executable: /bin/bash
+    ignore_errors: true
+    when: >
+      (ts_age.files | length > 0) and
+      ( ansible_facts['os_family']|lower == 'debian' or
+      ansible_facts['os_family']|lower == 'redhat' )
+      
+  - name: "Download tree-sitter if > 1 Month old (on macos)"
+    vars:
+      tmp_ts_path: '{{ user_home_folder }}/.tmp_ts'
+    ansible.builtin.shell: |
+      mkdir -p {{ tmp_ts_path }} && curl -s https://api.github.com/repos/tree-sitter/tree-sitter/releases/latest\
+      |jq -r ".assets[] | select(.name | test(\"macos\"))" \
+      |jq -r ".browser_download_url"\
+      |wget -O {{ tmp_ts_path }}/asset.gz -i - && \
+      gunzip -d -N {{ tmp_ts_path }}/asset.gz && \
+      mv -f {{ tmp_ts_path }}/tree-sitter ~/.local/bin/ &&\
+      rm -rf {{ tmp_ts_path }} &&\
+      echo tree-sitter installed successfully.
+    args:
+      warn: false
+      executable: /bin/bash
+    ignore_errors: true
+    when: (ts_age.files | length > 0) and ansible_facts['os_family']|lower == 'darwin'
+
+  when: install_tree_sitter

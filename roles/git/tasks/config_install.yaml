@@ -1,0 +1,20 @@
+- name: Stow git configuration
+  stow: 
+    package: payload
+    dir: "{{ role_path }}"
+    target: "{{ user_home_folder }}"
+    state: latest
+  register: git_config_stow
+
+- name: Update git user details 
+  ansible.builtin.template:
+    src: gituser_info.secret.j2
+    dest: "{{ role_path }}/payload/.config/git/.gituser_info.secret"
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
+    mode: 0600
+    follow: yes
+    force: no
+  ignore_errors: true
+  when: git_config_stow is succeeded
+

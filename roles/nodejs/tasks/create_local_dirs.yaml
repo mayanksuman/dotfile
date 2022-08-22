@@ -1,0 +1,7 @@
+- name: Create npm package folder with appropiriate permission
+  ansible.builtin.file:
+    path: "{{ user_home_folder }}/.npm_packages"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
+    mode: '0755'

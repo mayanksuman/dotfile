@@ -1,0 +1,4 @@
+dependencies:
+  - { role: stow }
+  - { role: shell_common }
+  - { role: system_python }

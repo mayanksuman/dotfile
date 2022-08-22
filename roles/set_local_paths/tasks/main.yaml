@@ -1,0 +1,36 @@
+- name: Make ~/.local with appropriate permission
+  ansible.builtin.file:
+    path: "{{ user_home_folder }}/.local"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
+    mode: '0755'
+
+- name: Create sub directories in ~/.local
+  ansible.builtin.file:
+    path: "{{ user_home_folder }}/.local/{{ item }}"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
+    mode: '0755'
+  loop:
+    - bin
+    - programs
+    - share
+    - lib
+    - include
+    - man
+  loop_control:
+    label: "{{ user_home_folder }}/.local/{{ item }}"
+
+
+- name: Create sub directories in ~/.local/man
+  ansible.builtin.file:
+    path: "{{ user_home_folder }}/.local/man/man{{ item }}"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
+    mode: '0755'
+  loop: "{{ range(1, 2 + 1)|list }}"
+  loop_control:
+    label: "{{ user_home_folder }}/.local/man/man{{ item }}"

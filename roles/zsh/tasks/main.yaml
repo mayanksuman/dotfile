@@ -1,0 +1,73 @@
+- name: Ensure zsh is available on the host
+  block:
+    - name: Check if zsh command is available
+      shell: command -v zsh &> /dev/null
+      register: zsh_command_exist
+
+    - name: Stop configuration if zsh command do not exist
+      fail:
+        msg: "Stopping configuration as zsh command is not found."
+      when: zsh_command_exist.rc != 0
+
+- name: "{{ dotfile_action|capitalize }} zsh configuration"
+  ansible.builtin.include_tasks: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "config_{{ dotfile_action|lower }}.yaml"
+      paths:
+        - 'tasks'
+  ignore_errors: true
+
+
+- name: Install/update prezto
+  ansible.builtin.git:
+    repo: https://github.com/sorin-ionescu/prezto.git
+    dest: "{{ user_home_folder }}/.local/share/zsh/prezto"
+    recursive: yes
+    update: yes
+    depth: 1
+  environment:
+    GIT_TERMINAL_PROMPT: 0
+  ignore_errors: true
+
+
+- name: Check if /bin/zsh exists and set it as user shell
+  when: change_shell_to_zsh
+  block:
+  - name: Check if /bin/zsh is present
+    ansible.builtin.stat: path=/bin/zsh
+    register: bin_zsh
+
+  - name: Change user shell to zsh (/bin/zsh)
+    ansible.builtin.user:
+      name: "{{ user_name }}"
+      shell: /bin/zsh
+    become: yes
+    become_user: root
+    become_method: sudo
+    ignore_errors: true
+    when: bin_zsh.stat.exists
+
+
+- name: Check if /usr/local/bin/zsh exists and set it as user shell
+  when: change_shell_to_zsh and bin_zsh.stat.exists == false
+  block:
+  - name: Check if /usr/local/bin/zsh is present
+    ansible.builtin.stat: path=/usr/local/bin/zsh
+    register: local_bin_zsh
+
+  - name: Change user shell to zsh (/usr/local/bin/zsh)
+    ansible.builtin.user:
+      name: "{{ user_name }}"
+      shell: /usr/local/bin/zsh
+    become: yes
+    become_user: root
+    become_method: sudo
+    ignore_errors: true
+    when: local_bin_zsh.stat.exists
+
+- name: Load ~/.shell_common_config at zsh startup
+  ansible.builtin.lineinfile:
+    path: "{{ zsh_config_path }}"
+    line: '[ -n "$PS1" ] && source "$HOME/.shell_common_config"'

@@ -1,0 +1,4 @@
+package_update: yes
+package_upgrade: yes
+
+local_font_path: "{{ user_home_folder }}/.local/share/fonts/"

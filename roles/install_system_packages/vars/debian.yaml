@@ -1,0 +1,159 @@
+packages:
+  - ansible
+  - git
+  
+  # C/C++ programming tools
+  - build-essential
+  - gfortran
+  - clang
+  - clang-tools
+  - clang-tidy 
+  - global
+  - exuberant-ctags
+  - make
+  - cmake
+  - ccache
+  - gdb
+  
+  # python3
+  - python3-pip
+  - python3-sympy
+  - python3-openssl
+  - python3-dev
+  
+  # lua
+  - luajit
+  - luarocks
+  
+  # Downloading Utils
+  - wget
+  - aria2
+  - rsync
+  - curl
+  
+  # Docker
+  - docker-compose
+  - docker.io
+  
+  # Common utils
+  - zsh
+  - tmux
+  - sed
+  - xsel
+  - neovim
+  - python3-neovim
+  - jq
+  - htop
+  - sdcv
+  - youtube-dl
+  - firejail
+  - ripgrep
+  - timeshift
+  - stow
+  
+  # Common Fonts
+  - ttf-mscorefonts-installer
+  - fonts-firacode
+  - fonts-freefont-ttf
+  
+  # Dev files
+  - libbz2-dev
+  - libffi-dev
+  - liblzma-dev
+  - libncurses5-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  - libssl-dev
+  - zlib1g-dev
+  - libnetcdf-dev
+  - libnetcdff-dev
+  - libnetcdf-c++4-dev
+  - libnetcdf-mpi-dev
+  - libnetcdf-pnetcdf-dev
+  - libhdf5-dev
+  - libhdf5-mpi-dev
+  - libgsl-dev
+  
+  # Compression Utils
+  - p7zip-full
+  - p7zip-rar
+  - xz-utils
+  - cabextract
+  - tar
+  - gzip
+  
+  # GIS related 
+  - proj-bin 
+  - libproj-dev
+  - gdal-bin
+  - libgdal-dev
+  - python3-gdal
+  - libgeos++-dev
+  - libgeos-dev
+  
+  # Climate science related
+  - cdo 
+  - nco
+  
+  # PHP composer framework
+  - composer
+  
+  # Text Processing
+  - pandoc
+  - markdown
+  - tidy
+  - sassc
+  - odt2txt
+  - dos2unix
+  - texlive
+  - dvipng
+  - texlive-xetex
+  - texlive-luatex
+  - texlive-latex-extra
+  - texlive-formats-extra
+  - texlive-publishers 
+  - texlive-science
+  - texlive-bibtex-extra
+  - biber
+  - texlive-font-utils
+  - texlive-fonts-extra
+  - chktex
+  - cm-super
+  - pdftk
+
+packages_gui:
+  - gimp
+  - darktable
+  - inkscape
+  #- blender
+  - vlc
+  - qgis
+  - python3-tk
+  - tk-dev
+  - texworks
+  - pdf-presenter-console
+  - projecteur
+  
+packages_libreoffice:
+  - libreoffice-script-provider-python
+  - libreoffice-l10n-in
+  - hunspell-hi
+  - libreoffice-l10n-en-gb
+  - hunspell-en-gb
+  - hunspell-en-us
+  - mythes-en-us
+  - libreoffice-lightproof-en
+  
+packages_music:
+  - ardour
+  - jalv
+  - lsp-plugins
+  - x42-plugins
+  - dpf-plugins
+# - calf-plugins
+  - guitarix-lv2
+  - zynaddsubfx-lv2
+  - dragonfly-reverb
+
+remove_packages:
+  - gnome-shell-extension-ubuntu-dock

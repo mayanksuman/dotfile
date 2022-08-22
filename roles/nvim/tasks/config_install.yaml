@@ -1,0 +1,52 @@
+- include_tasks: config_uninstall.yaml
+
+- name: Check if neovim configuration exists
+  ansible.builtin.stat: path="{{ nvim_config_path }}"
+  register: old_nvim_config
+
+- name: Back up existing neovim configuration
+  ansible.builtin.command: "mv {{ nvim_config.stat.path }} {{ nvim_config.stat.path + '.old' }}"
+  args:
+    creates: "{{ nvim_config.stat.path + '.old' }}"
+  register: old_nvim_config_backedup
+  when: old_nvim_config.stat.exists
+
+- block:
+  - name: Check if neovim data folder exists
+    ansible.builtin.stat: path="{{ nvim_data_path }}"
+    register: old_nvim_data
+
+  - name: Back up existing neovim data
+    ansible.builtin.command: "mv {{ nvim_data.stat.path }} {{ nvim_data.stat.path + '.old' }}"
+    args:
+      creates: "{{ nvim_data.stat.path + '.old' }}"
+    register: old_nvim_data_backedup
+    when: old_nvim_data.stat.exists
+  when: nvim_remove_data
+
+- name: Check if vim configuration exists
+  ansible.builtin.stat: path="{{ vim_config_path }}"
+  register: old_vim_config
+
+- name: Back up existing vim configuration
+  ansible.builtin.command: "mv {{ vim_config.stat.path }} {{ vim_config.stat.path + '.old' }}"
+  args:
+    creates: "{{ vim_config.stat.path + '.old' }}"
+  register: old_vim_config_backedup
+  when: old_vim_config.stat.exists
+
+- name: Stow neovim/vim configuration
+  stow:
+    package: payload
+    dir: "{{ role_path }}"
+    target: "{{ user_home_folder }}"
+    state: present
+
+- name: Bootstrap packer plugin install
+  ansible.builtin.shell:
+    set timeout 600
+    nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+    exit 0
+  async: 600
+  poll: 10
+  ignore_errors: true

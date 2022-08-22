@@ -1,0 +1,29 @@
+- name: Set up local development environment
+  hosts: login
+  roles:
+    # Tag each role so that we can select individual roles to run with ansible-playbook --tags
+    - {role: set_local_paths, tags: ['set_local_paths']}
+    - {role: install_system_packages, tags: ['install_system_packages']}
+    - {role: download_dotfile, tags: ['download_dotfile']}
+    - {role: stow, tags: ['stow']}
+    - {role: git, tags: ['git']}
+    - {role: gdb, tags: ['gdb']}
+    - {role: latex, tags: ['latex']}
+    - {role: system_python, tags: ['system_python']}
+    - {role: nodejs, tags: ['nodejs']}
+    - {role: fonts, tags: ['fonts']}
+    - {role: shell_common, tags: ['shell_common']}
+    - {role: zsh, tags: ['zsh']}
+    - {role: tmux, tags: ['tmux']}
+    - {role: nvim, tags: ['nvim']}
+    - {role: miniforge, tags: ['miniforge']}
+
+  post_tasks:
+    - name: Limit access to all files having user info
+      shell: |
+        find group_vars -type f -exec chmod 600 {} \; > /dev/null
+        find group_vars -type d -exec chmod 700 {} \; > /dev/null
+        find host_vars -type f -exec chmod 600 {} \; > /dev/null
+        find host_vars -type d -exec chmod 700 {} \; > /dev/null
+        find {{ dotfile_folder }} -name "*.secret" -type f -exec chmod 600 {} \; > /dev/null
+        find {{ dotfile_folder }} -name "*.secret" -type d -exec chmod 700 {} \; > /dev/null

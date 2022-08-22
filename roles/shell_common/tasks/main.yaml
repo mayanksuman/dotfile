@@ -1,0 +1,33 @@
+- name: "{{ dotfile_action|capitalize }} shell_common configuration"
+  ansible.builtin.include_tasks: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "config_{{ dotfile_action|lower }}.yaml"
+      paths:
+        - 'tasks'
+  ignore_errors: true
+
+- name: Install/update base16-shell colorsheme
+  ansible.builtin.git:
+    repo: https://github.com/chriskempson/base16-shell.git
+    dest: "{{ user_home_folder }}/.local/share/base16-shell"
+    recursive: yes
+    update: yes
+    depth: 1
+  environment:
+    GIT_TERMINAL_PROMPT: 0
+  register: base16_git_clone
+  ignore_errors: true
+
+- name: Load ~/.shell_common_config at bash startup
+  ansible.builtin.lineinfile:
+    path: "{{ user_home_folder }}/.bashrc"
+    line: '[ -n "$PS1" ] && source "$HOME/.shell_common_config"'
+
+
+- name: Applying base16 brewer theme
+  ansible.builtin.shell: bash -ic "source ~/.shell_common_config;base16_brewer > /dev/null; exit"
+  ignore_errors: true
+  when: base16_git_clone is succeeded
+

@@ -1,0 +1,5 @@
+change_shell_to_zsh: yes
+
+zsh_config_path: "{{ user_home_folder }}/.zshrc"
+prezto_path: "{{ user_home_folder }}/.local/share/zsh/prezto"
+

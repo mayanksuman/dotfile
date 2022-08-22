@@ -1,0 +1,232 @@
+#!/bin/bash
+
+usage()
+{
+	echo "Usage: "
+	echo "   gpw \$1 \$2 \$3 \$4 \$5"
+	echo 
+	echo "      \$1 - site name such as hotmail.com (optional)"
+	echo "      \$2 - user name (optional)"
+	echo "      \$3 - Output length (optional)"
+	echo "      \$4 - Iteration Count (optional)"
+	echo "      \$5 - Random data file (optional)"
+	echo
+	echo "   'gpw help' or 'gpw ?' shows this usage report."
+}
+
+# Read default configs for all sites
+read_config_vars()
+{
+	CFG_FILE="$1"
+	if [ -s "$CFG_FILE" ] && [ -r "$CFG_FILE" ]; then
+		CFG_CONTENT="$(sed -r '/[^=]+=[^=]+/!d' "$CFG_FILE" | sed -r 's/\s+=\s/=/g')"
+		eval "$CFG_CONTENT"
+		CFG_CONTENT=""
+	else
+		echo "Error: Check the config file - $CFG_FILE. Exitting"
+		exit 1
+	fi
+}
+
+# Read custom configs for selected sites
+read_custom_config()
+{
+	CFG_FILE="$1"
+	if [ -s "$CFG_FILE" ] && [ -r "$CFG_FILE" ]; then
+		CFG_CONTENT=$(grep -e ^set_ "$CFG_FILE")
+		eval "$CFG_CONTENT"
+		CFG_CONTENT=""
+	else
+		echo "Error: Check the config file - $CFG_FILE. Exitting"
+		exit 1
+	fi
+}
+
+# Process all arguments except site argument
+process_args()
+{
+	if ! [ -z "$1" ]
+	then
+		user="$1"
+	fi
+	if ! [ -z "$2" ]
+	then
+		length="$2"
+	fi
+	if ! [ -z "$3" ]
+	then
+		iter_count="$3"
+	fi
+	if ! [ -z "$4" ]
+	then
+		random_data_file="$4"
+	fi
+}
+
+gen_rnd_str() {
+	data="$secret_msg + $user_prefix$user$user_suffix"
+	data="$data@$site_prefix$site$site_suffix + $random_data"
+	i=0
+	while [ $i -le "$iter_count" ]; do
+		data=$(echo "$data$random_data"|base64|sha512sum|xargs -0)
+		i=$((i+1))
+	done
+	length_wo_requited_msg=$((length-${#required_msg}))
+	data=$(echo "$data"|base64|$head_prog -c $length_wo_requited_msg|xargs -0)
+	random_output_for_site=$(echo "$data$required_msg"|xargs -0)
+	if [ "$clipboard_name" != "stdout" ]; then
+		echo "$random_output_for_site"|$clipboard_function -i
+		echo "The output is available for $wait_sec sec."
+		sleep "$wait_sec"
+		curr_clip_content=$($clipboard_function -o)
+		if [ "$curr_clip_content" = "$random_output_for_site" ]; then
+			eval "$clipboard_function -c"
+		fi
+		echo "Bye."
+	else
+		echo "$random_output_for_site"
+		echo
+	fi
+}
+
+# Site specific customization functions
+set_len()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		if [ "$2" -eq "$2" ] 2> /dev/null; then
+			length="$2"
+		fi
+	fi
+}
+
+set_iter_count()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		if [ "$2" -eq "$2" ] 2> /dev/null; then
+			iter_count="$2"
+		fi
+	fi
+}
+
+set_user()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		user="$2"
+	fi
+}
+
+set_required_msg()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		required_msg="$2"
+	fi
+}
+
+set_user_prefix()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		user_prefix="$2"
+	fi
+}
+
+set_user_suffix()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		user_suffix="$2"
+	fi
+}
+
+set_site_prefix()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		site_prefix="$2"
+	fi
+}
+
+set_site_suffix()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		site_suffix="$2"
+	fi
+}
+
+set_random_data_file()
+{
+	curr_site="$1"
+	if [ "$site" = "$curr_site" ]; then
+		random_data_file="$2"
+	fi
+}
+
+set_clipboard_function()
+{
+	case "$1" in
+		primary)
+			clipboard_function="xsel -p"
+			;;
+		secondary)
+			clipboard_function="xsel -s"
+			;;
+		clipboard)
+			clipboard_function="xsel -b"
+			;;
+		stdout)
+			;;
+		*)
+			echo "Error: wrong clipboard name. Exitting"
+			exit 1
+	esac
+}
+
+
+main()
+{
+	if ! [ -z "$1" ]
+	then
+		site="$1"
+	else
+		read -r -sp 'Site: ' site
+		echo
+	fi
+	read_config_vars "$CFG_FILE"
+	read_custom_config "$CUSTOM_CFG_FILE"
+	process_args "$2" "$3" "$4" "$5"
+	set_clipboard_function "$clipboard_name"
+	read -r -sp 'Secret Sause (Message): ' secret_msg
+	echo
+	if [ -s "$random_data_file" ] && [ -r "$random_data_file" ]; then
+		random_data=$(cat "$random_data_file")
+	else
+		echo "Error: Check the salt file - $random_data_file. Exitting"
+		exit 1
+	fi
+	gen_rnd_str
+	if [ "$save_site_info" -eq 1 ]; then
+		if ! grep -qsFx "$site" "$site_file" ; then
+			echo "$site">>"$site_file"
+		fi
+	fi
+	exit 0
+}
+
+gpw_data_location=~/.local/share/gpw_old
+gpw_config_location=~/.config/gpw_old
+CFG_FILE=$gpw_config_location/gpw.conf.secret
+CUSTOM_CFG_FILE=$gpw_config_location/gpw.custom.conf.secret
+head_prog=head
+# head_prog=/usr/bin/head
+
+if [ "$1" = "help" ] || [ "$1" = "?" ]; then
+	usage
+	exit 0
+else
+	main "$1" "$2" "$3" "$4" "$5"
+fi
