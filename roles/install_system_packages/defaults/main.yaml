@@ -1,1 +1,3 @@
 package_upgrade: yes
+
+install_security_packages: yes

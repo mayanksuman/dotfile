@@ -83,7 +83,7 @@ packages:
   - gzip
   
   # GIS related 
-  - proj-bin 
+  - proj-bin
   - libproj-dev
   - gdal-bin
   - libgdal-dev
@@ -92,7 +92,7 @@ packages:
   - libgeos-dev
   
   # Climate science related
-  - cdo 
+  - cdo
   - nco
   
   # PHP composer framework
@@ -117,22 +117,46 @@ packages:
   - biber
   - texlive-font-utils
   - texlive-fonts-extra
+  - latexmk
   - chktex
   - cm-super
   - pdftk
+  
+  # sound related libraries
+  - pipewire-jack
+  - pipewire-pulse
+  - pipewire-audio-client-libraries
+  - libspa-0.2-bluetooth
+  - libspa-0.2-jack
+  - wireplumber
+
+# Security related packages
+packages_security:
+  - apparmor-profiles
+  - apparmor-profiles-extra
+  - fail2ban
+  - firejail
+  - firejail-profiles
+  - usbguard
+  - rkhunter
+  - chkrootkit
 
 packages_gui:
   - gimp
   - darktable
   - inkscape
-  #- blender
+  - blender
   - vlc
+  - obs-studio
   - qgis
   - python3-tk
   - tk-dev
+  - calibre
   - texworks
   - pdf-presenter-console
   - projecteur
+  - virt-manager
+  - torbrowser-launcher
   
 packages_libreoffice:
   - libreoffice-script-provider-python
