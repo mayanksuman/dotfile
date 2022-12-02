@@ -151,7 +151,9 @@ pathappend () {
 
 # BASE16-Shell Entry : Helps in getting even color scheme in zsh, bash and nvim
 BASE16_SHELL=$HOME/.local/share/base16-shell
-[ -n "$PS1" ] && [ -s "${BASE16_SHELL}/profile_helper.sh" ] && eval "$("${BASE16_SHELL}/profile_helper.sh")"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        source "$BASE16_SHELL/profile_helper.sh"
 
 # unicode support in tmux
 alias tmux='tmux -u'
