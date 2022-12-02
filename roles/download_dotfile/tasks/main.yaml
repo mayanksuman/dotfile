@@ -1,36 +1,24 @@
 - name: Ensure git is available on the host
   block:
     - name: Check if git command is available
-      shell: command -v git &> /dev/null 
-      register: git_command_exist 
-      
-    - name: Stop configuration if git command do not exist 
+      shell: command -v git &> /dev/null
+      register: git_command_exist
+
+    - name: Stop configuration if git command do not exist
       fail:
         msg: "Stopping configuration as git command is not found."
-      when: git_command_exist.rc != 0 
+      when: git_command_exist.rc != 0
 
 - name: Check if dotfile exist on host
   stat:
     path: "{{ dotfile_folder }}/.git"
   register: dotfile_stat
-  
+
 - name: Update dotfile from github if it exists on host
-  block:
-    - name: Get dotfile origin repo URL
-      ansible.builtin.shell: "cd {{ dotfile_folder }} && git config --get remote.origin.url"
-      register: dotfile_repo_shell
-      
-    - name: Update dotfile from its origin repo
-      ansible.builtin.git:
-        repo: "{{ dotfile_repo_shell.stdout }}"
-        dest: "{{ dotfile_folder }}"
-        recursive: yes
-        update: yes
-        depth: 1
-      environment:
-        GIT_TERMINAL_PROMPT: 0
-      ignore_errors: true
-      when: dotfile_repo_shell.rc == 0
+  ansible.builtin.shell: "cd {{ dotfile_folder }} && git pull && git submodule update --init --recursive"
+  environment:
+    GIT_TERMINAL_PROMPT: 0
+  ignore_errors: true
   when: dotfile_stat.stat.exists
 
 - name: Clone dotfile from github if it do not exist on host
