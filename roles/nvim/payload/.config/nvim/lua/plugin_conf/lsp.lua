@@ -1,12 +1,14 @@
+local mason = require("mason")
+local mason_lsp_config = require("mason-lspconfig")
 local lspconfig = require('lspconfig')
-local lsp_installer = require("nvim-lsp-installer")
 local lsp_signature = require("lsp_signature")
 local lsp, cmd = vim.lsp, vim.cmd
 
 
-local function config_lsp_installer()
-    -- nvim-lsp-installer should be setup before any server configuration
-    lsp_installer.setup({
+local function config_mason_lsp()
+    -- mason should be setup before any server configuration
+    mason.setup()
+    mason_lsp_config.setup({
         automatic_installation = true, -- automatically install server (based on which servers are set up via lspconfig)
     })
 end
@@ -68,11 +70,11 @@ local function config_lspconfig()
 
     -- servers to be setup
     local servers = {'angularls', 'ansiblels', 'awk_ls', 'bashls', 'clangd',
-        'cmake', 'cssls', 'dockerls', 'esbonio', 'eslint', 'fortls', 'html',
-        'java_language_server', 'jsonls', 'ltex', 'marksman', 'opencl_ls',
-        'perlls', 'phan', 'pylsp', 'pyright', 'quick_lint_js',
-        'r_language_server', 'rust_analyzer', 'sorbet', 'sumneko_lua',
-        'tailwindcss', 'taplo', 'texlab', 'tsserver', 'typeprof', 'vimls',
+        'cssls', 'dockerls', 'eslint', 'html', 'grammarly',
+        'java_language_server', 'jsonls', 'marksman', 'opencl_ls',
+        'perlls', 'phan', 'pyright', 'quick_lint_js',
+        'ruby_ls', 'rust_analyzer', 'sorbet', 'sumneko_lua',
+        'tailwindcss', 'texlab', 'tsserver', 'typeprof', 'vimls',
         'yamlls'}
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -88,7 +90,7 @@ end
 
 
 local function config()
-    config_lsp_installer()
+    config_mason_lsp()
     config_diagnostic()
     config_lspconfig()
 end

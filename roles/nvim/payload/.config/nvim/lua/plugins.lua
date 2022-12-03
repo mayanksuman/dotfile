@@ -216,19 +216,14 @@ local function init()
 
     -- LSP and linting support
     use {
-        {
-            "williamboman/nvim-lsp-installer",
-            module = 'nvim-lsp-installer',
-        },
-        {
-            "neovim/nvim-lspconfig",
-            after = "nvim-lsp-installer",
+        {"williamboman/mason.nvim"},
+        {"williamboman/mason-lspconfig.nvim"},
+        {"neovim/nvim-lspconfig",
             requires = { 'onsails/lspkind.nvim',
-                         --'nvim-lua/lsp-status.nvim',                          -- helps in getting info from LSP for statusbar
-                        {'ray-x/lsp_signature.nvim', module='lsp_signature'},   -- Shows function signature when you type from LSP
+                --'nvim-lua/lsp-status.nvim',                          -- helps in getting info from LSP for statusbar
+                {'ray-x/lsp_signature.nvim', module='lsp_signature'},   -- Shows function signature when you type from LSP
             },
             config = [[require('plugin_conf.lsp').config()]],
-            ft = programming_filetypes,
         }
     }
 

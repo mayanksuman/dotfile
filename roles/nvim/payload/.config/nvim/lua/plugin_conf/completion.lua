@@ -193,7 +193,7 @@ end
 local function update_lsp_capabilities(capabilities)
     if is_module_available('cmp') then
         if is_module_available('cmp_nvim_lsp') then
-            return require('cmp_nvim_lsp').update_capabilities(capabilities)
+            return require('cmp_nvim_lsp').default_capabilities(capabilities)
         end
     elseif is_module_available('coq') then
         return require('coq').lsp_ensure_capabilities(capabilities)
