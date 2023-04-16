@@ -49,6 +49,7 @@
         rm -f /tmp/{{ miniforge_unique_installer_name }}
         source {{ user_home_folder }}/.shell_common_config > /dev/null
         conda update --all
+        conda install -y mamba
       args:
         executable: /bin/bash
       ignore_errors: true
