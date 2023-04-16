@@ -162,8 +162,9 @@ packages_libreoffice:
   - libreoffice
   - libreoffice-script-provider-python
   - libreoffice-l10n-in
-  - hunspell-hi
   - libreoffice-l10n-en-gb
+  - libreoffice-l10n-en-us
+  - hunspell-hi
   - hunspell-en-gb
   - hunspell-en-us
   - mythes-en-us
