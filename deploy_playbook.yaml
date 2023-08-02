@@ -9,7 +9,7 @@
     - {role: git, tags: ['git']}
     - {role: gdb, tags: ['gdb']}
     - {role: latex, tags: ['latex']}
-    - {role: python_package_config, tags: ['python_package_config']}
+    - {role: system_python, tags: ['system_python']}
     - {role: nodejs, tags: ['nodejs']}
     - {role: fonts, tags: ['fonts']}
     - {role: shell_common, tags: ['shell_common']}

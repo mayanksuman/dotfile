@@ -130,33 +130,20 @@ local function init()
             ft=programming_filetypes,}
     -- Show tags in sidebar
     use { 'preservim/tagbar', event="BufWinEnter", ft=programming_filetypes,
-        config = [[require('plugin_conf.tagbar').config()]] }                   -- TODO: Is this plugin even needed given LSP support?
+        config = [[require('plugin_conf.tagbar').config()]] }
     -- REPLs
     use { 'hkupty/iron.nvim', setup = [[vim.g.iron_map_defaults = 0]],
         config = [[require('plugin_conf.iron').config()]],
-        cmd = { 'IronRepl', 'IronSend', 'IronReplHere' },                       -- TODO: Is this plugin required given ToggleTerm?
+        cmd = { 'IronRepl', 'IronSend', 'IronReplHere' },
     }
     -- Source code highlighting
-    use {{
+    use {
             'nvim-treesitter/nvim-treesitter',
             config = [[require('plugin_conf.treesitter').config()]],
             run = ':TSUpdate',
             ft = programming_filetypes,
             module='nvim-treesitter'
-        },
-        {
-            'lewis6991/spellsitter.nvim',
-            after = 'nvim-treesitter',
-            config = function()
-              require('spellsitter').setup()
-            end,
-            ft = programming_filetypes,
-        },
     }
-
-
-    -- Linter Suppot
-    --use {'mfussenegger/nvim-lint', ft = programming_filetypes}                -- TODO: add autocmds. Is this plugin needed given LSP?
 
     -- popup windows for searching
     use { 'nvim-telescope/telescope.nvim',
@@ -164,7 +151,9 @@ local function init()
             { 'nvim-lua/plenary.nvim' },                                        -- lua functions used by other plugins
             {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
             { 'nvim-telescope/telescope-frecency.nvim',                         -- sort filenames by access frequency
-                requires = { 'tami5/sql.nvim', module='sql.nvim' }},
+                config =[[require"telescope".load_extension("frecency")]],
+                requires = { 'kkharji/sqlite.lua' }
+            },
         },
         setup = [[require('plugin_conf.telescope').setup()]],
         config = [[require('plugin_conf.telescope').config()]],
@@ -172,16 +161,7 @@ local function init()
         module='telescope',
     }
 
-    -- -- completion and snippets: coq
-    -- use { "ms-jpq/coq_nvim", branch = 'coq',
-    --     requires = { { "ms-jpq/coq.artifacts", branch = 'artifacts' },
-    --         { "ms-jpq/coq.thirdparty", branch = '3p' } },
-    --     run = ":COQdeps",
-    --     setup = "require('plugin_conf.completion').setup()",
-    --     config = "require('plugin_conf.completion').config()",
-    -- }
-
-    -- completion and snippets: nvim-cmp (preferred one)
+    -- completion and snippets: nvim-cmp
     use {'L3MON4D3/LuaSnip',                                                    -- Snippets plugin (LuaSnip)
             requires={'rafamadriz/friendly-snippets'},                          -- Collection of snippets for LuaSnip
         module = 'luasnip',

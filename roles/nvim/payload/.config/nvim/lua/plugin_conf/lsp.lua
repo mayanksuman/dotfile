@@ -71,9 +71,9 @@ local function config_lspconfig()
     -- servers to be setup
     local servers = {'angularls', 'ansiblels', 'awk_ls', 'bashls', 'clangd',
         'cssls', 'dockerls', 'eslint', 'html', 'grammarly',
-        'java_language_server', 'jsonls', 'marksman', 'opencl_ls',
+        'jdtls', 'jsonls', 'marksman', 'opencl_ls',
         'perlls', 'phan', 'pyright', 'quick_lint_js',
-        'ruby_ls', 'rust_analyzer', 'sorbet', 'sumneko_lua',
+        'ruby_ls', 'rust_analyzer', 'sorbet', 'lua_ls',
         'tailwindcss', 'texlab', 'tsserver', 'typeprof', 'vimls',
         'yamlls'}
 
