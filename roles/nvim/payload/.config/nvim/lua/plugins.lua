@@ -147,11 +147,10 @@ local function init()
 
     -- popup windows for searching
     use { 'nvim-telescope/telescope.nvim',
-        requires = { { 'nvim-lua/popup.nvim', module='popup' },
+        requires = {
             { 'nvim-lua/plenary.nvim' },                                        -- lua functions used by other plugins
             {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
             { 'nvim-telescope/telescope-frecency.nvim',                         -- sort filenames by access frequency
-                config =[[require"telescope".load_extension("frecency")]],
                 requires = { 'kkharji/sqlite.lua' }
             },
         },
@@ -226,14 +225,6 @@ local function init()
     -------------------------------------------------------------------------------
     -- Plugins with utility value
     -------------------------------------------------------------------------------
-    -- Note taking system based on neuron Zettelkasten concept
-    use { "oberblastmeister/neuron.nvim",
-        requires = { {'nvim-lua/plenary.nvim'},
-            {'nvim-lua/popup.nvim', module="popup"},
-            {'nvim-telescope/telescope.nvim'},
-        },
-        event='BufEnter',
-    }
     -- Git support
     use { { 'tpope/vim-fugitive', cmd = { 'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull' } },
         { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' },
