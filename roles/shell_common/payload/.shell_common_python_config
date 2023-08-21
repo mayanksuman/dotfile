@@ -55,8 +55,8 @@ if [ -d "$MINIFORGE_ROOT" ]; then
     alias pv='conda create -y --name '
 
     # Mamba Setup (if present)
-    if [ -f "/home/mayank/.miniforge/etc/profile.d/mamba.sh" ]; then
-        . "/home/mayank/.miniforge/etc/profile.d/mamba.sh"
+    if [ -f "$MINIFORGE_ROOT/etc/profile.d/mamba.sh" ]; then
+        . "$MINIFORGE_ROOT/etc/profile.d/mamba.sh"
         
         # Some mamba alias
         alias pa='mamba activate'
