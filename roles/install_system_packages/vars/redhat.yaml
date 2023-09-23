@@ -19,6 +19,7 @@ packages:
   - python3-pip
   - python3-sympy
   - python3-openssl
+  - python3-pynvim
   - python3-dev
 
   # lua

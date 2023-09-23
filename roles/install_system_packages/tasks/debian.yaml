@@ -175,5 +175,5 @@
   become_user: root
   become_method: sudo
   args:
-    warn: no
+    warn: false
   ignore_errors: true

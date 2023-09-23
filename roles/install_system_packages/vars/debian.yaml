@@ -23,7 +23,8 @@ packages:
   - python3-autopep8
   - python3-virtualenvwrapper
   - python3-colorama
-  - python3-cookiecutter
+  - python3-cookie cutter
+  - python3-pynvim
   - pipenv
 
 
