@@ -183,8 +183,6 @@ local function init()
         requires='hrsh7th/nvim-cmp',}
     use{'hrsh7th/cmp-buffer', requires='hrsh7th/nvim-cmp'}                      -- nvim-cmp source: buffer
     use{'hrsh7th/cmp-path', requires='hrsh7th/nvim-cmp'}                        -- nvim-cmp source: path
-    use {'tzachar/cmp-tabnine', run='./install.sh',                             -- nvim-cmp source: tabnine
-        requires = 'hrsh7th/nvim-cmp'}
     use{'f3fora/cmp-spell', requires='hrsh7th/nvim-cmp'}                        -- nvim-cmp source: vim's spellsuggest
     use{'petertriho/cmp-git',                                                   -- nvim-cmp source: git
             requires = {'hrsh7th/nvim-cmp', "nvim-lua/plenary.nvim"},
