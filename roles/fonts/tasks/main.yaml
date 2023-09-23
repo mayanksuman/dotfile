@@ -16,6 +16,14 @@
 
 
 # Install nerd font locally
+- name: Check if {{ monospace_font_name }} Nerd Font is installed
+  ansible.builtin.find:
+    paths: "{{ local_font_path }}"
+    file_type: directory
+    recurse: no
+    patterns: "{{ monospace_font_name }}"
+  register: font_installed
+
 - name: check if {{ monospace_font_name }} Nerd font > 1 Month old
   ansible.builtin.find:
     paths: "{{ local_font_path }}"
@@ -25,6 +33,7 @@
     patterns: "{{ monospace_font_name }}"
     age: 30d
   register: font_age
+  when: (font_installed.files | length > 0)
 
 
 - name: "Download {{ monospace_font_name }} Nerd font if > 1 Month old"
@@ -38,7 +47,7 @@
         echo {{ monospace_font_name }} Nerd Font installed successfully.
   ignore_errors: true
   register: local_font_install
-  when: (font_age.files | length > 0)
+  when: (font_installed.files | length == 0) or (font_age.files | length > 0)
 
 
 # Update font cache to included all included fonts (local/system)
