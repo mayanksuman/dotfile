@@ -17,6 +17,8 @@ extract () {
             *.tar.bz2)  tar -jxvf $@                        ;;
             *.tar.xz)   tar -Jxvf $@                        ;;
             *.tar.gz)   tar -zxvf $@                        ;;
+            *.tar.zst)  tar -axvf $@                        ;;
+            *.tar.*)    tar -axvf $@                        ;;
             *.bz2)      bunzip2 $@                          ;;
             *.dmg)      hdiutil mount $@                    ;;
             *.gz)       gunzip -d -N $@                     ;;
