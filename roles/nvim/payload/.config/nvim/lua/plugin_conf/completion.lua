@@ -52,14 +52,6 @@ local function cmp_config()
     local luasnip = require 'luasnip'
     require("luasnip.loaders.from_vscode").lazy_load()                          -- load vscode snippet from rafamadriz/friendly-snippets
 
-    -- tabnine source setup
-    local tabnine = require "cmp_tabnine"
-    tabnine:setup {
-       max_lines = 500,
-       max_num_results = 5,
-       sort = true,
-    }
-
     -- nvim-cmp setup
     local cmp = require 'cmp'
     cmp.setup({
@@ -193,7 +185,7 @@ end
 local function update_lsp_capabilities(capabilities)
     if is_module_available('cmp') then
         if is_module_available('cmp_nvim_lsp') then
-            return require('cmp_nvim_lsp').update_capabilities(capabilities)
+            return require('cmp_nvim_lsp').default_capabilities(capabilities)
         end
     elseif is_module_available('coq') then
         return require('coq').lsp_ensure_capabilities(capabilities)

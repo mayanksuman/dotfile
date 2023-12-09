@@ -6,7 +6,7 @@
     group: "{{ user_group }}"
     mode: '0755'
 
-- name: Create sub directories for jupyter-lab and eg
+- name: Create sub directories for jupyter-lab, gpw and eg
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -15,4 +15,5 @@
     mode: '0755'
   loop:
     - '{{ user_home_folder }}/.config/jupyter/lab'
+    - '{{ user_home_folder }}/.config/gpw'
     - '{{ user_home_folder }}/.local/share/eg'

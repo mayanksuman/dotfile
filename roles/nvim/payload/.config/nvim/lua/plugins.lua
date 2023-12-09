@@ -130,41 +130,29 @@ local function init()
             ft=programming_filetypes,}
     -- Show tags in sidebar
     use { 'preservim/tagbar', event="BufWinEnter", ft=programming_filetypes,
-        config = [[require('plugin_conf.tagbar').config()]] }                   -- TODO: Is this plugin even needed given LSP support?
+        config = [[require('plugin_conf.tagbar').config()]] }
     -- REPLs
     use { 'hkupty/iron.nvim', setup = [[vim.g.iron_map_defaults = 0]],
         config = [[require('plugin_conf.iron').config()]],
-        cmd = { 'IronRepl', 'IronSend', 'IronReplHere' },                       -- TODO: Is this plugin required given ToggleTerm?
+        cmd = { 'IronRepl', 'IronSend', 'IronReplHere' },
     }
     -- Source code highlighting
-    use {{
+    use {
             'nvim-treesitter/nvim-treesitter',
             config = [[require('plugin_conf.treesitter').config()]],
             run = ':TSUpdate',
             ft = programming_filetypes,
             module='nvim-treesitter'
-        },
-        {
-            'lewis6991/spellsitter.nvim',
-            after = 'nvim-treesitter',
-            config = function()
-              require('spellsitter').setup()
-            end,
-            ft = programming_filetypes,
-        },
     }
-
-
-    -- Linter Suppot
-    --use {'mfussenegger/nvim-lint', ft = programming_filetypes}                -- TODO: add autocmds. Is this plugin needed given LSP?
 
     -- popup windows for searching
     use { 'nvim-telescope/telescope.nvim',
-        requires = { { 'nvim-lua/popup.nvim', module='popup' },
+        requires = {
             { 'nvim-lua/plenary.nvim' },                                        -- lua functions used by other plugins
             {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
             { 'nvim-telescope/telescope-frecency.nvim',                         -- sort filenames by access frequency
-                requires = { 'tami5/sql.nvim', module='sql.nvim' }},
+                requires = { 'kkharji/sqlite.lua' }
+            },
         },
         setup = [[require('plugin_conf.telescope').setup()]],
         config = [[require('plugin_conf.telescope').config()]],
@@ -172,16 +160,7 @@ local function init()
         module='telescope',
     }
 
-    -- -- completion and snippets: coq
-    -- use { "ms-jpq/coq_nvim", branch = 'coq',
-    --     requires = { { "ms-jpq/coq.artifacts", branch = 'artifacts' },
-    --         { "ms-jpq/coq.thirdparty", branch = '3p' } },
-    --     run = ":COQdeps",
-    --     setup = "require('plugin_conf.completion').setup()",
-    --     config = "require('plugin_conf.completion').config()",
-    -- }
-
-    -- completion and snippets: nvim-cmp (preferred one)
+    -- completion and snippets: nvim-cmp
     use {'L3MON4D3/LuaSnip',                                                    -- Snippets plugin (LuaSnip)
             requires={'rafamadriz/friendly-snippets'},                          -- Collection of snippets for LuaSnip
         module = 'luasnip',
@@ -204,8 +183,6 @@ local function init()
         requires='hrsh7th/nvim-cmp',}
     use{'hrsh7th/cmp-buffer', requires='hrsh7th/nvim-cmp'}                      -- nvim-cmp source: buffer
     use{'hrsh7th/cmp-path', requires='hrsh7th/nvim-cmp'}                        -- nvim-cmp source: path
-    use {'tzachar/cmp-tabnine', run='./install.sh',                             -- nvim-cmp source: tabnine
-        requires = 'hrsh7th/nvim-cmp'}
     use{'f3fora/cmp-spell', requires='hrsh7th/nvim-cmp'}                        -- nvim-cmp source: vim's spellsuggest
     use{'petertriho/cmp-git',                                                   -- nvim-cmp source: git
             requires = {'hrsh7th/nvim-cmp', "nvim-lua/plenary.nvim"},
@@ -216,19 +193,14 @@ local function init()
 
     -- LSP and linting support
     use {
-        {
-            "williamboman/nvim-lsp-installer",
-            module = 'nvim-lsp-installer',
-        },
-        {
-            "neovim/nvim-lspconfig",
-            after = "nvim-lsp-installer",
+        {"williamboman/mason.nvim"},
+        {"williamboman/mason-lspconfig.nvim"},
+        {"neovim/nvim-lspconfig",
             requires = { 'onsails/lspkind.nvim',
-                         --'nvim-lua/lsp-status.nvim',                          -- helps in getting info from LSP for statusbar
-                        {'ray-x/lsp_signature.nvim', module='lsp_signature'},   -- Shows function signature when you type from LSP
+                --'nvim-lua/lsp-status.nvim',                          -- helps in getting info from LSP for statusbar
+                {'ray-x/lsp_signature.nvim', module='lsp_signature'},   -- Shows function signature when you type from LSP
             },
             config = [[require('plugin_conf.lsp').config()]],
-            ft = programming_filetypes,
         }
     }
 
@@ -251,14 +223,6 @@ local function init()
     -------------------------------------------------------------------------------
     -- Plugins with utility value
     -------------------------------------------------------------------------------
-    -- Note taking system based on neuron Zettelkasten concept
-    use { "oberblastmeister/neuron.nvim",
-        requires = { {'nvim-lua/plenary.nvim'},
-            {'nvim-lua/popup.nvim', module="popup"},
-            {'nvim-telescope/telescope.nvim'},
-        },
-        event='BufEnter',
-    }
     -- Git support
     use { { 'tpope/vim-fugitive', cmd = { 'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull' } },
         { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' },

@@ -17,6 +17,8 @@ extract () {
             *.tar.bz2)  tar -jxvf $@                        ;;
             *.tar.xz)   tar -Jxvf $@                        ;;
             *.tar.gz)   tar -zxvf $@                        ;;
+            *.tar.zst)  tar -axvf $@                        ;;
+            *.tar.*)    tar -axvf $@                        ;;
             *.bz2)      bunzip2 $@                          ;;
             *.dmg)      hdiutil mount $@                    ;;
             *.gz)       gunzip -d -N $@                     ;;
@@ -151,7 +153,9 @@ pathappend () {
 
 # BASE16-Shell Entry : Helps in getting even color scheme in zsh, bash and nvim
 BASE16_SHELL=$HOME/.local/share/base16-shell
-[ -n "$PS1" ] && [ -s "${BASE16_SHELL}/profile_helper.sh" ] && eval "$("${BASE16_SHELL}/profile_helper.sh")"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        source "$BASE16_SHELL/profile_helper.sh"
 
 # unicode support in tmux
 alias tmux='tmux -u'

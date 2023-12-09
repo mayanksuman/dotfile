@@ -20,6 +20,12 @@ packages:
   - python3-sympy
   - python3-openssl
   - python3-dev
+  - python3-autopep8
+  - python3-virtualenvwrapper
+  - python3-colorama
+  - python3-cookiecutter
+  - python3-pynvim
+  - pipenv
 
   # lua
   - luajit
@@ -45,7 +51,7 @@ packages:
   - jq
   - htop
   - sdcv
-  - youtube-dl
+  - yt-dlp
   - firejail
   - ripgrep
   - timeshift
@@ -117,28 +123,53 @@ packages:
   - biber
   - texlive-font-utils
   - texlive-fonts-extra
+  - latexmk
   - chktex
   - cm-super
   - pdftk
+
+  # sound related libraries
+  - pipewire-jack
+  - pipewire-pulse
+  - pipewire-audio-client-libraries
+  - libspa-0.2-bluetooth
+  - libspa-0.2-jack
+  - wireplumber
+
+# Security related packages
+packages_security:
+  - apparmor-profiles
+  - apparmor-profiles-extra
+  - fail2ban
+  - firejail
+  - firejail-profiles
+  - usbguard
+  - rkhunter
+  - chkrootkit
 
 packages_gui:
   - gimp
   - darktable
   - inkscape
-  #- blender
+#  - blender
   - vlc
+  - obs-studio
   - qgis
   - python3-tk
   - tk-dev
+  - calibre
   - texworks
   - pdf-presenter-console
   - projecteur
+  - virt-manager
+  - torbrowser-launcher
 
 packages_libreoffice:
+  - libreoffice
   - libreoffice-script-provider-python
   - libreoffice-l10n-in
-  - hunspell-hi
   - libreoffice-l10n-en-gb
+  - hunspell-hi
   - hunspell-en-gb
   - hunspell-en-us
   - mythes-en-us

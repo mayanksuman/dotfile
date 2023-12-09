@@ -4,10 +4,11 @@
     args:
       warn: false
   
-  - name: Install nodejs for Debian
+  - name: Install nodejs and npm for Debian
     ansible.builtin.apt: 
       name: 
         - nodejs
+        - npm
       state: present
       update_cache: yes
       cache_valid_time: 0

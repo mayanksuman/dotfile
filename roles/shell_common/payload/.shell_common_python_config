@@ -47,12 +47,23 @@ if [ -d "$MINIFORGE_ROOT" ]; then
         fi
     fi
     unset __conda_setup
-    
-    # Some pyenv alias
+
+    # Some conda alias
     alias pa='conda activate'
     alias pd='conda deactivate'
     alias pi='conda install -y '
     alias pv='conda create -y --name '
+
+    # Mamba Setup (if present)
+    if [ -f "$MINIFORGE_ROOT/etc/profile.d/mamba.sh" ]; then
+        . "$MINIFORGE_ROOT/etc/profile.d/mamba.sh"
+        
+        # Some mamba alias
+        alias pa='mamba activate'
+        alias pd='mamba deactivate'
+        alias pi='mamba install -y '
+        alias pv='mamba create -y --name '
+    fi
 fi
 
 # Some alias for ipython

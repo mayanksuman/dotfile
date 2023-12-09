@@ -8,16 +8,7 @@
         - "config_{{ dotfile_action|lower }}.yaml"
       paths:
         - 'tasks'
-  ignore_errors: true 
-
-    
-- name: Install python packages used by other utils
-  ansible.builtin.pip:
-    executable: /usr/bin/pip3
-    name: "{{ python_packages }}"
-    extra_args: --user -U 
-    state: present
-  when: python_packages
+  ignore_errors: true
 
 
 - name: Check if eg command is installed
@@ -26,6 +17,6 @@
 
 
 - name: Indexing the cheatsheets/Examples for eg
-  ansible.builtin.shell: 'bash -ic "source ~/.shell_common_config;eg -r; exit"' 
+  ansible.builtin.shell: 'bash -ic "source ~/.shell_common_config;eg -r; exit"'
   ignore_errors: true
   when: eg_command.rc == 0

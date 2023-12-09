@@ -33,19 +33,6 @@ normal_mode_set_keymap({
     }
     )
 
--- better handling of arrow keys, enter and esc keys on vim builtin autocompletion
--- dropdown (https://vim.fandom.com/wiki/Improve_completion_popup_menu)
-set_keymap({'insert', 'command'}, {
-    ['<Esc>'] = 'pumvisible() ? "\\<C-e>" : "\\<Esc>"',
-    ['<Left>'] = 'pumvisible() ? "\\<C-e>" : "\\<Left>"',
-    ['<CR>'] = 'pumvisible() ? "\\<C-y>" : "\\<CR>"',
-    ['<Right>'] = 'pumvisible() ? "\\<C-y>" : "\\<Right>"',
-    ['<Down>'] = 'pumvisible() ? "\\<C-n>" : "\\<Down>"',
-    ['<Up>'] = 'pumvisible() ? "\\<C-p>" : "\\<Up>"',
-    ['<PageDown>'] = 'pumvisible() ? "\\<PageDown>\\<C-p>\\<C-n>" : "\\<PageDown>"',
-    ['<PageUp>'] = 'pumvisible() ? "\\<PageUp>\\<C-p>\\<C-n>" : "\\<PageUp>"',
-}, {noremap=true, expr=true})
-
 
 -- Wrapped lines goes down/up to next row, rather than next line in file.
 set_keymap('', {j='gj', k='gk'})

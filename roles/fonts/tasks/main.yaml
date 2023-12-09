@@ -5,10 +5,10 @@
     owner: "{{ user_name }}"
     group: "{{ user_group }}"
     mode: '0755'
-    
-    
+
+
 - name: Setup Indic fonts
-  stow: 
+  stow:
     package: payload
     dir: "{{ role_path }}"
     target: "{{ user_home_folder }}"
@@ -16,6 +16,15 @@
 
 
 # Install nerd font locally
+- name: Check if {{ monospace_font_name }} Nerd Font is installed
+  ansible.builtin.find:
+    paths: "{{ local_font_path }}"
+    file_type: directory
+    recurse: no
+    patterns: "{{ monospace_font_name }}"
+  register: font_installed
+
+
 - name: check if {{ monospace_font_name }} Nerd font > 1 Month old
   ansible.builtin.find:
     paths: "{{ local_font_path }}"
@@ -25,22 +34,22 @@
     patterns: "{{ monospace_font_name }}"
     age: 30d
   register: font_age
+  when: (font_installed.files | length > 0)
 
-    
+
 - name: "Download {{ monospace_font_name }} Nerd font if > 1 Month old"
   ansible.builtin.shell: |
     curl -s https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest\
         |jq -r ".assets[] | select(.name | test(\"{{ monospace_font_name }}\"))"\
-        |jq -r ".browser_download_url"\
-        |wget -O {{ user_home_folder }}/.sel_font.zip -i - && \
-        unzip -o {{ user_home_folder }}/.sel_font.zip -d {{ local_font_path }}/{{ monospace_font_name }} &&\
-        rm -rf {{ user_home_folder }}/.sel_font.zip &&\
+        |jq -r ".browser_download_url" | grep tar\
+        |wget -O {{ user_home_folder }}/.sel_font.tar.xz -i - && \
+        mkdir -p {{ local_font_path }}/{{ monospace_font_name }} &&\
+        tar fax {{ user_home_folder }}/.sel_font.tar.xz -C {{ local_font_path }}/{{ monospace_font_name }} &&\
+        rm -rf {{ user_home_folder }}/.sel_font.tar.xz &&\
         echo {{ monospace_font_name }} Nerd Font installed successfully.
-  args:
-    warn: false
   ignore_errors: true
   register: local_font_install
-  when: (font_age.files | length > 0)
+  when: (font_installed.files | length == 0) or (font_age.files | length > 0)
 
 
 # Update font cache to included all included fonts (local/system)
@@ -49,56 +58,56 @@
   become: yes
   become_user: root
   become_method: sudo
-  register: update_font_cache 
+  register: update_font_cache
   ignore_errors: true
 
 
-# Set the monospace font for terminal using gsettings 
-- name: Check for gsettings command 
+# Set the monospace font for terminal using gsettings
+- name: Check for gsettings command
   ansible.builtin.shell: command -v gsettings &> /dev/null
   register: gsettings_cmd_exists
-  when: > 
+  when: >
     update_font_cache is succeeded and
     local_font_install is not failed
 
 - block:
   - name: "Check {{ monospace_font_name }} Nerd Font is installed"
-    ansible.builtin.shell:  'fc-list|grep "{{ monospace_font_name }}"|cut -d ":" -f 2,3|grep "Nerd"|grep "style=Regular"|grep -v "Mono"|wc -l'
+    ansible.builtin.shell: 'fc-list|grep "{{ monospace_font_name }}"|cut -d ":" -f 2,3|grep "Nerd Font:"|grep "style=Regular"|wc -l'
     register: fontname_has_nerd
     ignore_errors: true
-  
+
   - name: "Set {{ monospace_font_name }} Nerd Font as default for terminals"
-    ansible.builtin.command: 'gsettings set org.gnome.desktop.interface monospace-font-name "{{ monospace_font_name }} Nerd Font Regular 12"'
+    ansible.builtin.command: 'gsettings set org.gnome.desktop.interface monospace-font-name "{{ monospace_font_name }} Nerd Font Regular 13"'
     register: set_fontname_nerd
     ignore_errors: true
     when: >
-      fontname_has_nerd is succeeded and 
-      fontname_has_nerd.stdout is defined and 
+      fontname_has_nerd is succeeded and
+      fontname_has_nerd.stdout is defined and
       fontname_has_nerd.stdout != '0'
-  
+
   - name: "Check {{ monospace_font_name }} NF is installed"
-    ansible.builtin.command:  'fc-list|grep "{{ monospace_font_name }}"|cut -d ":" -f 2,3|grep "NF"|grep "style=Regular"|grep -v "Mono"|wc -l'
+    ansible.builtin.command:  'fc-list|grep "{{ monospace_font_name }}"|cut -d ":" -f 2,3|grep "NF:"|grep "style=Regular"|wc -l'
     register: fontname_has_nf
     ignore_errors: true
     when: >
       (set_fontname_nerd is not defined or set_fontname_nerd is not succeeded)
-  
+
   - name: "Set {{ monospace_font_name }} NF as default for terminals"
-    ansible.builtin.command: 'gsettings set org.gnome.desktop.interface monospace-font-name "{{ monospace_font_name }} NF Regular 12"'
+    ansible.builtin.command: 'gsettings set org.gnome.desktop.interface monospace-font-name "{{ monospace_font_name }} NF Regular 13"'
     register: set_fontname_nf
     ignore_errors: true
     when: >
-      fontname_has_nf is succeeded and 
-      fontname_has_nf.stdout is defined and 
+      fontname_has_nf is succeeded and
+      fontname_has_nf.stdout is defined and
       fontname_has_nf.stdout != '0'
   when: gsettings_cmd_exists and gsettings_cmd_exists.rc == 0
 
-- name: "Warn, if {{ monospace_font_name }} font is not set" 
+- name: "Warn, if {{ monospace_font_name }} font is not set"
   ansible.builtin.fail:
     msg: |
-      I cannot find appropiriate font file. 
+      I cannot find appropriate font file.
       "Please select the {{ monospace_font_name }} nerd font manually"
       in gnome-tweak tool.
   when: >
-    (set_fontname_nerd is not defined or set_fontname_nerd is not succeeded) or 
+    (set_fontname_nerd is not defined or set_fontname_nerd is not succeeded) or
     (set_fontname_nf is not defined or set_fontname_nerd is not succeeded)

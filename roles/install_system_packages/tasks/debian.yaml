@@ -40,6 +40,24 @@
     msg: "Packages {{ packages | difference(repo_packages) }} are not found in repos (check apt sources)."
   ignore_errors: yes
   when: packages | difference(repo_packages)
+  
+- name: Installing packages related to security
+  ansible.builtin.apt:
+    name: "{{ packages_security | intersect(repo_packages) }}"
+    update_cache: yes
+    cache_valid_time: 3600
+    state: latest
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+  when: ( packages_security | intersect(repo_packages) ) and install_security_packages
+
+- name: List security related packages absent in repos
+  fail:
+    msg: "Packages {{ packages_security | difference(repo_packages) }} are not found in repos (check apt sources)."
+  ignore_errors: yes
+  when: ( packages_security | difference(repo_packages) ) and install_security_packages
 
 - name: Check if GUI is running (using systemd)
   command: systemctl get-default
@@ -116,10 +134,14 @@
   when: >
     (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
     packages_music | difference(repo_packages)
+    
+- name: Update the installed package list
+  ansible.builtin.package_facts:
+    manager: auto
 
 - name: Remove packages (apt purge)
   ansible.builtin.apt:
-    name: "{{ remove_packages | intersect(repo_packages) }}"
+    name: "{{ remove_packages | intersect(ansible_facts.packages) }}"
     update_cache: yes
     cache_valid_time: 3600
     purge: yes
@@ -128,7 +150,7 @@
   become_user: root
   become_method: sudo
   ignore_errors: true
-  when: remove_packages | intersect(repo_packages)
+  when: remove_packages | intersect(ansible_facts.packages)
 
 - name: apt autoremove
   ansible.builtin.apt:
@@ -153,5 +175,5 @@
   become_user: root
   become_method: sudo
   args:
-    warn: no
+    warn: false
   ignore_errors: true
