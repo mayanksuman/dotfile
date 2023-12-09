@@ -128,10 +128,9 @@ if ! hash ansible 2>/dev/null; then
     fi
 fi
 
-if [ -f "$SYS_PIP" ]; then
-    "$SYS_PIP" install --user -Iv 'resolvelib<0.6.0'  # workaround to run ansible-galaxy (https://github.com/ansible-collections/community.digitalocean/issues/132)
-    ansible-galaxy collection install community.general
-fi
+# if you are not able to run ansible-galaxy then check
+# (https://github.com/ansible-collections/community.digitalocean/issues/132)
+ansible-galaxy collection install community.general
 
 echo "Running deploy_plabook.yml ansible playbook..."
 echo "Please enter your password, if asked"
