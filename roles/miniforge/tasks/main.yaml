@@ -23,7 +23,6 @@
         wget -O /tmp/{{ miniforge_unique_installer_name }} \
         https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh
       args:
-        warn: false
         executable: /bin/bash
       ignore_errors: true
       register: miniforge_download_linux
@@ -36,7 +35,6 @@
         wget -O /tmp/{{ miniforge_unique_installer_name }} \
         https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-$(uname -m).sh
       args:
-        warn: false
         executable: /bin/bash
       ignore_errors: true
       register: miniforge_download_mac

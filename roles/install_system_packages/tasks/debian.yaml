@@ -40,7 +40,7 @@
     msg: "Packages {{ packages | difference(repo_packages) }} are not found in repos (check apt sources)."
   ignore_errors: yes
   when: packages | difference(repo_packages)
-  
+
 - name: Installing packages related to security
   ansible.builtin.apt:
     name: "{{ packages_security | intersect(repo_packages) }}"
@@ -134,7 +134,7 @@
   when: >
     (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
     packages_music | difference(repo_packages)
-    
+
 - name: Update the installed package list
   ansible.builtin.package_facts:
     manager: auto
@@ -174,6 +174,4 @@
   become: yes
   become_user: root
   become_method: sudo
-  args:
-    warn: false
   ignore_errors: true
