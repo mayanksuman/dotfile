@@ -1,40 +1,40 @@
 packages:
   - ansible
   - git
-  
+
   # C/C++ programming tools
   - build-essential
   - gfortran
   - clang
   - clang-tools
-  - clang-tidy 
+  - clang-tidy
   - global
   - exuberant-ctags
   - make
   - cmake
   - ccache
   - gdb
-  
+
   # python3
   - python3-pip
   - python3-sympy
   - python3-openssl
   - python3-dev
-  
+
   # lua
   - luajit
   - luarocks
-  
+
   # Downloading Utils
   - wget
   - aria2
   - rsync
   - curl
-  
+
   # Docker
   - docker-compose
   - docker.io
-  
+
   # Common utils
   - zsh
   - tmux
@@ -50,17 +50,17 @@ packages:
   - ripgrep
   - timeshift
   - stow
-  
+
   # Common Fonts
   - https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
   - fira-code-fonts
   - gnu-free-fonts
-  
+
   # Dev files
   - libbz2-dev
   - libffi-dev
   - liblzma-dev
-  - libncurses5-dev
+  - libncurses-dev
   - libreadline-dev
   - libsqlite3-dev
   - libssl-dev
@@ -73,7 +73,7 @@ packages:
   - libhdf5-dev
   - libhdf5-mpi-dev
   - libgsl-dev
-  
+
   # Compression Utils
   - p7zip-full
   - p7zip-rar
@@ -81,23 +81,23 @@ packages:
   - cabextract
   - tar
   - gzip
-  
-  # GIS related 
-  - proj-bin 
+
+  # GIS related
+  - proj-bin
   - libproj-dev
   - gdal-bin
   - libgdal-dev
   - python3-gdal
   - libgeos++-dev
   - libgeos-dev
-  
+
   # Climate science related
-  - cdo 
+  - cdo
   - nco
-  
+
   # PHP composer framework
   - composer
-  
+
   # Text Processing
   - pandoc
   - markdown
@@ -111,7 +111,7 @@ packages:
   - texlive-luatex
   - texlive-latex-extra
   - texlive-formats-extra
-  - texlive-publishers 
+  - texlive-publishers
   - texlive-science
   - texlive-bibtex-extra
   - biber
@@ -133,7 +133,7 @@ packages_gui:
   - texworks
   - pdf-presenter-console
   - projecteur
-  
+
 packages_libreoffice:
   - libreoffice-script-provider-python
   - libreoffice-l10n-in
@@ -143,7 +143,7 @@ packages_libreoffice:
   - hunspell-en-us
   - mythes-en-us
   - libreoffice-lightproof-en
-  
+
 packages_music:
   - ardour
   - jalv
