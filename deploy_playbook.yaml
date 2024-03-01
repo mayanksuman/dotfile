@@ -10,7 +10,6 @@
     - {role: gdb, tags: ['gdb']}
     - {role: latex, tags: ['latex']}
     - {role: system_python, tags: ['system_python']}
-    - {role: nodejs, tags: ['nodejs']}
     - {role: fonts, tags: ['fonts']}
     - {role: shell_common, tags: ['shell_common']}
     - {role: zsh, tags: ['zsh']}

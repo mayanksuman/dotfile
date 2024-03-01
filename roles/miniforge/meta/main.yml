@@ -2,4 +2,3 @@ allow_duplicates: false
 
 dependencies:
   - { role: shell_common }
-  - { role: nodejs }
