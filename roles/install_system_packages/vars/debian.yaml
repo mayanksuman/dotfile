@@ -1,6 +1,7 @@
 packages:
   - ansible
   - git
+  - stow
 
   # C/C++ programming tools
   - build-essential
@@ -47,7 +48,6 @@ packages:
   - sed
   - xsel
   - neovim
-  - python3-neovim
   - jq
   - htop
   - sdcv
@@ -55,7 +55,6 @@ packages:
   - firejail
   - ripgrep
   - timeshift
-  - stow
 
   # Common Fonts
   - ttf-mscorefonts-installer
@@ -151,7 +150,7 @@ packages_gui:
   - gimp
   - darktable
   - inkscape
-#  - blender
+  - blender
   - vlc
   - obs-studio
   - qgis
