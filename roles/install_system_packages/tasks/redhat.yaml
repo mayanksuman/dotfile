@@ -26,8 +26,8 @@
   become_user: root
   become_method: sudo
   ignore_errors: true
-  async: 900
-  poll: 10
+  async: 3600
+  poll: 60
   when: packages | intersection(repo_packages)
 
 - name: List packages absent in repos
@@ -35,12 +35,12 @@
     msg: "Packages {{ packages | difference(repo_packages) }} are not found in repos (check yum sources)."
   ignore_errors: yes
   when: packages | difference(repo_packages)
-  
+
 - name: Installing packages related to security
   ansible.builtin.yum:
     name: "{{ packages_security | intersect(repo_packages) }}"
     update_cache: yes
-    cache_valid_time: 3600
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
@@ -62,13 +62,14 @@
   ansible.builtin.yum:
     name: "{{ packages_gui | intersection(repo_packages) }}"
     update_cache: yes
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
   become_method: sudo
   ignore_errors: true
-  async: 900
-  poll: 10
+  async: 3600
+  poll: 60
   when: >
     (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
     packages_gui | intersection(repo_packages)
@@ -85,13 +86,14 @@
   ansible.builtin.yum:
     name: "{{ packages_libreoffice | intersection(repo_packages) }}"
     update_cache: yes
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
   become_method: sudo
   ignore_errors: true
-  async: 900
-  poll: 10
+  async: 3600
+  poll: 60
   when: >
     'libreoffice-writer' in ansible_facts.packages and
     packages_libreoffice | intersection(repo_packages)
@@ -108,13 +110,14 @@
   ansible.builtin.yum:
     name: "{{ packages_music | intersection(repo_packages) }}"
     update_cache: yes
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
   become_method: sudo
   ignore_errors: true
-  async: 900
-  poll: 10
+  async: 3600
+  poll: 60
   when: >
     (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
     packages_music | intersect(repo_packages)
@@ -126,7 +129,7 @@
   when: >
     (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
     packages_music | difference(repo_packages)
-    
+
 - name: Update the installed package list
   ansible.builtin.package_facts:
     manager: auto

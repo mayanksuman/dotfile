@@ -25,14 +25,14 @@
   ansible.builtin.apt:
     name: "{{ packages | intersect(repo_packages) }}"
     update_cache: yes
-    cache_valid_time: 3600
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
   become_method: sudo
   ignore_errors: true
-  async: 900
-  poll: 10
+  async: 3000
+  poll: 60
   when: packages | intersect(repo_packages)
 
 - name: List packages absent in repos
@@ -45,7 +45,7 @@
   ansible.builtin.apt:
     name: "{{ packages_security | intersect(repo_packages) }}"
     update_cache: yes
-    cache_valid_time: 3600
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
@@ -67,14 +67,14 @@
   ansible.builtin.apt:
     name: "{{ packages_gui | intersect(repo_packages) }}"
     update_cache: yes
-    cache_valid_time: 3600
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
   become_method: sudo
   ignore_errors: true
-  async: 900
-  poll: 10
+  async: 3600
+  poll: 60
   when: >
     (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
     packages_gui | intersect(repo_packages)
@@ -91,14 +91,14 @@
   ansible.builtin.apt:
     name: "{{ packages_libreoffice | intersect(repo_packages) }}"
     update_cache: yes
-    cache_valid_time: 3600
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
   become_method: sudo
   ignore_errors: true
-  async: 900
-  poll: 10
+  async: 3600
+  poll: 60
   when: >
     'libreoffice-writer' in ansible_facts.packages and
     packages_libreoffice | intersect(repo_packages)
@@ -115,14 +115,14 @@
   ansible.builtin.apt:
     name: "{{ packages_music | intersect(repo_packages) }}"
     update_cache: yes
-    cache_valid_time: 3600
+    cache_valid_time: 10800
     state: latest
   become: yes
   become_user: root
   become_method: sudo
   ignore_errors: true
-  async: 900
-  poll: 10
+  async: 3600
+  poll: 60
   when: >
     (systemctl_gui_output.stdout == 'graphical.target' or 'gnome' in ansible_facts.packages) and
     packages_music | intersect(repo_packages)
@@ -143,7 +143,7 @@
   ansible.builtin.apt:
     name: "{{ remove_packages | intersect(ansible_facts.packages) }}"
     update_cache: yes
-    cache_valid_time: 3600
+    cache_valid_time: 10800
     purge: yes
     state: absent
   become: yes
