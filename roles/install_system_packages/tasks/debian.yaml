@@ -14,7 +14,7 @@
 
     - name: Save the list of repo packages on the hosts
       set_fact:
-        repo_packages: "{{ repo_packages_shell.stdout }}"
+        repo_packages: "{{ repo_packages_shell.stdout_lines }}"
       when: repo_packages_shell.rc == 0
 
 - name: Get installed package list
