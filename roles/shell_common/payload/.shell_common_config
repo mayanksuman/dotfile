@@ -254,5 +254,9 @@ if [[ -f "${HOME}/.zsh_custom_config" ]]; then
 	fi
 fi
 
+if [[ -f "${HOME}/.spack/share/spack/setup-env.sh" ]]; then
+    source "${HOME}/.spack/share/spack/setup-env.sh"
+fi
+
 # unset the path related functions
 unset pathprepend pathappend pathremove
