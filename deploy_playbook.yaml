@@ -2,20 +2,20 @@
   hosts: login
   roles:
     # Tag each role so that we can select individual roles to run with ansible-playbook --tags
-    - {role: set_local_paths, tags: ['set_local_paths']}
-    - {role: install_system_packages, tags: ['install_system_packages']}
-    - {role: download_dotfile, tags: ['download_dotfile']}
-    - {role: stow, tags: ['stow']}
-    - {role: git, tags: ['git']}
-    - {role: gdb, tags: ['gdb']}
-    - {role: latex, tags: ['latex']}
-    - {role: system_python, tags: ['system_python']}
-    - {role: fonts, tags: ['fonts']}
-    - {role: shell_common, tags: ['shell_common']}
-    - {role: zsh, tags: ['zsh']}
-    - {role: tmux, tags: ['tmux']}
-    - {role: nvim, tags: ['nvim']}
-    - {role: miniforge, tags: ['miniforge']}
+    - {role: set_local_paths, tags: set_local_paths}
+    - {role: install_system_packages, tags: install_system_packages}
+    - {role: download_dotfile, tags: download_dotfile}
+    - {role: stow, tags: stow}
+    - {role: git, tags: git}
+    - {role: gdb, tags: gdb}
+    - {role: shell_common, tags: shell_common}
+    - {role: latex, tags: latex}
+    - {role: system_python, tags: system_python}
+    - {role: fonts, tags: fonts}
+    - {role: zsh, tags: zsh}
+    - {role: tmux, tags: tmux}
+    - {role: nvim, tags: nvim}
+    - {role: miniforge, tags: miniforge}
 
   post_tasks:
     - name: Limit access to all files having user info

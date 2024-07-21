@@ -1,4 +1,5 @@
 allow_duplicates: false
 
 dependencies:
-  - { role: stow }
+  - {role: set_local_paths, tags: set_local_paths}
+  - {role: stow, tags: stow}

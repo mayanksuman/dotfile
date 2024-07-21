@@ -1,4 +1,5 @@
+allow_duplicates: false
+
 dependencies:
-  - { role: stow }
-  - { role: shell_common }
-  - { role: install_system_packages }
+  - {role: stow, tags: stow}
+  - {role: shell_common, tags: shell_common}
