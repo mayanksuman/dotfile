@@ -81,7 +81,7 @@
         source {{ user_home_folder }}/.shell_common_config
         conda activate jupyter
         conda install -y jupyter jupyterlab jupyterhub ipython ipywidgets \
-        ipyleaflet ipympl ipykernel nb_conda_kernels scipy ipyparallel pyreadline
+        ipyleaflet ipympl ipykernel nb_conda_kernels scipy ipyparallel 
       args:
         executable: /bin/bash
       ignore_errors: true
@@ -150,7 +150,7 @@
         conda activate num_python
         conda install -y numpy scipy statsmodels pandas xarray sympy \
         		geopandas matplotlib cartopy h5py netcdf4 dask \
-        		bottleneck seaborn xlwt ipykernel pyreadline
+        		bottleneck seaborn xlwt ipykernel 
       args:
         executable: /bin/bash
       ignore_errors: true
