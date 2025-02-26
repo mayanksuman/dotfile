@@ -5,8 +5,8 @@
     // *************************************
 
     // Selected Theme
-    // Application-level visual styling theme
-    "theme": "JupyterLab Light",
+    // Application-level visual styling theme. Ignored when Adaptive Theme is enabled.
+    "theme": "JupyterLab Dark",
 
     // Scrollbar Theming
     // Enable/disable styling of the application scrollbars
