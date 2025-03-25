@@ -258,5 +258,9 @@ if [[ -f "${HOME}/.spack/share/spack/setup-env.sh" ]]; then
     source "${HOME}/.spack/share/spack/setup-env.sh"
 fi
 
+if [ -x "$(command -v minikube)" ]; then
+    alias kubectl="minikube kubectl --"
+fi
+
 # unset the path related functions
 unset pathprepend pathappend pathremove
