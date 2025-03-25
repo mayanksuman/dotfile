@@ -71,7 +71,6 @@ else                                            -- On mac and Windows, use * reg
 end
 opt.virtualedit = 'onemore'          -- Allow for cursor till the end of line
 opt.whichwrap = 'b,s,h,l,<,>,[,]'    -- Backspace and cursor keys wrap too
-opt.pastetoggle = '<F12>'            -- pastetoggle (sane indentation on pastes)
 opt.autowrite = true                 -- Writes on make/shell commands
 opt.scrolloff = 10                   -- Keep 10 lines below the last line when scrolling
 opt.switchbuf = 'useopen'            -- Switch to an existing buffer if one exists

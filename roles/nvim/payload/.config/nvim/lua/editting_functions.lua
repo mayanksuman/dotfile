@@ -36,21 +36,6 @@ end
 
 
 -- ---------------
--- Paste using Paste Mode : Keeps indentation in source.
--- ---------------
-local function PasteWithPasteMode()
-    if vim.opt.paste:get() then
-        cmd('normal p')
-    else
-        -- Enable paste mode and paste the text, then disable paste mode.
-        vim.opt.paste = true
-        cmd('normal p')
-        vim.opt.paste = false
-    end
-end
-
-
--- ---------------
 -- Copy the current line without newline character at the end.
 -- ---------------
 local function YankLineWithoutNewline()
@@ -77,7 +62,6 @@ command! -register CopyMatches call CopyMatches(<q-reg>)]])
 
 return {QuickSpellingFix=QuickSpellingFix,
         StripTrailingWhitespace=StripTrailingWhitespace,
-        PasteWithPasteMode=PasteWithPasteMode,
         ListLeaders=ListLeaders,
         YankLineWithoutNewline = YankLineWithoutNewline,
 }
