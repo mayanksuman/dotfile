@@ -7,7 +7,7 @@ Version 3.0! Dotfile managed by GNU stow using an ansible-playbook.
 Only tested on Debian/Ubuntu and Fedora based systems.
 
 1. `git clone --depth 1 https://github.com/mayanksuman/dotfile.git ~/.dotfile && cd ~/.dotfile`
-1. `./bootstrap.sh`.
+1. `./bootstrap.sh`
 1. Use Fira Code font for terminal.
 
 ## Customized neovim Mappings
