@@ -55,8 +55,23 @@ if [ -d "$MINIFORGE_ROOT" ]; then
     alias pv='conda create -y --name '
 
     # Mamba Setup (if present)
-    if [ -f "$MINIFORGE_ROOT/etc/profile.d/mamba.sh" ]; then
-        . "$MINIFORGE_ROOT/etc/profile.d/mamba.sh"
+    if [ -f "$MINIFORGE_ROOT/bin/mamba" ]; then
+        # >>> mamba initialize 
+        # !! Contents within this block are managed by 'mamba shell init' !!
+        export MAMBA_EXE=$MINIFORGE_ROOT/bin/mamba;                                                                                           
+        export MAMBA_ROOT_PREFIX=$MINIFORGE_ROOT;
+        if [ -n "$BASH_VERSION" ]; then
+        __mamba_setup="$("$MAMBA_EXE" shell hook --shell bash --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"                                                      
+        elif [ -n "$ZSH_VERSION" ]; then
+        __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"                                                      
+        fi
+        if [ $? -eq 0 ] then 
+            eval "$__mamba_setup"
+        else
+            alias mamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+        fi
+        unset __mamba_setup
+        # <<< mamba initialize <<<   
         
         # Some mamba alias
         alias pa='mamba activate'
