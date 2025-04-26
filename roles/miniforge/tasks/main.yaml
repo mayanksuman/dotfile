@@ -76,7 +76,7 @@
       register: jl_vnev_created
       when: jl_venv_stat.rc != 0
 
-    - name: Installing packages in newly created general jupyter virtualenv.
+    - name: Installing packages in general jupyter virtualenv.
       ansible.builtin.shell: |
         source {{ user_home_folder }}/.shell_common_config
         mamba activate jupyter
@@ -86,7 +86,7 @@
         executable: /bin/bash
       ignore_errors: true
       register: jl_venv_pkg_install
-      when: jl_vnev_created is succeeded and jl_venv_stat.rc != 0
+      when: jl_venv_stat.rc == 0 or jl_venv_pkg_install is succeeded
 
     - name: Building jupyter lab assets.
       ansible.builtin.shell: |
@@ -154,7 +154,7 @@
       args:
         executable: /bin/bash
       ignore_errors: true
-      when: num_python_venv_stat.rc != 0  and num_python_vnev_created is succeeded
+      when: num_python_venv_stat.rc != 0 and num_python_vnev_created is succeeded
 
 - name: Cleaning up conda.
   ansible.builtin.shell: |
