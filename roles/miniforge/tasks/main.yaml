@@ -70,7 +70,7 @@
     - name: Creating general jupyter virtualenv if it do not exist.
       ansible.builtin.shell: |
         source {{ user_home_folder }}/.shell_common_config
-        conda create -y --name jupyter
+        mamba create -y --name jupyter
       args:
         executable: /bin/bash
       register: jl_vnev_created
@@ -79,8 +79,8 @@
     - name: Installing packages in newly created general jupyter virtualenv.
       ansible.builtin.shell: |
         source {{ user_home_folder }}/.shell_common_config
-        conda activate jupyter
-        conda install -y jupyter jupyterlab jupyterhub ipython ipywidgets \
+        mamba activate jupyter
+        mamba install -y jupyter jupyterlab jupyterhub ipython ipywidgets \
         ipyleaflet ipympl ipykernel nb_conda_kernels scipy ipyparallel 
       args:
         executable: /bin/bash
@@ -91,7 +91,7 @@
     - name: Building jupyter lab assets.
       ansible.builtin.shell: |
         source {{ user_home_folder }}/.shell_common_config
-        conda activate jupyter
+        mamba activate jupyter
         jupyter lab build
       args:
         executable: /bin/bash
@@ -113,9 +113,9 @@
     - name: Creating and setting up virtualenv for data science tools if it do not exist.
       ansible.builtin.shell: |
         source {{ user_home_folder }}/.shell_common_config
-        conda create -y --name ds_tools
-        conda activate ds_tools
-        conda install -y orange3 glueviz
+        mamba create -y --name ds_tools
+        mamba activate ds_tools
+        mamba install -y orange3 glueviz
       args:
         executable: /bin/bash
       ignore_errors: true
@@ -137,7 +137,7 @@
     - name: Creating general scientific python virtualenv if it do not exist.
       ansible.builtin.shell: |
         source {{ user_home_folder }}/.shell_common_config
-        conda create -y --name num_python
+        mamba create -y --name num_python
       args:
         executable: /bin/bash
       ignore_errors: true
@@ -147,8 +147,8 @@
     - name: Installing libraries in newly created scientific python virtualenv.
       ansible.builtin.shell: |
         source {{ user_home_folder }}/.shell_common_config
-        conda activate num_python
-        conda install -y numpy scipy statsmodels pandas xarray sympy \
+        mamba activate num_python
+        mamba install -y numpy scipy statsmodels pandas xarray sympy \
         		geopandas matplotlib cartopy h5py netcdf4 dask \
         		bottleneck seaborn xlwt ipykernel 
       args:
