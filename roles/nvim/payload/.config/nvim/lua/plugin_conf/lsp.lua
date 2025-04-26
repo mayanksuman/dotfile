@@ -73,8 +73,8 @@ local function config_lspconfig()
         'cssls', 'dockerls', 'eslint', 'html', 'grammarly',
         'jdtls', 'jsonls', 'marksman', 'opencl_ls',
         'perlls', 'phan', 'pyright', 'quick_lint_js',
-        'ruby_ls', 'rust_analyzer', 'sorbet', 'lua_ls',
-        'tailwindcss', 'texlab', 'tsserver', 'typeprof', 'vimls',
+        'ruby_lsp', 'rust_analyzer', 'sorbet', 'lua_ls',
+        'tailwindcss', 'texlab', 'ts_ls', 'typeprof', 'vimls',
         'yamlls'}
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()

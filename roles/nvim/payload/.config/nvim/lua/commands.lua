@@ -10,14 +10,12 @@ local set_command = utils.set_command
 set_command({
     QuickSpellingFix = "lua require('editting_functions').QuickSpellingFix()",
     StripTrailingWhitespace = "lua require('editting_functions').StripTrailingWhitespace()",
-    PasteWithPasteMode = "lua require('editting_functions').PasteWithPasteMode()",
     YankLineWithoutNewline = "lua require('editting_functions').YankLineWithoutNewline()"
 })
 
 normal_mode_set_keymap(leader_keymap_table(
                         {z  =':QuickSpellingFix<cr>',
                          stw=':StripTrailingWhitespace<cr>',
-                         p  =':PasteWithPasteMode<cr>',
                          yl =':YankLineWithoutNewline<cr>',
                         }))
 

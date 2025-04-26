@@ -44,7 +44,7 @@ local function init()
     -------------------------------------------------------------------------------
     -- Pretty symbols
     use { 'kyazdani42/nvim-web-devicons', module = "nvim-web-devicons",
-            setup = [[require'nvim-web-devicons'.setup {default = true}]]
+            setup = [[require('nvim-web-devicons').setup {default = true}]]
     }
     use { { 'dracula/vim', config = [[vim.cmd('colorscheme dracula')]] },       -- dracula theme
         { 'hoob3rt/lualine.nvim', requires = 'kyazdani42/nvim-web-devicons',    -- status bar
@@ -71,8 +71,8 @@ local function init()
     }
     -- Indentation tracking
     use { 'lukas-reineke/indent-blankline.nvim',
-        setup = [[require('plugin_conf.indentline').setup()]],
-        config = [[require('plugin_conf.indentline').config()]],
+        module = "ibl",
+        setup = [[require('ibl').setup()]],
         event = 'BufEnter' }
     -- Directory tree at the side
     use { 'kyazdani42/nvim-tree.lua',

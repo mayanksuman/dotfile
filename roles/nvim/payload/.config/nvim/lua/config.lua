@@ -61,7 +61,6 @@ set_cursorline("FileType", false, "TelescopePrompt")
 -- ---------------
 -- Behaviors
 -- ---------------
-opt.hidden = true                    -- Enable modified buffers in background
 opt.confirm = true                   -- Confirm if you exit without saving
 -- clipboard settings inspired by spf13
 if has('clipboard') and has('unnamedplus') then
