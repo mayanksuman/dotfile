@@ -262,5 +262,9 @@ if [ -x "$(command -v minikube)" ]; then
     alias kubectl="minikube kubectl --"
 fi
 
+
+# Add rust support
+pathprepend ${HOME}/.cargo/bin
+
 # unset the path related functions
 unset pathprepend pathappend pathremove
