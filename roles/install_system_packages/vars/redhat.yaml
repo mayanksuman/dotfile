@@ -141,6 +141,9 @@ packages_security:
   - rkhunter
   - chkrootkit
 
+# Network Time Protocol
+  - chrony
+
 packages_gui:
   - gimp
   - darktable

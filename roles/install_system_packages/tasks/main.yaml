@@ -24,3 +24,12 @@
     label: "{{ package_list_file_path | basename }}"
     loop_var: package_list_file_path
   when: package_list_file is succeeded
+
+
+- name: Enabling Network Time Protocol
+  ansible.builtin.shell: timedatectl set-ntp true
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
+

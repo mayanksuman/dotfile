@@ -152,3 +152,10 @@
   become_user: root
   become_method: sudo
   ignore_errors: true
+
+- name: Enabling Network Time Protocol
+  ansible.builtin.command:timedatectl set-ntp true
+  become: yes
+  become_user: root
+  become_method: sudo
+  ignore_errors: true
